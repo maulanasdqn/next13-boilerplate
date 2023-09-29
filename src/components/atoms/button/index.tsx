@@ -17,7 +17,7 @@ export const Button: FC<TButton> = (props): ReactElement => {
   const { className = `${size} ${variant}` } = props;
 
   return (
-    <button className={className} {...props}>
+    <button data-testid="button" className={className} {...props}>
       {props.children}
     </button>
   );
