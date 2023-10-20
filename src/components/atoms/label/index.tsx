@@ -1,5 +1,12 @@
-import { FC, HTMLAttributes, ReactElement } from "react";
+import { FC, ReactElement } from "react";
+import { TLabel } from "./type";
 
-export const Label: FC<HTMLAttributes<HTMLLabelElement>> = (props): ReactElement => {
-  return <label {...props}>{props.children}</label>;
+export const Label: FC<TLabel> = (props): ReactElement => {
+  const { className = "flex gap-x-1" } = props;
+  return (
+    <label className={className} {...props}>
+      {props.children}
+      {props.required && <span className="text-red">*</span>}
+    </label>
+  );
 };

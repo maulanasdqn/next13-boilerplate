@@ -1,6 +1,6 @@
 import { ButtonHTMLAttributes } from "react";
 
-export type TButton = {
+export type TButton = ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: "primary" | "secondary";
   size?: "sm" | "md" | "lg";
-} & ButtonHTMLAttributes<HTMLButtonElement>;
+};
