@@ -1,27 +1,20 @@
-import { Label } from "@/components";
-import { FC, HTMLAttributes, ReactElement } from "react";
-import { FieldValues, UseControllerProps, useController } from "react-hook-form";
+import { InputWrapper, TField, className } from "@/components";
+import { FC, ReactElement, Ref, forwardRef } from "react";
 
-export const SelectField: FC<
-  HTMLAttributes<HTMLSelectElement> & {
-    label?: string;
-    options?: Array<{
-      value: string;
-      label: string;
-    }>;
-  } & UseControllerProps<FieldValues>
-> = (props): ReactElement => {
-  const { field } = useController(props);
-  return (
-    <section className="flex flex-col gap-y-2">
-      {props?.label && <Label>{props.label}</Label>}
-      <select {...{ ...field, ...props }}>
-        {props?.options?.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-    </section>
-  );
-};
+export const SelectField: FC<TField> = forwardRef(
+  (props, ref: Ref<HTMLSelectElement>): ReactElement => {
+    return (
+      <InputWrapper {...props}>
+        <select ref={ref} className={className(props)} {...props}>
+          {props?.options?.map((option, index) => (
+            <option key={index} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </InputWrapper>
+    );
+  },
+);
+
+SelectField.displayName = "SelectField";

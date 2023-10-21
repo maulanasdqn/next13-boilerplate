@@ -1,8 +1,8 @@
-import { QueryProvider } from "@/libs";
-import "./globals.css";
 import type { Metadata } from "next";
+import { QueryProvider } from "@/libs";
 import { Inter } from "next/font/google";
 import { FC, PropsWithChildren, ReactElement } from "react";
+import "@/styles/global.css";
 
 const inter = Inter({ subsets: ["latin"] });
 

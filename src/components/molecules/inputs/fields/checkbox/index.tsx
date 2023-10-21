@@ -4,9 +4,11 @@ import { InputWrapper, TField } from "@/components";
 export const CheckBoxField: FC<TField> = forwardRef(
   (props, ref: Ref<HTMLInputElement>): ReactElement => {
     return (
-      <InputWrapper {...props}>
+      <InputWrapper type="checkbox" {...props}>
         <input type="checkbox" ref={ref} {...props} />
       </InputWrapper>
     );
   },
 );
+
+CheckBoxField.displayName = "CheckBoxField";

@@ -1,4 +1,3 @@
-import React from "react";
 import { fireEvent, render } from "@testing-library/react";
 import { Button } from ".";
 import { expect, describe, it, vi as jest } from "vitest";
@@ -40,5 +39,13 @@ describe("Test Button Functionality", () => {
     fireEvent.click(getByTestId("button"));
     expect(onClickFn).toHaveBeenCalled();
     expect(getByTestId("button")).toHaveAttribute("type", "reset");
+  });
+
+  it("Should have children Loading... when loading props pass", () => {
+    const onClickFn = jest.fn();
+    const { getByTestId } = render(<Button type="button" loading="true" onClick={onClickFn} />);
+    fireEvent.click(getByTestId("button"));
+    expect(onClickFn).toHaveBeenCalled();
+    expect(getByTestId("button")).toHaveTextContent("Loading...");
   });
 });
