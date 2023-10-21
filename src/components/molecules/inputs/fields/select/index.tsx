@@ -1,11 +1,12 @@
-import { InputWrapper, TField, className } from "@/components";
-import { FC, ReactElement, Ref, forwardRef } from "react";
+import { InputWrapper, className } from "@/components";
+import { FC, ReactElement, forwardRef } from "react";
+import { TSelectField } from "./type";
 
-export const SelectField: FC<TField> = forwardRef(
-  (props, ref: Ref<HTMLSelectElement>): ReactElement => {
+export const SelectField: FC = forwardRef<HTMLSelectElement, TSelectField>(
+  (props, ref): ReactElement => {
     return (
       <InputWrapper {...props}>
-        <select ref={ref} className={className(props)} {...props}>
+        <select {...props} ref={ref} className={className(props)}>
           {props?.options?.map((option, index) => (
             <option key={index} value={option.value}>
               {option.label}

@@ -6,6 +6,6 @@ import { TControlledField } from "@/components";
 export const ControlledSelectField = <T extends FieldValues>(
   props: TControlledField<T>,
 ): ReactElement => {
-  const { field } = useController(props);
+  const { field } = useController<T>(props);
   return <SelectField {...{ ...field, ...props }} />;
 };

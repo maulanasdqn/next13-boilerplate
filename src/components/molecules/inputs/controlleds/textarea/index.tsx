@@ -6,6 +6,6 @@ import { TControlledField } from "@/components";
 export const ControlledTextAreaField = <T extends FieldValues>(
   props: TControlledField<T>,
 ): ReactElement => {
-  const { field } = useController(props);
+  const { field } = useController<T>(props);
   return <TextAreaField {...{ ...field, ...props }} />;
 };

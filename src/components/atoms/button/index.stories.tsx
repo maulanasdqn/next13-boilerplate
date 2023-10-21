@@ -19,6 +19,9 @@ const meta: Meta<typeof Button> = {
       control: { type: "radio" },
       options: ["true", "false"],
     },
+    disabled: {
+      control: { type: "boolean" },
+    },
   },
 };
 

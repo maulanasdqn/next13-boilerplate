@@ -1,14 +1,12 @@
-import { FC, ReactElement, Ref, forwardRef } from "react";
+import { FC, ReactElement, forwardRef } from "react";
 import { InputWrapper, TField, className } from "@/components";
 
-export const TextField: FC<TField> = forwardRef(
-  (props, ref: Ref<HTMLInputElement>): ReactElement => {
-    return (
-      <InputWrapper {...props}>
-        <input className={className(props)} data-testid="text-field" ref={ref} {...props} />
-      </InputWrapper>
-    );
-  },
-);
+export const TextField: FC = forwardRef<HTMLInputElement, TField>((props, ref): ReactElement => {
+  return (
+    <InputWrapper {...props}>
+      <input {...props} className={className(props)} data-testid="text-field" ref={ref} />
+    </InputWrapper>
+  );
+});
 
 TextField.displayName = "TextField";

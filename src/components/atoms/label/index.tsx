@@ -4,14 +4,14 @@ import { clsx } from "clsx";
 
 export const Label: FC<TLabel> = (props): ReactElement => {
   const className = clsx(
-    "flex gap-x-1 ",
+    "flex gap-x-1 text-gray-500",
     {
       "text-sm": props.size === "sm",
       "text-base": props.size === "md",
       "text-lg": props.size === "lg",
     },
     {
-      "text-gray-400": props.disabled,
+      "text-gray-400 cursor-not-allowed opacity-50": props.disabled,
     },
   );
 

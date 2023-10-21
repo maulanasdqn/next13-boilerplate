@@ -8,7 +8,9 @@ export const className = ({
   status?: "error" | "warning" | "success" | "none";
 }) =>
   clsx(
-    "rounded-lg border border-1 outline-none disable:cursor-not-allowed disable:opacity-50 disable:select-none disabled:bg-gray-100 disabled:placeholder:text-gray-300 disabled:border-gray-200",
+    "rounded-lg border border-1 outline-none w-full",
+    "disabled:bg-gray-100 disabled:placeholder:text-gray-300 disabled:border-gray-200",
+    "disable:cursor-not-allowed disable:opacity-50 disable:select-none ",
     {
       "text-sm placeholder:text-xs pl-2 pr-3 py-2": variant === "sm",
       "text-base placeholder:text-sm pl-3 pr-4 py-3": variant === "md",

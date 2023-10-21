@@ -5,7 +5,7 @@ import { TMetaErrorResponse, TUser } from "@/entities";
 import { TLoginResponse } from "./type";
 import { JWT } from "next-auth/jwt";
 
-const refreshAccessToken = async (token: JWT) => {
+const refreshAccessToken = async (token: JWT & { access_token: string; refresh_token: string }) => {
   try {
     const refreshedToken = await refreshRequest({
       refresh_token: token?.refresh_token,
@@ -80,7 +80,7 @@ export const authOptions: NextAuthOptions = {
         return { ...token, ...currentUser };
       }
 
-      return refreshAccessToken(token);
+      return refreshAccessToken(token as JWT & { access_token: string; refresh_token: string });
     },
 
     async session({ session, token }) {
@@ -88,8 +88,8 @@ export const authOptions: NextAuthOptions = {
         expires: token?.exp as string,
         user: {
           ...(token.user as TUser),
-          access_token: token.access_token,
-          refresh_token: token.refresh_token,
+          access_token: token?.access_token as string,
+          refresh_token: token?.refresh_token as string,
         },
       };
       return session;

@@ -1,10 +1,11 @@
 import { FC, Fragment, ReactElement } from "react";
-import { Label, TField } from "@/components";
+import { Label } from "@/components";
 import { clsx } from "clsx";
 import { BiErrorCircle, BiCheckCircle } from "react-icons/bi";
 import { match } from "ts-pattern";
+import { TInputWrapper } from "./type";
 
-export const InputWrapper: FC<TField> = (props): ReactElement => {
+export const InputWrapper: FC<TInputWrapper> = (props): ReactElement => {
   const { status = "none" } = props;
   const className = clsx("text-xs flex items-center gap-x-1", {
     "text-red-400": status === "error",
@@ -18,7 +19,12 @@ export const InputWrapper: FC<TField> = (props): ReactElement => {
         <div className="flex gap-x-2">
           {props.children}
           {props?.label && (
-            <Label disabled={props.disabled} size={props.variant} required={props.required}>
+            <Label
+              htmlFor={props.name}
+              disabled={props.disabled}
+              size={props.variant}
+              required={props.required}
+            >
               {props.label}
             </Label>
           )}
@@ -26,7 +32,12 @@ export const InputWrapper: FC<TField> = (props): ReactElement => {
       ) : (
         <Fragment>
           {props?.label && (
-            <Label disabled={props.disabled} size={props.variant} required={props.required}>
+            <Label
+              htmlFor={props.name}
+              disabled={props.disabled}
+              size={props.variant}
+              required={props.required}
+            >
               {props.label}
             </Label>
           )}
