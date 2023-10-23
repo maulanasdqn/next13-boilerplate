@@ -31,3 +31,5 @@ export const RadioField = forwardRef<HTMLInputElement, TRadioField>((props, ref)
     </InputWrapper>
   );
 });
+
+RadioField.displayName = "RadioField";
