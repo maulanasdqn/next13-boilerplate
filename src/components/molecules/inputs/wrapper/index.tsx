@@ -20,6 +20,7 @@ export const InputWrapper: FC<TInputWrapper> = (props): ReactElement => {
           {props.children}
           {props?.label && (
             <Label
+              id={props.name}
               htmlFor={props.name}
               disabled={props.disabled}
               size={props.variant}
