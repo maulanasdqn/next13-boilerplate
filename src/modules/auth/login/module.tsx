@@ -34,10 +34,7 @@ export const AuthLoginModule: FC = (): ReactElement => {
   return (
     <section className="flex w-full h-screen items-center justify-between">
       <div className="w-1/2 h-full bg-blue-400 items-center justify-center flex">
-        <div className="flex flex-col items-center gap-y-4">
-          <Image priority width={200} height={200} alt="logo" src="/logo.png" />
-          <h1 className="text-3xl text-white font-bold">PSU Member Portal</h1>
-        </div>
+        <div className="flex flex-col items-center gap-y-4"></div>
       </div>
       <form
         onSubmit={onSubmit}
