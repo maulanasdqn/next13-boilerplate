@@ -21,6 +21,9 @@ const meta: Meta<typeof TextField> = {
     disabled: {
       control: { type: "boolean" },
     },
+    message: {
+      control: { type: "text" },
+    },
   },
 };
 
