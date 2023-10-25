@@ -1,36 +1,95 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Boilerplate Next.js 13
+
+Selamat datang di Boilerplate Next.js 13! Boilerplate ini menyediakan pengaturan yang terstruktur untuk membangun aplikasi web menggunakan Next.js 13. Ini mencakup berbagai direktori untuk meningkatkan pengorganisasian kode dan pemeliharaan.
+
+## Package yang Digunakan
+
+- NextJs 13 (latest)
+- Next-Auth
+- Axios
+- clsx
+- ts-patterns
+- Zod
+- Tanstack React Query
+
+## Struktur Direktori
+
+Projek ini diorganisir dengan direktori-direktori berikut:
+
+- `app`: Direktori ini berisi file inti aplikasi dan konfigurasi. Ini berfungsi sebagai titik masuk untuk aplikasi Next.js Anda.
+
+- `components`: Di dalam direktori `components`, Anda akan menemukan struktur direktori yang mengikuti metodologi Atomic Design. Di sini Anda mengorganisasi komponen UI Anda, termasuk atom, molekul, organisme, template, dan komponen tingkat lebih tinggi lainnya.
+
+- `entities`: Direktori `entities` dimaksudkan untuk tipe data atau interface yang bersifat domain-specific.
+
+- `libs`: Di direktori `libs`, Anda dapat menempatkan fungsi utilitas, modul pembantu, dan kode lain yang dapat digunakan ulang di seluruh aplikasi.
+
+- `modules`: Direktori `modules` adalah tempat Anda mengenkapsulasi logika, proses bisnis dan komponen berbasis fitur. Setiap modul bisa memiliki subdirektori sendiri, termasuk component, style, dan file lain yang relevan.
+
+- `styles`: Direktori ini dimaksudkan untuk style global, seperti file CSS atau SCSS yang berlaku untuk seluruh aplikasi.
 
 ## Getting Started
 
-First, run the development server:
+Ikuti langkah-langkah berikut untuk memulai menggunakan Next.js 13 boilerplate:
 
-```bash
-npm run dev
+1. **Clone repository:**
+
+   ```bash
+   git clone https://github.com/maulanasdqn/next13-boilerplate.git
+   ```
+
+2. **Akses direktori repository:**
+
+   ```cd next3-boilerplate
+
+   ```
+
+3. **Install Package:**
+
+   ```npm install
+   # or
+   yarn install
+   # or
+   bun install
+   ```
+
+4. **Jalankan pada server dev local:**
+
+   ```npm run dev
+   # or
+   yarn dev
+   # or
+   bun dev
+   ```
+
+   Aplikasi akan berjalan di http://localhost:3000.
+
+## Command lain yang tersedia
+
+**Menjalankan test:**
+
+    ```npm run test
+
 # or
-yarn dev
+
+yarn test
+
 # or
-pnpm dev
+
+bun test
+
 # or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+bun test:run
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+````
+**Menjalankan storybook:**
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+ ```npm run storybook
+# or
+yarn storybook
+# or
+bun storybook
+# or
+bun storybook
+````
