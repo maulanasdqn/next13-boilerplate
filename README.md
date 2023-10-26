@@ -34,31 +34,41 @@ Ikuti langkah-langkah berikut untuk memulai menggunakan Next.js 13 boilerplate:
 
 1. **Clone repository:**
 
-   ```bash
+   ```
    git clone https://github.com/maulanasdqn/next13-boilerplate.git
    ```
 
 2. **Akses direktori repository:**
 
-   ```cd next3-boilerplate
-
+   ```
+   cd next3-boilerplate
    ```
 
 3. **Install Package:**
 
-   ```npm install
-   # or
+   ```
+   npm install
+   ```
+   
+   ```
    yarn install
-   # or
+   ```
+   
+   ```
    bun install
    ```
 
-4. **Jalankan pada server dev local:**
+5. **Jalankan pada server dev local:**
 
-   ```npm run dev
-   # or
+   ```
+   npm run dev
+   ```
+   
+   ```
    yarn dev
-   # or
+   ```
+   
+   ```
    bun dev
    ```
 
@@ -68,28 +78,32 @@ Ikuti langkah-langkah berikut untuk memulai menggunakan Next.js 13 boilerplate:
 
 **Menjalankan test:**
 
-    ```npm run test
-
-# or
-
-yarn test
-
-# or
-
-bun test
-
-# or
-
-bun test:run
-
-````
+  ```  
+  npm run test
+  ```
+  
+  ```
+  yarn test
+  ```
+  
+  ```
+  bun test
+  ```
+  
+  ```
+  bun test:run
+  ````
 **Menjalankan storybook:**
 
- ```npm run storybook
-# or
-yarn storybook
-# or
-bun storybook
-# or
-bun storybook
-````
+   ```
+  npm run storybook
+  ```
+  
+  ```
+  yarn storybook
+  ```
+  
+  ```
+  bun storybook
+  ```
+  
