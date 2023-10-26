@@ -96,14 +96,14 @@ Ikuti langkah-langkah berikut untuk memulai menggunakan Next.js 13 boilerplate:
 **Menjalankan storybook:**
 
    ```
-  npm run storybook
+  npm run storybook dev
   ```
   
   ```
-  yarn storybook
+  yarn storybook dev
   ```
   
   ```
-  bun storybook
+  bun storybook dev
   ```
   
