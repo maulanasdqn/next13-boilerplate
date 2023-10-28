@@ -1,9 +1,11 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { loginRequest, refreshRequest } from "./api";
+import { loginRequest, loginRequestMock, refreshRequest } from "./api";
 import { TMetaErrorResponse, TUser } from "@/entities";
 import { TLoginResponse } from "./type";
 import { JWT } from "next-auth/jwt";
+
+const isMock = process.env.NEXT_PUBLIC_API_MODE === "mock";
 
 const refreshAccessToken = async (token: JWT & { access_token: string; refresh_token: string }) => {
   try {
@@ -34,11 +36,19 @@ export const authOptions: NextAuthOptions = {
 
       async authorize(credentials): Promise<TLoginResponse> {
         try {
-          const data = await loginRequest({
-            email: credentials?.email,
-            password: credentials?.password,
-          });
-          return data;
+          if (isMock) {
+            const data = await loginRequestMock({
+              email: credentials?.email,
+              password: credentials?.password,
+            });
+            return data;
+          } else {
+            const data = await loginRequest({
+              email: credentials?.email,
+              password: credentials?.password,
+            });
+            return data;
+          }
         } catch (err) {
           const error = err as TMetaErrorResponse;
           if (error?.response?.status === 422) {
@@ -55,7 +65,7 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   pages: {
-    signIn: process.env.NEXT_PUBLIC_WORKSPACE === "admin" ? "/" : "/auth/login",
+    signIn: "/",
     signOut: "/auth/logout",
   },
   session: {
