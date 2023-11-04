@@ -10,7 +10,7 @@ export const TableBody = <T extends Record<string, unknown>>(
       {props.tableBody.rows.map((row) => (
         <tr key={row.id}>
           {row.getVisibleCells().map((cell, index) => (
-            <td key={index} className="neo__table__td">
+            <td key={index} className="border-b p-2 text-gray-600 font-medium">
               {flexRender(cell.column.columnDef.cell, cell.getContext())}
             </td>
           ))}

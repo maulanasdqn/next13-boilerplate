@@ -16,7 +16,6 @@ COPY . .
 
 RUN bun run build
 
-
 FROM node:18-slim AS runner
 WORKDIR /app
 
@@ -25,7 +24,7 @@ COPY $CONFIG_FILE /app/.env
 ENV NODE_ENV production
 ENV NEXT_TELEMETRY_DISABLED 1
 
-COPY --from=builder  /app/.next/standalone ./
+COPY --from=builder  /app/.next/ ./
 
 EXPOSE 3001
 

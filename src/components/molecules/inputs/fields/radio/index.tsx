@@ -8,6 +8,7 @@ export const RadioField = forwardRef<HTMLInputElement, TRadioField>((props, ref)
       {props?.options?.map((option) => (
         <div className="flex gap-x-1 items-center" key={option.value}>
           <input
+            data-testid="radio-field"
             {...props}
             type="radio"
             key={option.value}
@@ -15,7 +16,7 @@ export const RadioField = forwardRef<HTMLInputElement, TRadioField>((props, ref)
             ref={ref}
             checked={props.value?.value === option.value}
             onChange={() => props.onChange?.(option)}
-            onClick={() => props.value && props.onChange?.(null)}
+            onClick={() => props.value && props.onChange?.(option)}
           />
           <Label
             className="cursor-pointer select-none"

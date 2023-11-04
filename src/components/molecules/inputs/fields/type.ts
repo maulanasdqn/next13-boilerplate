@@ -1,4 +1,4 @@
-import { DetailedHTMLProps, InputHTMLAttributes } from "react";
+import { DetailedHTMLProps, InputHTMLAttributes, ReactNode } from "react";
 
 export type TOption<T = string | number> = {
   label: string;
@@ -16,4 +16,6 @@ export type TField = Omit<
   status?: "error" | "warning" | "success" | "none";
   message?: string;
   label?: string;
+  append?: ReactNode;
+  preppend?: ReactNode;
 };

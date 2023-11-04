@@ -7,14 +7,14 @@ export const TableHead = <T extends Record<string, unknown>>(
   props: TTableHead<T>,
 ): ReactElement => {
   return (
-    <thead className="neo__table__thead">
+    <thead className="bg-gray-50 p-2 w-auto h-auto rounded-lg">
       {props.tableHead.map((headerGroup) => (
         <tr key={headerGroup.id}>
           {headerGroup.headers.map((header) => (
-            <th className="neo__table__th" key={header.id}>
+            <th className="text-gray-500 p-2 text-left" key={header.id}>
               <div
                 {...{
-                  className: "neo__table__sort",
+                  className: "flex items-center",
                   onClick: header.column.getToggleSortingHandler(),
                 }}
               >
