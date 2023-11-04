@@ -11,7 +11,7 @@ export const Search: FC<TSearch> = (props): ReactElement => {
         preppend={<IoMdSearch className="text-gray-400" size="1.5em" />}
         variant="md"
         placeholder={props.placeholder || "Cari data..."}
-        onChange={props.onChange}
+        onChange={props.handleSearch}
       />
     </section>
   );

@@ -47,7 +47,9 @@ export const InputWrapper: FC<TInputWrapper> = (props): ReactElement => {
           <div className="flex items-center gap-x-2 absolute top-3 left-3">{props.preppend}</div>
         )}
         {props.children}
-        {props?.append && <div className="flex items-center gap-x-2">{props.append}</div>}
+        {props?.append && (
+          <div className="flex items-center gap-x-2 absolute top-3 right-3">{props.append}</div>
+        )}
       </section>
     ));
 

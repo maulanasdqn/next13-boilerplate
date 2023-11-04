@@ -4,6 +4,11 @@ export type TMetaItem = {
   code: number;
   status: string;
   message: string;
+  page: number;
+  perPage: number;
+  totalPage: number;
+  nextPage: number | null;
+  prevPage: number | null;
 };
 
 export type TMetaResponse<T> = {
@@ -11,9 +16,3 @@ export type TMetaResponse<T> = {
 } & TMetaItem;
 
 export type TMetaErrorResponse = AxiosError<TMetaItem>;
-
-export interface CustomError extends Error {
-  response?: {
-    status: number;
-  };
-}
