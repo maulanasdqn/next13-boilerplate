@@ -34,6 +34,10 @@ const meta: Meta<typeof RadioField> = {
         },
       ],
     },
+
+    onChange: {
+      control: { type: "function" },
+    },
   },
 };
 
@@ -45,8 +49,9 @@ export const Primary: Story = {
     variant: "sm",
     required: false,
     label: "Gender",
-    placeholder: "Masukkan Gender Anda",
     status: "none",
+    value: "lelaki",
+    onChange: (value) => console.log(value),
     options: [
       {
         label: "Lelaki",

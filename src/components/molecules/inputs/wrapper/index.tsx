@@ -17,8 +17,7 @@ export const InputWrapper: FC<TInputWrapper> = (props): ReactElement => {
 
   const inputType = match(props.type)
     .with("checkbox", () => (
-      <div className="flex gap-x-2">
-        {props.children}
+      <section className="flex flex-col gap-y-2">
         {props?.label && (
           <Label
             htmlFor={props.name}
@@ -29,7 +28,21 @@ export const InputWrapper: FC<TInputWrapper> = (props): ReactElement => {
             {props.label}
           </Label>
         )}
-      </div>
+        <section className="flex gap-x-2">
+          {props.children}
+          {props?.text && (
+            <Label
+              id={props.name}
+              htmlFor={props.name}
+              disabled={props.disabled}
+              size={props.variant}
+              required={props.required}
+            >
+              {props.text}
+            </Label>
+          )}
+        </section>
+      </section>
     ))
     .otherwise(() => (
       <section className="relative flex flex-col gap-y-2">

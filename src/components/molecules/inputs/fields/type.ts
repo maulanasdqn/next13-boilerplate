@@ -5,13 +5,7 @@ export type TOption<T = string | number> = {
   value: T;
 };
 
-export type TField = Omit<
-  DetailedHTMLProps<
-    InputHTMLAttributes<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
-    HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-  >,
-  "size"
-> & {
+export type TField<T> = DetailedHTMLProps<InputHTMLAttributes<T>, T> & {
   variant?: "sm" | "md" | "lg";
   status?: "error" | "warning" | "success" | "none";
   message?: string;

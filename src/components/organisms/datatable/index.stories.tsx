@@ -8,13 +8,13 @@ const meta: Meta<typeof DataTable> = {
   title: "Organisms/DataTable",
   argTypes: {
     columns: {
-      table: {
-        disable: true,
+      control: {
+        type: "array",
       },
     },
     data: {
-      table: {
-        disable: true,
+      control: {
+        type: "array",
       },
     },
   },

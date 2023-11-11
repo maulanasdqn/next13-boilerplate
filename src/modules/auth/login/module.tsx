@@ -1,5 +1,10 @@
 "use client";
-import { Button, ControlledTextField, ControlledCheckBoxField } from "@/components";
+import {
+  Button,
+  ControlledTextField,
+  ControlledCheckBoxField,
+  ControlledRadioField,
+} from "@/components";
 import { FC, ReactElement } from "react";
 import { useForm } from "react-hook-form";
 import { TVSLogin, VSLogin } from "./schema";
@@ -19,6 +24,7 @@ export const AuthLoginModule: FC = (): ReactElement => {
       email: "",
       password: "",
       remember: false,
+      gender: "male",
     },
   });
 
@@ -48,7 +54,7 @@ export const AuthLoginModule: FC = (): ReactElement => {
         </div>
         <ControlledTextField
           required
-          variant="md"
+          variant="sm"
           type="email"
           control={control}
           name="email"
@@ -59,7 +65,7 @@ export const AuthLoginModule: FC = (): ReactElement => {
         />
         <ControlledTextField
           required
-          variant="md"
+          variant="sm"
           type="password"
           control={control}
           name="password"
@@ -68,7 +74,29 @@ export const AuthLoginModule: FC = (): ReactElement => {
           status={errors.password ? "error" : "none"}
           message={errors.password?.message}
         />
-        <ControlledCheckBoxField control={control} name="remember" label="Remember Me" />
+        <ControlledRadioField
+          variant="sm"
+          direction="column"
+          label="Gender"
+          control={control}
+          name="gender"
+          options={[
+            {
+              label: "Male",
+              value: "male",
+            },
+            {
+              label: "Female",
+              value: "female",
+            },
+          ]}
+        />
+        <ControlledCheckBoxField
+          variant="sm"
+          control={control}
+          name="remember"
+          text="Remember Me"
+        />
         <Button disabled={!isValid} size="lg" type="submit">
           Login
         </Button>
