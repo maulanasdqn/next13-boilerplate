@@ -16,7 +16,7 @@ jobs:
       - run: bun run build
 
 test:
-  name: unit-test
+  name: test
   runs-on: ubuntu-latest
   steps:
     - uses: actions/checkout@v3

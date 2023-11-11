@@ -17,14 +17,14 @@ const meta: Meta<typeof Modal> = {
       control: {
         type: "text",
       },
-      defaultValue: "600",
+      defaultValue: "400",
     },
 
     height: {
       control: {
         type: "text",
       },
-      defaultValue: "600",
+      defaultValue: "400",
     },
 
     onClose: {
