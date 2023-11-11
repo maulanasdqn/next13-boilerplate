@@ -1,10 +1,5 @@
 "use client";
-import {
-  Button,
-  ControlledTextField,
-  ControlledCheckBoxField,
-  ControlledRadioField,
-} from "@/components";
+import { Button, ControlledTextField, ControlledCheckBoxField } from "@/components";
 import { FC, ReactElement } from "react";
 import { useForm } from "react-hook-form";
 import { TVSLogin, VSLogin } from "./schema";
@@ -24,7 +19,6 @@ export const AuthLoginModule: FC = (): ReactElement => {
       email: "",
       password: "",
       remember: false,
-      gender: "male",
     },
   });
 
@@ -73,23 +67,6 @@ export const AuthLoginModule: FC = (): ReactElement => {
           placeholder="Masukkan Password"
           status={errors.password ? "error" : "none"}
           message={errors.password?.message}
-        />
-        <ControlledRadioField
-          variant="sm"
-          direction="column"
-          label="Gender"
-          control={control}
-          name="gender"
-          options={[
-            {
-              label: "Male",
-              value: "male",
-            },
-            {
-              label: "Female",
-              value: "female",
-            },
-          ]}
         />
         <ControlledCheckBoxField
           variant="sm"

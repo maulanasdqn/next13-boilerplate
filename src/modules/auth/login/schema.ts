@@ -12,7 +12,6 @@ export const VSLogin = z.object({
     })
     .min(6, { message: "Password minimal 6 karakter" }),
   remember: z.boolean().optional(),
-  gender: z.string().optional(),
 });
 
 export type TVSLogin = z.infer<typeof VSLogin>;
