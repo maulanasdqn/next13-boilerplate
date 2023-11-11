@@ -15,7 +15,7 @@ jobs:
       - run: bun install
       - run: bun run build
 
-unit-test:
+test:
   name: unit-test
   runs-on: ubuntu-latest
   steps:
