@@ -1,12 +1,15 @@
 import { ReactElement, forwardRef } from "react";
-import { InputWrapper, TField, className } from "@/components";
+import { InputWrapper, className } from "@/components";
+import { TTextAreaField } from "./type";
 
-export const TextAreaField = forwardRef<HTMLTextAreaElement, TField>((props, ref): ReactElement => {
-  return (
-    <InputWrapper {...props}>
-      <textarea {...props} className={className(props)} data-testid="textarea-field" ref={ref} />
-    </InputWrapper>
-  );
-});
+export const TextAreaField = forwardRef<HTMLTextAreaElement, TTextAreaField>(
+  (props, ref): ReactElement => {
+    return (
+      <InputWrapper {...props}>
+        <textarea {...props} className={className(props)} data-testid="textarea-field" ref={ref} />
+      </InputWrapper>
+    );
+  },
+);
 
 TextAreaField.displayName = "TextAreaField";

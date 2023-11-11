@@ -10,6 +10,10 @@ const meta: Meta<typeof CheckBoxField> = {
     required: {
       control: { type: "boolean" },
     },
+
+    text: {
+      control: { type: "text" },
+    },
     variant: {
       options: ["sm", "md", "lg"],
       control: { type: "radio" },
@@ -21,6 +25,9 @@ const meta: Meta<typeof CheckBoxField> = {
     disabled: {
       control: { type: "boolean" },
     },
+    name: {
+      control: { type: "text" },
+    },
   },
 };
 
@@ -31,7 +38,8 @@ export const Primary: Story = {
   args: {
     variant: "sm",
     required: false,
-    label: "Nama Lengkap",
+    text: "Nama Lengkap",
     status: "none",
+    name: "nama",
   },
 };

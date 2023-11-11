@@ -13,6 +13,20 @@ const meta: Meta<typeof Modal> = {
       },
     },
 
+    width: {
+      control: {
+        type: "text",
+      },
+      defaultValue: "600",
+    },
+
+    height: {
+      control: {
+        type: "text",
+      },
+      defaultValue: "600",
+    },
+
     onClose: {
       action: "onClose",
     },
@@ -26,6 +40,8 @@ export const Primary: Story = {
   args: {
     isOpen: true,
     onClose: () => console.log("close"),
-    children: <h1>Angin Bawalah Jiwaku Melayang</h1>,
+    children: <div>Angin Bawalah Jiwaku Melayang</div>,
+    width: "600",
+    height: "600",
   },
 };
