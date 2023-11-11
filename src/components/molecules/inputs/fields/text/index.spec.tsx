@@ -69,28 +69,83 @@ describe("Test TextField Functionality", () => {
     expect(getByTestId("text-field")).toBeRequired();
   });
 
-  it("Should have className", () => {
-    const { getByTestId } = render(<TextField className="className" />);
-    expect(getByTestId("text-field")).toHaveClass("className");
-  });
-
   it("Should have size sm", () => {
-    const { getByTestId } = render(<TextField size="sm" />);
+    const { getByTestId } = render(<TextField variant="sm" />);
     expect(getByTestId("text-field")).toHaveClass("text-sm");
   });
 
   it("Should have size md", () => {
-    const { getByTestId } = render(<TextField size="md" />);
+    const { getByTestId } = render(<TextField variant="md" />);
     expect(getByTestId("text-field")).toHaveClass("text-base");
   });
 
   it("Should have size lg", () => {
-    const { getByTestId } = render(<TextField size="lg" />);
+    const { getByTestId } = render(<TextField variant="lg" />);
     expect(getByTestId("text-field")).toHaveClass("text-lg");
   });
 
   it("Should have readOnly", () => {
     const { getByTestId } = render(<TextField readOnly />);
     expect(getByTestId("text-field")).toHaveAttribute("readOnly");
+  });
+
+  it("Should have spellCheck", () => {
+    const { getByTestId } = render(<TextField spellCheck />);
+    expect(getByTestId("text-field")).toHaveAttribute("spellcheck", "true");
+  });
+
+  it("Should have autoComplete", () => {
+    const { getByTestId } = render(<TextField autoComplete="on" />);
+    expect(getByTestId("text-field")).toHaveAttribute("autocomplete", "on");
+  });
+
+  it("Should have autoCapitalize", () => {
+    const { getByTestId } = render(<TextField autoCapitalize="on" />);
+    expect(getByTestId("text-field")).toHaveAttribute("autocapitalize", "on");
+  });
+
+  it("Should have autoCorrect", () => {
+    const { getByTestId } = render(<TextField autoCorrect="on" />);
+    expect(getByTestId("text-field")).toHaveAttribute("autocorrect", "on");
+  });
+
+  it("Should have autoSave", () => {
+    const { getByTestId } = render(<TextField autoSave="on" />);
+    expect(getByTestId("text-field")).toHaveAttribute("autosave", "on");
+  });
+
+  it("Should have inputMode", () => {
+    const { getByTestId } = render(<TextField inputMode="search" />);
+    expect(getByTestId("text-field")).toHaveAttribute("inputmode", "search");
+  });
+
+  it("Should have accept", () => {
+    const { getByTestId } = render(<TextField accept="image/*" />);
+    expect(getByTestId("text-field")).toHaveAttribute("accept", "image/*");
+  });
+
+  it("Should have maxLength", () => {
+    const { getByTestId } = render(<TextField maxLength={10} />);
+    expect(getByTestId("text-field")).toHaveAttribute("maxlength", "10");
+  });
+
+  it("Should have minLength", () => {
+    const { getByTestId } = render(<TextField minLength={10} />);
+    expect(getByTestId("text-field")).toHaveAttribute("minlength", "10");
+  });
+
+  it("Should have status success", () => {
+    const { getByTestId } = render(<TextField status="success" />);
+    expect(getByTestId("text-field")).toHaveAttribute("status", "success");
+  });
+
+  it("Should have status error", () => {
+    const { getByTestId } = render(<TextField status="error" />);
+    expect(getByTestId("text-field")).toHaveAttribute("status", "error");
+  });
+
+  it("Should have status warning", () => {
+    const { getByTestId } = render(<TextField status="warning" />);
+    expect(getByTestId("text-field")).toHaveAttribute("status", "warning");
   });
 });
