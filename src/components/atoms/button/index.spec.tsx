@@ -48,4 +48,28 @@ describe("Test Button Functionality", () => {
     expect(onClickFn).toHaveBeenCalled();
     expect(getByTestId("button")).toHaveTextContent("Loading...");
   });
+
+  it("Should have className", () => {
+    const onClickFn = jest.fn();
+    const { getByTestId } = render(<Button className="test" onClick={onClickFn} />);
+    fireEvent.click(getByTestId("button"));
+    expect(onClickFn).toHaveBeenCalled();
+    expect(getByTestId("button")).toHaveClass("test");
+  });
+
+  it("Should have style", () => {
+    const onClickFn = jest.fn();
+    const { getByTestId } = render(<Button style={{ color: "#FFF" }} onClick={onClickFn} />);
+    fireEvent.click(getByTestId("button"));
+    expect(onClickFn).toHaveBeenCalled();
+    expect(getByTestId("button")).toHaveStyle({ color: "#FFF" });
+  });
+
+  it("Should have id", () => {
+    const onClickFn = jest.fn();
+    const { getByTestId } = render(<Button id="test" onClick={onClickFn} />);
+    fireEvent.click(getByTestId("button"));
+    expect(onClickFn).toHaveBeenCalled();
+    expect(getByTestId("button")).toHaveAttribute("id", "test");
+  });
 });
