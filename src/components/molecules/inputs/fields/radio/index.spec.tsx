@@ -56,4 +56,16 @@ describe("Test RadioField Functionality", () => {
     expect(getByTestId("radio-field")).toBeInTheDocument();
     expect(getAllByText("test")).toHaveLength(2);
   });
+
+  it("Should render correctly with options", () => {
+    const { getAllByLabelText } = render(
+      <RadioField
+        options={[
+          { label: "test", value: "test" },
+          { label: "test", value: "test" },
+        ]}
+      />,
+    );
+    expect(getAllByLabelText("test")).toHaveLength(1);
+  });
 });
