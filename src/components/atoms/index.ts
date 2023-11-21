@@ -1,2 +1,2 @@
-export * from "./button";
-export * from "./label";
+export * from "./forms";
+export * from "./documents";

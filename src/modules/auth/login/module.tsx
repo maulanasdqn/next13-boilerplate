@@ -1,5 +1,5 @@
 "use client";
-import { Button, ControlledTextField, ControlledCheckBoxField } from "@/components";
+import { Button, ControlledFieldText } from "@/components";
 import { FC, ReactElement } from "react";
 import { useForm } from "react-hook-form";
 import { TVSLogin, VSLogin } from "./schema";
@@ -46,9 +46,9 @@ export const AuthLoginModule: FC = (): ReactElement => {
             ullam modi animi cum, voluptate beatae doloremque id
           </p>
         </div>
-        <ControlledTextField
+        <ControlledFieldText
           required
-          variant="sm"
+          size="sm"
           type="email"
           control={control}
           name="email"
@@ -57,9 +57,9 @@ export const AuthLoginModule: FC = (): ReactElement => {
           status={errors.email ? "error" : "none"}
           message={errors.email?.message}
         />
-        <ControlledTextField
+        <ControlledFieldText
           required
-          variant="sm"
+          size="sm"
           type="password"
           control={control}
           name="password"
@@ -67,12 +67,6 @@ export const AuthLoginModule: FC = (): ReactElement => {
           placeholder="Masukkan Password"
           status={errors.password ? "error" : "none"}
           message={errors.password?.message}
-        />
-        <ControlledCheckBoxField
-          variant="sm"
-          control={control}
-          name="remember"
-          text="Remember Me"
         />
         <Button disabled={!isValid} size="lg" type="submit">
           Login
