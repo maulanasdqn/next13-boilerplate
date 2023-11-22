@@ -1,6 +1,5 @@
-import { InputText } from "@/components";
+import { InputText, Fieldset } from "@/components";
 import { ReactElement, forwardRef } from "react";
-import { Fieldset } from "../../fieldset";
 import { TFieldText } from "./type";
 
 export const FieldText = forwardRef<HTMLInputElement, TFieldText>(
