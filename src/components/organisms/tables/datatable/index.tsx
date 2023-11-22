@@ -4,11 +4,13 @@ import {
   getSortedRowModel,
   SortingState,
 } from "@tanstack/react-table";
-import { FC, ReactElement, useState } from "react";
+import { ReactElement, useState } from "react";
 import { TDataTable } from "./type";
 import { TableHead, TableBody, Table } from "@/components";
 
-export const DataTable: FC<TDataTable<Record<string, unknown>>> = (props): ReactElement => {
+export const DataTable = <T extends Record<string, unknown>>(
+  props: TDataTable<T>,
+): ReactElement => {
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const table = useReactTable({

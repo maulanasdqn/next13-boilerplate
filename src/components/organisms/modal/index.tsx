@@ -24,7 +24,12 @@ export const Modal: FC<TModal> = (props): ReactElement => {
               <div className="flex justify-between w-full items-center">
                 <h1 className="text-base font-medium select-none">{props.title}</h1>
                 {props.onClose && (
-                  <IoMdClose className="cursor-pointer" onClick={props.onClose} size={20} />
+                  <IoMdClose
+                    data-testid="close-button"
+                    className="cursor-pointer"
+                    onClick={props.onClose}
+                    size={20}
+                  />
                 )}
               </div>
               <div

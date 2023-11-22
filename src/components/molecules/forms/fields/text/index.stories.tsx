@@ -5,7 +5,7 @@ import { FieldText } from "./index";
 const meta: Meta<typeof FieldText> = {
   component: FieldText,
   tags: ["autodocs"],
-  title: "Components/Molecules/Forms/Fields/Text",
+  title: "Components/Molecules/Forms/Fields/FieldText",
   argTypes: {
     required: {
       control: { type: "boolean" },
