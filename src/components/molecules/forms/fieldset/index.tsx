@@ -58,11 +58,11 @@ export const Fieldset: FC<TFieldSet> = (props): ReactElement => {
           </Label>
         )}
         {props?.preppend && (
-          <div className="flex items-center gap-x-2 absolute top-2 left-2">{props.preppend}</div>
+          <div className="flex items-center gap-x-2 absolute top-3 left-2">{props.preppend}</div>
         )}
         {props.children}
         {props?.append && (
-          <div className="flex items-center gap-x-2 absolute top-3 right-3">{props.append}</div>
+          <div className="flex items-center gap-x-2 absolute top-2 right-3">{props.append}</div>
         )}
       </section>
     ));

@@ -4,8 +4,7 @@ import { Modal } from "./index";
 const meta: Meta<typeof Modal> = {
   component: Modal,
   tags: ["autodocs"],
-  title: "Organisms/Modal",
-
+  title: "Components/organisms/Modal",
   argTypes: {
     isOpen: {
       control: {

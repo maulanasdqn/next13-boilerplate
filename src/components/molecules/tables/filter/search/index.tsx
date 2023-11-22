@@ -7,8 +7,8 @@ export const Search: FC<TSearch> = (props): ReactElement => {
   return (
     <FieldText
       type="search"
-      preppend={<IoMdSearch className="text-gray-400" size="1.5em" />}
-      size="md"
+      preppend={<IoMdSearch className="text-gray-400" size="1em" />}
+      size="sm"
       placeholder={props.placeholder || "Cari data..."}
       onChange={props.handleSearch}
     />

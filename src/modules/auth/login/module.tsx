@@ -1,5 +1,5 @@
 "use client";
-import { Button, ControlledFieldText } from "@/components";
+import { Button, ControlledFieldCheckbox, ControlledFieldText } from "@/components";
 import { FC, ReactElement } from "react";
 import { useForm } from "react-hook-form";
 import { TVSLogin, VSLogin } from "./schema";
@@ -54,7 +54,7 @@ export const AuthLoginModule: FC = (): ReactElement => {
           name="email"
           label="Email"
           placeholder="Masukkan Email"
-          status={errors.email ? "error" : "none"}
+          status={errors.email ? "error" : isValid ? "success" : "none"}
           message={errors.email?.message}
         />
         <ControlledFieldText
@@ -65,10 +65,11 @@ export const AuthLoginModule: FC = (): ReactElement => {
           name="password"
           label="Password"
           placeholder="Masukkan Password"
-          status={errors.password ? "error" : "none"}
+          status={errors.password ? "error" : isValid ? "success" : "none"}
           message={errors.password?.message}
         />
-        <Button disabled={!isValid} size="lg" type="submit">
+        <ControlledFieldCheckbox size="sm" control={control} name="remember" text="Remember Me" />
+        <Button disabled={!isValid} size="md" type="submit">
           Login
         </Button>
         <div className="w-full flex justify-between">

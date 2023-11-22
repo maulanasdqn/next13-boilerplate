@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { FieldText } from "./";
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect } from "vitest";
 import { createRef } from "react";
 
 describe("FieldText component", () => {

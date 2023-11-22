@@ -5,7 +5,7 @@ import { DataTable } from "./index";
 const meta: Meta<typeof DataTable> = {
   component: DataTable,
   tags: ["autodocs"],
-  title: "Organisms/DataTable",
+  title: "Components/Organisms/Tables/DataTable",
   argTypes: {
     columns: {
       control: {

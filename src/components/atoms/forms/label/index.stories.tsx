@@ -5,7 +5,7 @@ import { Label } from "./index";
 const meta: Meta<typeof Label> = {
   component: Label,
   tags: ["autodocs"],
-  title: "Atoms/Label",
+  title: "Components/Atoms/Forms/Label",
   argTypes: {
     required: {
       control: { type: "boolean" },
