@@ -12,7 +12,8 @@
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.1",
@@ -51,6 +52,7 @@
     "eslint": "latest",
     "eslint-config-next": "latest",
     "eslint-plugin-storybook": "^0.6.15",
+    "husky": "^8.0.3",
     "jsdom": "^22.1.0",
     "postcss": "latest",
     "storybook": "^7.5.1",

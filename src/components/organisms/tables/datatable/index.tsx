@@ -6,7 +6,7 @@ import {
 } from "@tanstack/react-table";
 import { FC, ReactElement, useState } from "react";
 import { TDataTable } from "./type";
-import { TableHead, TableBody, TableWrapper } from "@/components";
+import { TableHead, TableBody, Table } from "@/components";
 
 export const DataTable: FC<TDataTable<Record<string, unknown>>> = (props): ReactElement => {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -23,9 +23,9 @@ export const DataTable: FC<TDataTable<Record<string, unknown>>> = (props): React
   });
 
   return (
-    <TableWrapper {...props}>
+    <Table {...props}>
       <TableHead tableHead={table.getHeaderGroups()} />
       <TableBody tableBody={table.getRowModel()} />
-    </TableWrapper>
+    </Table>
   );
 };
