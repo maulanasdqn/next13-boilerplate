@@ -3,7 +3,7 @@ import { FC, ReactElement } from "react";
 import { TButton } from "./type";
 
 export const Button: FC<TButton> = (props): ReactElement => {
-  const { isLoading = false, variant = "primary", size = "md" } = props;
+  const { isloading = +false, variant = "primary", size = "md" } = props;
 
   const className = clsx(
     "rounded-lg border hover:opacity-80",
@@ -22,13 +22,13 @@ export const Button: FC<TButton> = (props): ReactElement => {
       "px-6 py-3 text-base": size === "lg",
     },
     {
-      "opacity-50": isLoading,
+      "opacity-50": isloading,
     },
   );
 
   return (
     <button data-testid="button" className={className} {...props}>
-      {isLoading ? "Loading..." : props.children}
+      {isloading ? "Loading..." : props.children}
     </button>
   );
 };

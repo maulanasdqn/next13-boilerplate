@@ -15,7 +15,7 @@ const meta: Meta<typeof Button> = {
       options: ["sm", "md", "lg"],
       control: { type: "radio" },
     },
-    isLoading: {
+    isloading: {
       control: { type: "boolean" },
     },
     disabled: {
@@ -32,6 +32,6 @@ export const Primary: Story = {
     variant: "primary",
     size: "sm",
     children: "Button",
-    isLoading: false,
+    isloading: +false,
   },
 };
