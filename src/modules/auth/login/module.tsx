@@ -1,6 +1,6 @@
 "use client";
 import { Button, ControlledFieldCheckbox, ControlledFieldText } from "@/components";
-import { FC, ReactElement, useEffect, useState } from "react";
+import { FC, ReactElement, useLayoutEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { TVSLogin, VSLogin } from "./schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -50,7 +50,7 @@ export const AuthLoginModule: FC = (): ReactElement => {
     setIsLoading(false);
   });
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (error) {
       setTimeout(() => {
         setError("");
@@ -89,8 +89,8 @@ export const AuthLoginModule: FC = (): ReactElement => {
         type="password"
         control={control}
         name="password"
-        label="Password"
-        placeholder="Masukkan Password"
+        label="Kata sandi"
+        placeholder="Masukkan Kata sandi"
         status={errors.password ? "error" : "none"}
         message={errors.password?.message}
       />
@@ -113,7 +113,7 @@ export const AuthLoginModule: FC = (): ReactElement => {
       <div className="w-full flex justify-between">
         <p>
           Belum punya akun?{" "}
-          <Link className="text-blue-600" href="/register">
+          <Link className="text-blue-600" href="/auth/register">
             Daftar
           </Link>
         </p>

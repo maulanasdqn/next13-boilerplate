@@ -1,9 +1,10 @@
-import { FC, ReactElement, useMemo } from "react";
+import { FC, ReactElement, useMemo, useState } from "react";
 import { signOut, useSession } from "next-auth/react";
 import { Button } from "@/components";
 import { usePathname } from "next/navigation";
 import { clsx } from "clsx";
-import { IoMdPerson } from "react-icons/io";
+import { IoMdBasket } from "react-icons/io";
+import { AiFillBook, AiFillCaretDown, AiFillMoneyCollect } from "react-icons/ai";
 import Link from "next/link";
 
 export const Sidebar: FC = (): ReactElement => {
@@ -11,6 +12,8 @@ export const Sidebar: FC = (): ReactElement => {
   const userName = useMemo(() => data?.user?.name, [data]);
   const roleName = useMemo(() => data?.user?.role, [data]);
   const pathname = usePathname();
+
+  const [open, setOpen] = useState("");
 
   const selectedMenu = (url: string) =>
     clsx(
@@ -52,31 +55,48 @@ export const Sidebar: FC = (): ReactElement => {
               <span className="ms-3">Dashboard</span>
             </Link>
           </li>
-          <li>
-            <Link
-              href="/dashboard/reservasi?title=Data Reservasi Tamu"
-              className={selectedMenu("/dashboard/reservasi")}
+          <li className="text-white">
+            <div
+              onClick={() => (open === "" ? setOpen("catatan") : setOpen(""))}
+              className="flex gap-x-3 cursor-pointer select-none items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
             >
-              <svg
-                className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                viewBox="0 0 18 18"
-              >
-                <path d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10Zm10 0h-4.286A1.857 1.857 0 0 0 10 11.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 18 16.143v-4.286A1.857 1.857 0 0 0 16.143 10Z" />
-              </svg>
-              <span className="flex-1 ms-3 whitespace-nowrap">Reservasi Tamu</span>
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/dashboard/guest?title=Data Reservasi Tamu selesai"
-              className={selectedMenu("/dashboard/guest")}
-            >
-              <IoMdPerson className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-              <span className="flex-1 ms-3 whitespace-nowrap">Reservasi Tamu Selesai</span>
-            </Link>
+              <AiFillBook className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-white" />
+              Catatan Laporan
+              <AiFillCaretDown
+                className={clsx(
+                  "flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-white",
+                  {
+                    "rotate-180": open === "catatan",
+                  },
+                )}
+              />
+            </div>
+            <div className="my-3" />
+            {open === "catatan" && (
+              <div className="flex flex-col gap-y-2 p-2 ml-2 bg-gray-600 rounded-lg">
+                <Link
+                  href="/dashboard/report-transaction?title=Data Pelaporan Transaksi"
+                  className={selectedMenu("/dashboard/report-transaction")}
+                >
+                  <AiFillBook className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+                  <span className="flex-1 ms-3 whitespace-nowrap">Pencatatan Transaksi</span>
+                </Link>
+                <Link
+                  href="/dashboard/report-payment?title=Data Pelaporan Pembayaran"
+                  className={selectedMenu("/dashboard/report-payment")}
+                >
+                  <AiFillMoneyCollect className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+                  <span className="flex-1 ms-3 whitespace-nowrap">Pembayaran</span>
+                </Link>
+                <Link
+                  href="/dashboard/report?title=Data Pelaporan"
+                  className={selectedMenu("/dashboard/report")}
+                >
+                  <IoMdBasket className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+                  <span className="flex-1 ms-3 whitespace-nowrap">Laporan Kuangan</span>
+                </Link>
+              </div>
+            )}
           </li>
           <li className="flex mt-6 w-full">
             <Button onClick={() => signOut()} variant="cancel">

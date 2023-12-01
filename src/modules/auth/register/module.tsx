@@ -1,6 +1,6 @@
 "use client";
 import { Button, ControlledFieldCheckbox, ControlledFieldText } from "@/components";
-import { FC, ReactElement, useEffect, useState } from "react";
+import { FC, ReactElement, useLayoutEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { TVSRegister, VSRegister } from "./schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,8 +12,8 @@ import { RegisterAction } from "./action";
 
 export const AuthRegisterModule: FC = (): ReactElement => {
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/profile";
-  const [error, setError] = useState("");
+  const callbackUrl = searchParams.get("callbackUrl") || "/auth/login";
+  const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
@@ -28,7 +28,6 @@ export const AuthRegisterModule: FC = (): ReactElement => {
       name: "",
       email: "",
       password: "",
-      toc: false,
     },
   });
 
@@ -40,16 +39,17 @@ export const AuthRegisterModule: FC = (): ReactElement => {
         email: data.email,
         password: data.password,
       });
+      router.push(callbackUrl);
     } catch (error) {
       setError(error as string);
     }
     setIsLoading(false);
   });
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (error) {
       setTimeout(() => {
-        setError("");
+        setError(null);
       }, 3000);
     }
   }, [error]);
@@ -64,8 +64,8 @@ export const AuthRegisterModule: FC = (): ReactElement => {
       </div>
       {error && (
         <span className="bg-red-50 text-red-500 p-4 rounded-lg border border-red-500 flex justify-between items-center">
-          {error}
-          <IoMdClose onClick={() => setError("")} className="cursor-pointer" size={20} />
+          {typeof error !== "string" ? "Email sudah digunakan" : error}
+          <IoMdClose onClick={() => setError(null)} className="cursor-pointer" size={20} />
         </span>
       )}
       <ControlledFieldText
@@ -96,11 +96,24 @@ export const AuthRegisterModule: FC = (): ReactElement => {
         type="password"
         control={control}
         name="password"
-        label="Password"
-        placeholder="Masukkan Password"
+        label="Kata sandi"
+        hint="Kata sandi setidaknya ada 8 karakter"
+        placeholder="Masukkan Kata sandi"
         status={errors.password ? "error" : "none"}
         message={errors.password?.message}
       />
+      <ControlledFieldText
+        required
+        size="sm"
+        type="password"
+        control={control}
+        name="confirm_password"
+        label="Konfirmasi Kata sandi"
+        placeholder="Masukkan Konfirmasi Kata sandi"
+        status={errors.confirm_password ? "error" : "none"}
+        message={errors.confirm_password?.message}
+      />
+
       <ControlledFieldCheckbox
         size="sm"
         control={control}
@@ -125,7 +138,7 @@ export const AuthRegisterModule: FC = (): ReactElement => {
       <div className="w-full flex justify-between">
         <p>
           Sudah punya akun?{" "}
-          <Link className="text-blue-600" href="/">
+          <Link className="text-blue-600" href="/auth/login">
             Masuk disini
           </Link>
         </p>

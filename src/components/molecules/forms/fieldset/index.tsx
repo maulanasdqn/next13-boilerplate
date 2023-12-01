@@ -71,7 +71,11 @@ export const Fieldset: FC<TFieldSet> = (props): ReactElement => {
     <fieldset className="flex flex-col gap-y-2">
       {inputType}
       {props.message && status !== "none" && <Message {...props}>{props.message}</Message>}
-      {props?.hint && <Message status={"none"}>*{props.hint}</Message>}
+      {props?.hint && (
+        <Message className="text-xs italic mt-[-7px] text-gray-400" status={"none"}>
+          *{props.hint}
+        </Message>
+      )}
     </fieldset>
   );
 };
