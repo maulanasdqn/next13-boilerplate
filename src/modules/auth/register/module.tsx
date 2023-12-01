@@ -2,16 +2,17 @@
 import { Button, ControlledFieldCheckbox, ControlledFieldText } from "@/components";
 import { FC, ReactElement, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { TVSLogin, VSLogin } from "./schema";
+import { TVSRegister, VSRegister } from "./schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
-import Link from "next/link";
 import { IoLogoGoogle, IoMdClose } from "react-icons/io";
 import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { RegisterAction } from "./action";
 
-export const AuthLoginModule: FC = (): ReactElement => {
+export const AuthRegisterModule: FC = (): ReactElement => {
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard?title=Dashboard";
+  const callbackUrl = searchParams.get("callbackUrl") || "/profile";
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -20,32 +21,27 @@ export const AuthLoginModule: FC = (): ReactElement => {
     control,
     handleSubmit,
     formState: { isValid, errors },
-  } = useForm<TVSLogin>({
+  } = useForm<TVSRegister>({
     mode: "all",
-    resolver: zodResolver(VSLogin),
+    resolver: zodResolver(VSRegister),
     defaultValues: {
+      name: "",
       email: "",
       password: "",
-      remember: false,
+      toc: false,
     },
   });
 
   const onSubmit = handleSubmit(async (data) => {
     setIsLoading(true);
     try {
-      const res = await signIn("login", {
+      await RegisterAction({
+        name: data.name,
         email: data.email,
         password: data.password,
-        redirect: false,
       });
-
-      if (!res?.error) {
-        router.push(callbackUrl);
-      } else {
-        setError(res.error);
-      }
     } catch (error) {
-      setError("Terjadi kesalahan " + error);
+      setError(error as string);
     }
     setIsLoading(false);
   });
@@ -64,7 +60,7 @@ export const AuthLoginModule: FC = (): ReactElement => {
       className="md:w-1/2 w-full border h-full gap-y-4 justify-center flex flex-col md:px-12 px-6 rounded-lg"
     >
       <div className="flex flex-col gap-y-2">
-        <h1 className="text-4xl text-gray-600 text-center font-medium">Masuk</h1>
+        <h1 className="text-4xl text-gray-600 text-center font-medium">Daftar</h1>
       </div>
       {error && (
         <span className="bg-red-50 text-red-500 p-4 rounded-lg border border-red-500 flex justify-between items-center">
@@ -72,6 +68,17 @@ export const AuthLoginModule: FC = (): ReactElement => {
           <IoMdClose onClick={() => setError("")} className="cursor-pointer" size={20} />
         </span>
       )}
+      <ControlledFieldText
+        required
+        size="sm"
+        type="text"
+        control={control}
+        name="name"
+        label="Nama Lengkap"
+        placeholder="Masukkan Nama Lengkap"
+        status={errors.name ? "error" : "none"}
+        message={errors.name?.message}
+      />
       <ControlledFieldText
         required
         size="sm"
@@ -94,9 +101,14 @@ export const AuthLoginModule: FC = (): ReactElement => {
         status={errors.password ? "error" : "none"}
         message={errors.password?.message}
       />
-      <ControlledFieldCheckbox size="sm" control={control} name="remember" text="Ingat Saya" />
+      <ControlledFieldCheckbox
+        size="sm"
+        control={control}
+        name="toc"
+        text="Syarat & Ketentuan Berlaku"
+      />
       <Button isloading={+isLoading} disabled={!isValid} size="md" type="submit">
-        Masuk
+        Daftar Sekarang
       </Button>
       <hr />
       <Button
@@ -106,18 +118,17 @@ export const AuthLoginModule: FC = (): ReactElement => {
         type="button"
       >
         <div className="flex w-full items-center justify-center gap-x-2">
-          <span> Masuk Dengan Google </span> <IoLogoGoogle size="20px" />
+          <span> Daftar Dengan Google </span> <IoLogoGoogle size="20px" />
         </div>
       </Button>
 
       <div className="w-full flex justify-between">
         <p>
-          Belum punya akun?{" "}
-          <Link className="text-blue-600" href="/register">
-            Daftar
+          Sudah punya akun?{" "}
+          <Link className="text-blue-600" href="/">
+            Masuk disini
           </Link>
         </p>
-        <p>Lupa kata sandi?</p>
       </div>
     </form>
   );

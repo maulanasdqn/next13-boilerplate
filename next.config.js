@@ -10,7 +10,7 @@ module.exports = withSentryConfig(
   {
     silent: true,
     org: "psu-dev-team",
-    project: "next13-boilerplate",
+    project: "vocasia-pos-umkm",
   },
   {
     widenClientFileUpload: true,
