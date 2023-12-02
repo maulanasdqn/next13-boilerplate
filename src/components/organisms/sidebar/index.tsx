@@ -1,10 +1,10 @@
 import { FC, ReactElement, useMemo, useState } from "react";
-import { signOut, useSession } from "next-auth/react";
-import { Button } from "@/components";
+import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { clsx } from "clsx";
 import { IoMdBasket } from "react-icons/io";
 import { AiFillBook, AiFillCaretDown, AiFillMoneyCollect } from "react-icons/ai";
+import { HiUsers } from "react-icons/hi2";
 import Link from "next/link";
 
 export const Sidebar: FC = (): ReactElement => {
@@ -19,9 +19,7 @@ export const Sidebar: FC = (): ReactElement => {
     clsx(
       "flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group",
       {
-        "bg-gray-700":
-          pathname?.split?.("/")?.splice?.(0, 3)?.join?.("") ===
-          url?.split?.("/")?.splice?.(0, 3).join(""),
+        "bg-gray-700": pathname === url,
       },
     );
 
@@ -57,7 +55,7 @@ export const Sidebar: FC = (): ReactElement => {
           </li>
           <li className="text-white">
             <div
-              onClick={() => (open === "" ? setOpen("catatan") : setOpen(""))}
+              onClick={() => (open === "" || open !== "report" ? setOpen("report") : setOpen(""))}
               className="flex gap-x-3 cursor-pointer select-none items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
             >
               <AiFillBook className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-white" />
@@ -66,42 +64,68 @@ export const Sidebar: FC = (): ReactElement => {
                 className={clsx(
                   "flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-white",
                   {
-                    "rotate-180": open === "catatan",
+                    "rotate-180": open === "report",
                   },
                 )}
               />
             </div>
             <div className="my-3" />
-            {open === "catatan" && (
+            {open === "report" && (
               <div className="flex flex-col gap-y-2 p-2 ml-2 bg-gray-600 rounded-lg">
                 <Link
-                  href="/dashboard/report-transaction?title=Data Pelaporan Transaksi"
-                  className={selectedMenu("/dashboard/report-transaction")}
+                  href="/dashboard/report/transaction?title=Data Pelaporan Transaksi"
+                  className={selectedMenu("/dashboard/report/transaction")}
                 >
                   <AiFillBook className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-                  <span className="flex-1 ms-3 whitespace-nowrap">Pencatatan Transaksi</span>
+                  <span className="flex-1 ms-3 whitespace-nowrap">Data Transaksi</span>
                 </Link>
                 <Link
-                  href="/dashboard/report-payment?title=Data Pelaporan Pembayaran"
-                  className={selectedMenu("/dashboard/report-payment")}
+                  href="/dashboard/report/payment?title=Data Pelaporan Pembayaran"
+                  className={selectedMenu("/dashboard/report/payment")}
                 >
                   <AiFillMoneyCollect className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-                  <span className="flex-1 ms-3 whitespace-nowrap">Pembayaran</span>
+                  <span className="flex-1 ms-3 whitespace-nowrap">Data Pembayaran</span>
                 </Link>
                 <Link
                   href="/dashboard/report?title=Data Pelaporan"
-                  className={selectedMenu("/dashboard/report")}
+                  className={selectedMenu("/dashboard/report/financial")}
                 >
                   <IoMdBasket className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-                  <span className="flex-1 ms-3 whitespace-nowrap">Laporan Kuangan</span>
+                  <span className="flex-1 ms-3 whitespace-nowrap">Data Laporan Kuangan</span>
                 </Link>
               </div>
             )}
           </li>
-          <li className="flex mt-6 w-full">
-            <Button onClick={() => signOut()} variant="cancel">
-              Logout
-            </Button>
+          <li className="text-white">
+            <div
+              onClick={() =>
+                open === "" || open !== "customer" ? setOpen("customer") : setOpen("")
+              }
+              className="flex gap-x-3 cursor-pointer select-none justify-between items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+            >
+              <HiUsers className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-white" />
+              Catatan Pelanggan
+              <AiFillCaretDown
+                className={clsx(
+                  "flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-white",
+                  {
+                    "rotate-180": open === "customer",
+                  },
+                )}
+              />
+            </div>
+            <div className="my-3" />
+            {open === "customer" && (
+              <div className="flex flex-col gap-y-2 p-2 ml-2 bg-gray-600 rounded-lg">
+                <Link
+                  href="/dashboard/report/transaction?title=Data Pelaporan Transaksi"
+                  className={selectedMenu("/dashboard/report/transaction")}
+                >
+                  <AiFillBook className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+                  <span className="flex-1 ms-3 whitespace-nowrap">Data Hutang</span>
+                </Link>
+              </div>
+            )}
           </li>
         </ul>
       </div>

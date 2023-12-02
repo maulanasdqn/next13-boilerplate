@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import { FC, ReactElement } from "react";
 import { TButton } from "./type";
+import Link from "next/link";
 
 export const Button: FC<TButton> = (props): ReactElement => {
   const { isloading = +false, variant = "primary", size = "md" } = props;
@@ -14,7 +15,7 @@ export const Button: FC<TButton> = (props): ReactElement => {
       "bg-red-500 text-white": variant === "error",
       "bg-white text-gray-600 border-gray-600": variant === "cancel",
       "bg-yellow-500 text-white": variant === "warning",
-      "bg-green-500 text-white": variant === "success",
+      "bg-green-600 text-white": variant === "success",
     },
     {
       "px-3 py-2 text-sm": size === "sm",
@@ -25,6 +26,14 @@ export const Button: FC<TButton> = (props): ReactElement => {
       "opacity-50": isloading,
     },
   );
+
+  if (props.href) {
+    return (
+      <Link data-testid="button" className={className} href={props.href}>
+        {isloading ? "Loading..." : props.children}
+      </Link>
+    );
+  }
 
   return (
     <button data-testid="button" className={className} {...props}>
