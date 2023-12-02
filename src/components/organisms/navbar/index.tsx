@@ -17,7 +17,7 @@ export const Navbar: FC = (): ReactElement => {
   const navbarClassName = clsx(
     "w-full items-center gap-x-4 right-0 fixed top-0 bg-white shadow-md p-4 max-h-[56px] z-1 justify-between flex",
     {
-      "sm:pl-[280px]": isSidebarOpen === "open",
+      "sm:pl-[280px]": isSidebarOpen === "open" || isSidebarOpen === "null" || !isSidebarOpen,
       "pl-6": isSidebarOpen === "close",
     },
   );
@@ -25,7 +25,7 @@ export const Navbar: FC = (): ReactElement => {
   return (
     <nav className={navbarClassName}>
       <div className="flex gap-x-4 relative">
-        {isSidebarOpen === undefined || isSidebarOpen !== "open" ? (
+        {isSidebarOpen === "close" ? (
           <IoMdMenu onClick={() => setIsSidebarOpen("open")} className="font-bold" size={24} />
         ) : (
           <IoMdClose onClick={() => setIsSidebarOpen("close")} className="font-bold" size={24} />

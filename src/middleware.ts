@@ -6,6 +6,8 @@ export async function middleware(req: NextRequest, _event: NextFetchEvent) {
   auth.pathname = "/auth/login";
   const afterAuth = req.nextUrl.clone();
   afterAuth.pathname = "/dashboard";
+  afterAuth.searchParams.set("title", "Dashboard");
+  afterAuth.searchParams.set("isSidebarOpen", "open");
 
   if (req.nextUrl.pathname.startsWith("/dashboard")) {
     const session = await getToken({ req: req as any });

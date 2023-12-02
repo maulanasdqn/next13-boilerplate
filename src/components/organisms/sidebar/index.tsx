@@ -26,7 +26,7 @@ export const Sidebar: FC = (): ReactElement => {
     );
 
   const sidebarClassName = clsx("fixed top-0 left-0 z-40 w-64 h-screen transition-transform", {
-    "translate-x-0": isSidebarOpen === "open",
+    "translate-x-0": isSidebarOpen === "open" || isSidebarOpen === "null" || !isSidebarOpen,
     "-translate-x-full": isSidebarOpen === "close",
   });
 
@@ -42,7 +42,10 @@ export const Sidebar: FC = (): ReactElement => {
         </div>
         <ul className="space-y-2 font-medium">
           <li>
-            <Link href="/dashboard?title=Dashboard" className={selectedMenu("/dashboard")}>
+            <Link
+              href={`/dashboard?title=Dashboard&isSidebarOpen=${isSidebarOpen}`}
+              className={selectedMenu("/dashboard")}
+            >
               <IoMdDesktop className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-white" />
               <span className="ms-3">Dashboard</span>
             </Link>
@@ -69,21 +72,21 @@ export const Sidebar: FC = (): ReactElement => {
             {open === "report" && (
               <div className="flex flex-col gap-y-2 p-2 ml-2 bg-gray-600 rounded-lg">
                 <Link
-                  href="/dashboard/report/transaction?title=Data Pelaporan Transaksi"
+                  href={`/dashboard/report/transaction?title=Data Transaksi&isSidebarOpen=${isSidebarOpen}`}
                   className={selectedMenu("/dashboard/report/transaction")}
                 >
                   <AiFillBook className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
                   <span className="flex-1 ms-3 whitespace-nowrap">Data Transaksi</span>
                 </Link>
                 <Link
-                  href="/dashboard/report/payment?title=Data Pelaporan Pembayaran"
+                  href={`/dashboard/report/payment?title=Data Pembayaran&isSidebarOpen=${isSidebarOpen}`}
                   className={selectedMenu("/dashboard/report/payment")}
                 >
                   <AiFillMoneyCollect className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
                   <span className="flex-1 ms-3 whitespace-nowrap">Data Pembayaran</span>
                 </Link>
                 <Link
-                  href="/dashboard/report?title=Data Pelaporan"
+                  href={`/dashboard/report/financial?title=Data Keuangan&isSidebarOpen=${isSidebarOpen}`}
                   className={selectedMenu("/dashboard/report/financial")}
                 >
                   <IoMdBasket className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
@@ -116,7 +119,7 @@ export const Sidebar: FC = (): ReactElement => {
             {open === "customer" && (
               <div className="flex flex-col gap-y-2 p-2 ml-2 bg-gray-600 rounded-lg">
                 <Link
-                  href="/dashboard/report/debt?title=Data Hutang"
+                  href={`/dashboard/customer/debt?title=Data Hutang Pelanggan&isSidebarOpen=${isSidebarOpen}`}
                   className={selectedMenu("/dashboard/customer/debt")}
                 >
                   <AiFillBook className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
@@ -147,8 +150,8 @@ export const Sidebar: FC = (): ReactElement => {
             {open === "item" && (
               <div className="flex flex-col gap-y-2 p-2 ml-2 bg-gray-600 rounded-lg">
                 <Link
-                  href="/dashboard/report/debt?title=Data Hutang"
-                  className={selectedMenu("/dashboard/customer/debt")}
+                  href={`/dashboard/item?title=Data Barang&isSidebarOpen=${isSidebarOpen}`}
+                  className={selectedMenu("/dashboard/item")}
                 >
                   <AiFillBoxPlot className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
                   <span className="flex-1 ms-3 whitespace-nowrap">Data Barang</span>

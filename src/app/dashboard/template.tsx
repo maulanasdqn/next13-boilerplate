@@ -11,7 +11,11 @@ const DashboardTemplate: NextPage = (props: PropsWithChildren): ReactElement => 
   const className = clsx(
     "pr-6 py-12 pl-10 mt-6  w-full bg-gray-50 gap-y-10 flex flex-col overflow-x-auto",
     {
-      "sm:ml-60": isSidebarOpen === "open",
+      "sm:ml-60":
+        isSidebarOpen === "open" ||
+        isSidebarOpen === undefined ||
+        isSidebarOpen === "null" ||
+        !isSidebarOpen,
       "pl-6": isSidebarOpen === "close",
     },
   );

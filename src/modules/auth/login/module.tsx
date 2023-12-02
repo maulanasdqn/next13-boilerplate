@@ -11,7 +11,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 export const AuthLoginModule: FC = (): ReactElement => {
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard?title=Dashboard";
+  const callbackUrl =
+    searchParams.get("callbackUrl") || "/dashboard?title=Dashboard&isSidebarOpen=open";
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
