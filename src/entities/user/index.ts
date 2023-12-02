@@ -5,4 +5,5 @@ export type TUser = {
   email: string;
   name: string;
   avatar_url?: string;
+  role: string;
 } & TToken;

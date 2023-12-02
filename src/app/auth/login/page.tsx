@@ -2,8 +2,8 @@ import { AuthLoginModule } from "@/modules";
 import { NextPage } from "next";
 import { ReactElement } from "react";
 
-const Home: NextPage = (): ReactElement => {
+const AuthLoginPage: NextPage = (): ReactElement => {
   return <AuthLoginModule />;
 };
 
-export default Home;
+export default AuthLoginPage;
