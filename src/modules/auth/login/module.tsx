@@ -109,7 +109,11 @@ export const AuthLoginModule: FC = (): ReactElement => {
       </Button>
       <hr />
       <Button
-        onClick={() => signIn("google", { callbackUrl })}
+        onClick={async () =>
+          await signIn("google", {
+            redirect: false,
+          })
+        }
         variant="cancel"
         size="md"
         type="button"

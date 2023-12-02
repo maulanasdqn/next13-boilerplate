@@ -22,7 +22,6 @@ export const authOptions: NextAuthOptions = {
     }),
     CredentialsProvider({
       id: "login",
-      name: "Sign in",
       credentials: {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
@@ -64,8 +63,18 @@ export const authOptions: NextAuthOptions = {
       };
     },
 
-    jwt: ({ token, user }) => {
-      if (user) {
+    jwt: ({ token, user, account, profile }) => {
+      if (account?.provider === "google" && profile) {
+        return {
+          ...token,
+          name: profile.name,
+          email: profile.email,
+          role: "USER",
+          id: profile.sub,
+        };
+      }
+
+      if (account?.provider === "login" && user) {
         const u = user as TUser;
         return {
           ...token,
@@ -73,6 +82,7 @@ export const authOptions: NextAuthOptions = {
           id: u.id,
         };
       }
+
       return token;
     },
   },
