@@ -2,16 +2,18 @@ import { FC, ReactElement, useMemo, useState } from "react";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { clsx } from "clsx";
-import { IoMdBasket } from "react-icons/io";
-import { AiFillBook, AiFillCaretDown, AiFillMoneyCollect } from "react-icons/ai";
-import { HiUsers } from "react-icons/hi2";
+import { IoMdBasket, IoMdDesktop } from "react-icons/io";
+import { AiFillBook, AiFillBoxPlot, AiFillCaretDown, AiFillMoneyCollect } from "react-icons/ai";
+import { HiArchiveBox, HiUsers } from "react-icons/hi2";
 import Link from "next/link";
+import { useQueryState } from "next-usequerystate";
 
 export const Sidebar: FC = (): ReactElement => {
   const { data } = useSession();
   const userName = useMemo(() => data?.user?.name, [data]);
   const roleName = useMemo(() => data?.user?.role, [data]);
   const pathname = usePathname();
+  const [isSidebarOpen, setIsSidebarOpen] = useQueryState("isSidebarOpen");
 
   const [open, setOpen] = useState("");
 
@@ -23,12 +25,13 @@ export const Sidebar: FC = (): ReactElement => {
       },
     );
 
+  const sidebarClassName = clsx("fixed top-0 left-0 z-40 w-64 h-screen transition-transform", {
+    "translate-x-0": isSidebarOpen === "open",
+    "-translate-x-full": isSidebarOpen === "close",
+  });
+
   return (
-    <aside
-      id="default-sidebar"
-      className="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
-      aria-label="Sidebar"
-    >
+    <aside id="default-sidebar" className={sidebarClassName} aria-label="Sidebar">
       <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
         <div className="flex flex-col gap-y-4 mb-4">
           <span className="text-white font-medium  w-full block text-2xl">POS UMKM</span>
@@ -40,26 +43,19 @@ export const Sidebar: FC = (): ReactElement => {
         <ul className="space-y-2 font-medium">
           <li>
             <Link href="/dashboard?title=Dashboard" className={selectedMenu("/dashboard")}>
-              <svg
-                className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                viewBox="0 0 22 21"
-              >
-                <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z" />
-                <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z" />
-              </svg>
+              <IoMdDesktop className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-white" />
               <span className="ms-3">Dashboard</span>
             </Link>
           </li>
           <li className="text-white">
             <div
               onClick={() => (open === "" || open !== "report" ? setOpen("report") : setOpen(""))}
-              className="flex gap-x-3 cursor-pointer select-none items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+              className="flex gap-x-3 cursor-pointer justify-between select-none items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
             >
-              <AiFillBook className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-white" />
-              Catatan Laporan
+              <div className="flex gap-x-3 items-center">
+                <AiFillBook className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-white" />
+                Man. Laporan
+              </div>
               <AiFillCaretDown
                 className={clsx(
                   "flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-white",
@@ -103,8 +99,10 @@ export const Sidebar: FC = (): ReactElement => {
               }
               className="flex gap-x-3 cursor-pointer select-none justify-between items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
             >
-              <HiUsers className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-white" />
-              Catatan Pelanggan
+              <div className="flex gap-x-3 items-center">
+                <HiUsers className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-white" />
+                Man. Pelanggan
+              </div>
               <AiFillCaretDown
                 className={clsx(
                   "flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-white",
@@ -123,6 +121,37 @@ export const Sidebar: FC = (): ReactElement => {
                 >
                   <AiFillBook className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
                   <span className="flex-1 ms-3 whitespace-nowrap">Data Hutang</span>
+                </Link>
+              </div>
+            )}
+          </li>
+          <li className="text-white">
+            <div
+              onClick={() => (open === "" || open !== "item" ? setOpen("item") : setOpen(""))}
+              className="flex gap-x-3 cursor-pointer select-none justify-between items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+            >
+              <div className="flex gap-x-3 items-center">
+                <HiArchiveBox className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-white" />
+                Man. Barang
+              </div>
+              <AiFillCaretDown
+                className={clsx(
+                  "flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-white",
+                  {
+                    "rotate-180": open === "item",
+                  },
+                )}
+              />
+            </div>
+            <div className="my-3" />
+            {open === "item" && (
+              <div className="flex flex-col gap-y-2 p-2 ml-2 bg-gray-600 rounded-lg">
+                <Link
+                  href="/dashboard/report/debt?title=Data Hutang"
+                  className={selectedMenu("/dashboard/customer/debt")}
+                >
+                  <AiFillBoxPlot className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+                  <span className="flex-1 ms-3 whitespace-nowrap">Data Barang</span>
                 </Link>
               </div>
             )}
