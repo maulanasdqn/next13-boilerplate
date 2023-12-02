@@ -37,8 +37,8 @@ module.exports = withSentryConfig(
   module.exports,
   {
     silent: true,
-    org: "psu-dev-team",
-    project: "vocasia-pos-umkm",
+    org: process.env.SENTRY_ORG,
+    project: process.env.SENTRY_PROJECT,
   },
   {
     widenClientFileUpload: true,

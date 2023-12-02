@@ -10,6 +10,8 @@
     "lint": "next lint",
     "test": "vitest",
     "test:run": "vitest run",
+    "generate": "prisma generate",
+    "studio": "prisma studio",
     "test:coverage": "vitest run --coverage",
     "storybook:dev": "storybook dev -p 6006",
     "storybook:build": "storybook build",
