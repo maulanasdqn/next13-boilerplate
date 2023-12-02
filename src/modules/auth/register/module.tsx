@@ -12,7 +12,9 @@ import { RegisterAction } from "./action";
 
 export const AuthRegisterModule: FC = (): ReactElement => {
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/auth/login";
+  const callbackUrl =
+    searchParams.get("callbackUrl") ||
+    "/auth/login?register_success=Berhasil Mendaftar silahkan masuk";
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();

@@ -16,6 +16,8 @@ export const AuthLoginModule: FC = (): ReactElement => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
+  const registerSuccess = searchParams.get("register_success");
+
   const {
     control,
     handleSubmit,
@@ -72,6 +74,13 @@ export const AuthLoginModule: FC = (): ReactElement => {
           <IoMdClose onClick={() => setError("")} className="cursor-pointer" size={20} />
         </span>
       )}
+
+      {registerSuccess && (
+        <span className="bg-green-50 text-green-600 p-4 rounded-lg border border-green-500 flex justify-between items-center">
+          {registerSuccess}
+        </span>
+      )}
+
       <ControlledFieldText
         required
         size="sm"
