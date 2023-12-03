@@ -115,7 +115,6 @@ export const AuthRegisterModule: FC = (): ReactElement => {
         status={errors.confirm_password ? "error" : "none"}
         message={errors.confirm_password?.message}
       />
-
       <ControlledFieldCheckbox
         size="sm"
         control={control}

@@ -18,12 +18,9 @@ export const Sidebar: FC = (): ReactElement => {
   const [open, setOpen] = useState("");
 
   const selectedMenu = (url: string) =>
-    clsx(
-      "flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group",
-      {
-        "bg-gray-700": pathname === url,
-      },
-    );
+    clsx("flex items-center p-2 rounded-lg text-white hover:bg-gray-700 group", {
+      "bg-gray-700": pathname === url,
+    });
 
   const sidebarClassName = clsx("fixed top-0 left-0 z-40 w-64 h-screen transition-transform", {
     "translate-x-0": isSidebarOpen === "open" || isSidebarOpen === "null" || !isSidebarOpen,
@@ -32,7 +29,7 @@ export const Sidebar: FC = (): ReactElement => {
 
   return (
     <aside id="default-sidebar" className={sidebarClassName} aria-label="Sidebar">
-      <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
+      <div className="h-full px-3 py-4 overflow-y-auto bg-gray-800">
         <div className="flex flex-col gap-y-4 mb-4">
           <span className="text-white font-medium  w-full block text-2xl">POS UMKM</span>
           <div className="bg-gray-600 p-2 rounded-lg flex flex-col">
@@ -46,14 +43,14 @@ export const Sidebar: FC = (): ReactElement => {
               href={`/dashboard?title=Dashboard&isSidebarOpen=${isSidebarOpen}`}
               className={selectedMenu("/dashboard")}
             >
-              <IoMdDesktop className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-white" />
+              <IoMdDesktop className="flex-shrink-0 w-5 h-5 text-gray-400 transition duration-75  group-hover:text-white" />
               <span className="ms-3">Dashboard</span>
             </Link>
           </li>
           <li className="text-white">
             <div
               onClick={() => (open === "" || open !== "report" ? setOpen("report") : setOpen(""))}
-              className="flex gap-x-3 cursor-pointer justify-between select-none items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+              className="flex gap-x-3 cursor-pointer justify-between select-none items-center p-2 rounded-lg text-white hover:bg-gray-700"
             >
               <div className="flex gap-x-3 items-center">
                 <AiFillBook className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-white" />
