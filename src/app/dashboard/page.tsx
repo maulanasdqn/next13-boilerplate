@@ -1,8 +1,10 @@
+import { serverTrpc } from "@/libs";
 import { DashboardModule } from "@/modules";
 import { NextPage } from "next";
-import { ReactElement } from "react";
 
-const DashboardPage: NextPage = (): ReactElement => {
+const DashboardPage: NextPage = async () => {
+  const data = await serverTrpc.getReportTransaction();
+  console.log(data);
   return <DashboardModule />;
 };
 

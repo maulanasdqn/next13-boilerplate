@@ -1,89 +1,90 @@
-import { PrismaAdapter } from "@auth/prisma-adapter";
-import { compare } from "bcryptjs";
-import type { NextAuthOptions } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import GoogleProvider from "next-auth/providers/google";
-import { prisma } from "../prisma";
+import { NextAuthOptions } from "next-auth";
+import { DrizzleAdapter } from "@auth/drizzle-adapter";
+import { db, roles, users } from "@/server";
 import { TUser } from "@/entities";
+import { eq } from "drizzle-orm";
+import { googleProvider } from "./google";
+import { credentialProvider } from "./credential";
 
-export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
+export const config = {
   pages: {
     signIn: "/auth/login",
   },
-  session: {
-    strategy: "jwt",
-  },
-  providers: [
-    GoogleProvider({
-      id: "google",
-      clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-    }),
-    CredentialsProvider({
-      id: "login",
-      credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
-      },
-      async authorize(credentials) {
-        if (!credentials?.email || !credentials.password) {
-          throw new Error("Email dan Password wajib diisi");
-        }
-
-        const user = await prisma.user.findUnique({
-          where: {
-            email: credentials.email,
-          },
-        });
-
-        if (!user || !(await compare(credentials.password, user.password!))) {
-          throw new Error("Email atau Password salah");
-        }
-
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          role: user.role,
-        };
-      },
-    }),
-  ],
-
+  providers: [googleProvider, credentialProvider],
+  adapter: DrizzleAdapter(db),
+  session: { strategy: "jwt" },
   callbacks: {
-    session: ({ session, token }) => {
-      return {
-        ...session,
-        user: {
-          ...session.user,
-          id: token.id,
-          role: token.role,
-        },
-      };
-    },
-
-    jwt: ({ token, user, account, profile }) => {
+    async jwt({ user: us, token, account, profile }) {
       if (account?.provider === "google" && profile) {
+        const p = profile as any;
+
+        const role = await db
+          .select({ name: roles.name, id: roles.id, permissions: roles.permissions })
+          .from(roles)
+          .where(eq(roles.name, "User"))
+          .then((res) => res.at(0));
+
+        const user = await db
+          .select({ role_id: users.role_id, id: users.id })
+          .from(users)
+          .where(eq(users.email, profile.email as string))
+          .then((res) => res.at(0));
+
+        if (!user?.id) {
+          await db
+            .insert(users)
+            .values({
+              role_id: role?.id as string,
+              fullname: profile?.name as string,
+              email: profile?.email as string,
+              image: p?.picture as string,
+            })
+            .returning();
+        }
+
+        if (!user?.role_id) {
+          await db
+            .update(users)
+            .set({ role_id: role?.id })
+            .where(eq(users.email, profile.email as string));
+        }
+
         return {
           ...token,
-          name: profile.name,
+          id: user?.id || "",
+          fullname: profile.name,
           email: profile.email,
-          role: "USER",
-          id: profile.sub,
+          image: p?.picture,
+          role,
         };
       }
 
-      if (account?.provider === "login" && user) {
-        const u = user as TUser;
+      if (account?.provider === "login" && us) {
+        const u = us as TUser;
         return {
           ...token,
-          role: u.role,
           id: u.id,
+          fullname: u.fullname,
+          email: u.email,
+          role: {
+            id: u.role.id,
+            name: u.role.name,
+            permissions: u.role.permissions,
+          },
         };
       }
-
       return token;
     },
+
+    async session({ session, token }) {
+      session.user = {
+        id: token?.id,
+        fullname: token?.fullname,
+        image: token?.image,
+        email: token.email,
+        role: token.role,
+      } as TUser;
+      return session;
+    },
   },
-};
+} satisfies NextAuthOptions;

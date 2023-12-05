@@ -6,7 +6,7 @@ import { useQueryState } from "next-usequerystate";
 import { PropsWithChildren, ReactElement } from "react";
 
 const DashboardTemplate: NextPage = (props: PropsWithChildren): ReactElement => {
-  const [isSidebarOpen, setIsSidebarOpen] = useQueryState("isSidebarOpen");
+  const [isSidebarOpen] = useQueryState("isSidebarOpen");
 
   const className = clsx(
     "pr-6 py-12 pl-10 mt-6  w-full bg-gray-50 gap-y-10 flex flex-col overflow-x-auto",

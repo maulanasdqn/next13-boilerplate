@@ -2,8 +2,12 @@ import { TToken } from "..";
 
 export type TUser = {
   id: string;
-  email: string;
-  name: string;
+  fullname: string;
   image?: string;
-  role: string;
+  email: string;
+  role: {
+    id: string;
+    name: string;
+    permissions: string[];
+  };
 } & TToken;

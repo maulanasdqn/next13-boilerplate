@@ -4,19 +4,17 @@ import { FC, ReactElement, useLayoutEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { TVSLogin, VSLogin } from "./schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { IoLogoGoogle, IoMdClose } from "react-icons/io";
 import { useRouter, useSearchParams } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 export const AuthLoginModule: FC = (): ReactElement => {
   const searchParams = useSearchParams();
-  const callbackUrl =
-    searchParams.get("callbackUrl") || "/dashboard?title=Dashboard&isSidebarOpen=open";
+  const callbackUrl = "/dashboard?title=Dashboard&isSidebarOpen=open";
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-
   const registerSuccess = searchParams.get("register_success");
 
   const {
@@ -36,19 +34,15 @@ export const AuthLoginModule: FC = (): ReactElement => {
   const onSubmit = handleSubmit(async (data) => {
     setIsLoading(true);
     try {
-      const res = await signIn("login", {
+      await signIn("login", {
         email: data.email,
         password: data.password,
-        redirect: false,
+        redirect: true,
+        redirectTo: callbackUrl,
       });
-
-      if (!res?.error) {
-        router.push(callbackUrl);
-      } else {
-        setError(res.error);
-      }
+      router.push(callbackUrl);
     } catch (error) {
-      setError("Terjadi kesalahan " + error);
+      setError(`${error}`);
     }
     setIsLoading(false);
   });

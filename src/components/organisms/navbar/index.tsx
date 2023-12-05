@@ -11,7 +11,7 @@ export const Navbar: FC = (): ReactElement => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useQueryState("isSidebarOpen");
 
-  const userName = useMemo(() => session?.user?.name, [session]);
+  const userName = useMemo(() => session?.user?.fullname, [session]);
   const profilePic = useMemo(() => session?.user?.image, [session]);
 
   const navbarClassName = clsx(
@@ -35,7 +35,14 @@ export const Navbar: FC = (): ReactElement => {
         </span>
       </div>
       {profilePic ? (
-        <Image src={profilePic} alt="profile" className="w-8 h-8 rounded-full" />
+        <Image
+          onClick={() => setIsOpen(!isOpen)}
+          src={profilePic}
+          alt="profile"
+          width={30}
+          height={30}
+          className="w-8 h-8 rounded-full"
+        />
       ) : (
         <RxAvatar className="cursor-pointer" onClick={() => setIsOpen(!isOpen)} size={30} />
       )}

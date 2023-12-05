@@ -10,10 +10,10 @@ import { useQueryState } from "next-usequerystate";
 
 export const Sidebar: FC = (): ReactElement => {
   const { data } = useSession();
-  const userName = useMemo(() => data?.user?.name, [data]);
-  const roleName = useMemo(() => data?.user?.role, [data]);
+  const userName = useMemo(() => data?.user?.fullname, [data]);
+  const roleName = useMemo(() => data?.user?.role?.name, [data]);
   const pathname = usePathname();
-  const [isSidebarOpen, setIsSidebarOpen] = useQueryState("isSidebarOpen");
+  const [isSidebarOpen] = useQueryState("isSidebarOpen");
 
   const [open, setOpen] = useState("");
 
@@ -87,7 +87,7 @@ export const Sidebar: FC = (): ReactElement => {
                   className={selectedMenu("/dashboard/report/financial")}
                 >
                   <IoMdBasket className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-                  <span className="flex-1 ms-3 whitespace-nowrap">Data Laporan Kuangan</span>
+                  <span className="flex-1 ms-3 whitespace-nowrap">Data Kuangan</span>
                 </Link>
               </div>
             )}

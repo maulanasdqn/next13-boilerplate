@@ -1,0 +1,1 @@
+ALTER TABLE "user" RENAME COLUMN "email_verified_at" TO "emailVerified";

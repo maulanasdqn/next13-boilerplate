@@ -1,0 +1,41 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1701787996155,
+      "tag": "0000_secret_fat_cobra",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1701788219758,
+      "tag": "0001_nappy_hemingway",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1701788377904,
+      "tag": "0002_busy_blindfold",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1701788497624,
+      "tag": "0003_omniscient_stone_men",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1701788610463,
+      "tag": "0004_cold_zaran",
+      "breakpoints": true
+    }
+  ]
+}

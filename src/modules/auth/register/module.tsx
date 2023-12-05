@@ -37,7 +37,7 @@ export const AuthRegisterModule: FC = (): ReactElement => {
     setIsLoading(true);
     try {
       await RegisterAction({
-        name: data.name,
+        fullname: data.name,
         email: data.email,
         password: data.password,
       });
