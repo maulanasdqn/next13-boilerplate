@@ -16,6 +16,8 @@
     "storybook:test": "test-storybook",
     "prepare": "husky install",
     "studio": "drizzle-kit studio",
+    "generate": "drizzle-kit generate:pg",
+    "push": "drizzle-kit push:pg",
     "seed": "node --loader esbuild-register/loader -r esbuild-register ./src/server/database/seed.ts"
   },
   "dependencies": {
