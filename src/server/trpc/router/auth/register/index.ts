@@ -1,19 +1,10 @@
-import { publicProcedure, router } from "@/libs/trpc/init";
-import { db, roles, users } from "..";
 import { VSRegister } from "@/entities";
+import { publicProcedure } from "@/libs/trpc/init";
+import { ROLES, db, roles, users } from "@/server";
 import { eq } from "drizzle-orm";
 import * as bs from "bcryptjs";
 
-export const appRouter = router({
-  getReportTransaction: publicProcedure.query(async () => {
-    try {
-      const res: Array<any> = [];
-      return res;
-    } catch (err) {
-      throw new Error(err as string);
-    }
-  }),
-
+export const registerRouter = {
   createUser: publicProcedure.input(VSRegister).mutation(async ({ input }) => {
     try {
       const password = await bs.hash(input.password, await bs.genSalt(12));
@@ -21,7 +12,7 @@ export const appRouter = router({
       const roleId = await db
         .select({ id: roles.id })
         .from(roles)
-        .where(eq(roles.name, "User"))
+        .where(eq(roles.name, ROLES.USER))
         .limit(1);
 
       await db
@@ -35,6 +26,4 @@ export const appRouter = router({
       return err;
     }
   }),
-});
-
-export type AppRouter = typeof appRouter;
+};

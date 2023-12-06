@@ -1,6 +1,6 @@
 import { NextAuthOptions } from "next-auth";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import { db, roles, users } from "@/server";
+import { ROLES, db, roles, users } from "@/server";
 import { TUser } from "@/entities";
 import { eq } from "drizzle-orm";
 import { googleProvider } from "./google";
@@ -21,7 +21,7 @@ export const config = {
         const role = await db
           .select({ name: roles.name, id: roles.id, permissions: roles.permissions })
           .from(roles)
-          .where(eq(roles.name, "User"))
+          .where(eq(roles.name, ROLES.USER))
           .then((res) => res.at(0));
 
         const user = await db

@@ -86,7 +86,11 @@ export const DashboardReportTransactionModule: FC = (): ReactElement => {
 
   return (
     <section className="flex w-full h-screen">
-      <DataTable columns={columns} data={data} />
+      <DataTable
+        createLink="/dashboard/report/transaction/create?title=Tambah Data Transaksi"
+        columns={columns}
+        data={data}
+      />
     </section>
   );
 };

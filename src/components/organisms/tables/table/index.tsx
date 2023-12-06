@@ -7,9 +7,11 @@ export const Table: FC<TTable> = (props): ReactElement => {
     <section className="shadow-md bg-white h-fit border p-4 rounded-lg w-full gap-y-4 flex flex-col overflow-x-auto">
       <div className="flex justify-between items-center">
         <Search {...props} />
-        <Button variant="cancel" size="sm">
-          + Tambah Data
-        </Button>
+        {props.createLink && (
+          <Button href={props.createLink} variant="cancel" size="sm">
+            + Tambah Data
+          </Button>
+        )}
       </div>
       <table {...props} className="border rounded-lg p-2 w-full overflow-x-auto">
         {props.children}

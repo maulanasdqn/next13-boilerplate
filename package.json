@@ -35,6 +35,7 @@
     "clsx": "^2.0.0",
     "drizzle-orm": "^0.29.1",
     "drizzle-zod": "^0.5.1",
+    "framer-motion": "latest",
     "next": "latest",
     "next-auth": "^4.24.5",
     "next-usequerystate": "latest",
@@ -45,6 +46,7 @@
     "react-dom": "latest",
     "react-hook-form": "^7.46.2",
     "react-icons": "latest",
+    "react-select": "latest",
     "sharp": "^0.33.0",
     "ts-pattern": "^5.0.5",
     "zod": "^3.22.2"

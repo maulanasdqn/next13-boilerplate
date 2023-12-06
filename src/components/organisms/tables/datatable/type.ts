@@ -5,4 +5,5 @@ export type TDataTable<T extends Record<string, unknown>> = {
   data: T[];
   meta?: TMetaItem;
   columns: ColumnDef<T>[];
+  createLink?: string;
 };

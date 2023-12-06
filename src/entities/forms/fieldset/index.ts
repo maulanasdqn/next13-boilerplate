@@ -1,9 +1,4 @@
-import {
-  DetailedHTMLProps,
-  InputHTMLAttributes,
-  SelectHTMLAttributes,
-  TextareaHTMLAttributes,
-} from "react";
+import { DetailedHTMLProps, InputHTMLAttributes } from "react";
 import { TCommonForms } from "..";
 
 export type TOption<T = string | number> = {
@@ -11,14 +6,6 @@ export type TOption<T = string | number> = {
   value: T;
 };
 
-export type TFieldSet = Omit<
-  DetailedHTMLProps<
-    | InputHTMLAttributes<HTMLInputElement>
-    | SelectHTMLAttributes<HTMLSelectElement>
-    | TextareaHTMLAttributes<HTMLTextAreaElement>,
-    HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-  >,
-  "size" | "type"
-> &
+export type TFieldSet = Omit<DetailedHTMLProps<any, any>, "size" | "type"> &
   TCommonForms &
   Pick<InputHTMLAttributes<HTMLInputElement>, "type">;

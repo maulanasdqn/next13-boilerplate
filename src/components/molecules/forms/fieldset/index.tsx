@@ -46,7 +46,7 @@ export const Fieldset: FC<TFieldSet> = (props): ReactElement => {
     ))
 
     .otherwise(() => (
-      <section className="relative flex flex-col gap-y-2">
+      <section className="relative flex flex-col gap-y-2 w-full">
         {props?.label && (
           <Label
             htmlFor={props.name}
@@ -68,7 +68,7 @@ export const Fieldset: FC<TFieldSet> = (props): ReactElement => {
     ));
 
   return (
-    <fieldset className="flex flex-col gap-y-2">
+    <fieldset className="flex flex-col gap-y-2 w-full">
       {inputType}
       {props.message && status !== "none" && <Message {...props}>{props.message}</Message>}
       {props?.hint && (

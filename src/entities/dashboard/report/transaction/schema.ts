@@ -1,18 +1,16 @@
 import { z } from "zod";
 
 export const VSReportTransaction = z.object({
-  id: z.string(),
-  price: z.number(),
-  transactionDate: z.string(),
-  transactionTime: z.string(),
-  totalSelled: z.number(),
-  itemId: z.string(),
-  paymentId: z.string(),
-  totalPrice: z.number(),
+  product_id: z.string(),
+  payment_id: z.string(),
+  user_id: z.string(),
   name: z.string(),
-  paymentMethod: z.string(),
-  userId: z.string(),
-  createdDate: z.date(),
+  price: z.number(),
+  transaction_date: z.string(),
+  transaction_time: z.string(),
+  total_selled: z.number(),
+  total_price: z.number(),
+  payment_method: z.string(),
 });
 
 export type TVSReportTransaction = z.infer<typeof VSReportTransaction>;
