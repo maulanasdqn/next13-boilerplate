@@ -4,7 +4,7 @@ import { Search, Pagination, Button } from "@/components";
 
 export const Table: FC<TTable> = (props): ReactElement => {
   return (
-    <section className="shadow-md bg-white h-fit border p-4 rounded-lg w-full gap-y-4 flex flex-col overflow-x-auto">
+    <section className="shadow-md bg-white h-full border p-4 rounded-lg w-full gap-y-4 flex flex-col overflow-x-auto">
       <div className="flex justify-between items-center">
         <Search {...props} />
         {props.createLink && (
@@ -13,9 +13,11 @@ export const Table: FC<TTable> = (props): ReactElement => {
           </Button>
         )}
       </div>
-      <table {...props} className="border rounded-lg p-2 w-full overflow-x-auto">
-        {props.children}
-      </table>
+      <div className="overflow-x-auto min-w-max w-full h-fit flex p-1 bg-gray-50 rounded-lg relative">
+        <table {...props} className="p-2 w-full">
+          {props.children}
+        </table>
+      </div>
       <Pagination {...props} />
     </section>
   );

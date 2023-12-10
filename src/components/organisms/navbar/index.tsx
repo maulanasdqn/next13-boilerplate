@@ -15,7 +15,7 @@ export const Navbar: FC = (): ReactElement => {
   const profilePic = useMemo(() => session?.user?.image, [session]);
 
   const navbarClassName = clsx(
-    "w-full items-center gap-x-4 right-0 fixed top-0 bg-white shadow-md p-4 max-h-[56px] z-1 justify-between flex",
+    "w-full items-center gap-x-4 right-0 fixed top-0 bg-white shadow-md p-4 max-h-[56px] z-1 justify-between flex z-10",
     {
       "sm:pl-[280px]": isSidebarOpen === "open" || isSidebarOpen === "null" || !isSidebarOpen,
       "pl-6": isSidebarOpen === "close",

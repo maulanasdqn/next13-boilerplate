@@ -1,52 +1,175 @@
 "use client";
-import { ControlledFieldSelect, ControlledFieldText, FormTemplate } from "@/components";
+import {
+  Button,
+  ControlledFieldSelect,
+  ControlledFieldText,
+  FieldText,
+  FormTemplate,
+} from "@/components";
 import { TVSReportTransaction, VSReportTransaction } from "@/entities";
+import { clientTrpc } from "@/libs/trpc/client";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useCallback, useMemo } from "react";
 import { useForm } from "react-hook-form";
 
 export const DashboardReportTransactionCreateModule = () => {
-  const { control } = useForm<TVSReportTransaction>({
+  const { data: paymentMethods } = clientTrpc.getPaymentMethods.useQuery();
+  const { data: products } = clientTrpc.getProducts.useQuery();
+  const { data: customers } = clientTrpc.getCustomers.useQuery();
+
+  const {
+    control,
+    watch,
+    setValue,
+    formState: { isValid, errors },
+  } = useForm<TVSReportTransaction>({
+    mode: "all",
     resolver: zodResolver(VSReportTransaction),
     defaultValues: {
       name: "",
       product_id: undefined,
       payment_id: undefined,
       user_id: undefined,
+      total_selled: 0,
+      total_price: 0,
+      price: 0,
     },
   });
 
-  const productOptions = [
-    {
-      label: "Beras",
-      value: "beras",
-    },
-  ];
+  const productOptions = useMemo(
+    () =>
+      products?.map((product) => ({
+        label: product.name,
+        value: product.id,
+      })),
+    [products],
+  );
+
+  const paymentMethodOptions = useMemo(
+    () =>
+      paymentMethods?.map((payment) => ({
+        label: payment.provider_name,
+        value: payment.id,
+      })),
+    [paymentMethods],
+  );
+
+  const customerOptions = useMemo(
+    () =>
+      customers?.map((customer) => ({
+        label: customer.name,
+        value: customer.id,
+      })),
+    [customers],
+  );
+
+  const totalPrice = useCallback(() => {
+    const product = products?.find((product) => product.id === watch("product_id"));
+    const payment = paymentMethods?.find((payment) => payment.id === watch("payment_id"));
+    if (product && payment) {
+      setValue("price", product.price);
+      setValue("total_price", product.price * watch("total_selled"));
+      return {
+        price: product.price,
+        total_price: product.price * watch("total_selled"),
+      };
+    }
+    return {
+      price: 0,
+      total_price: 0,
+    };
+  }, [products, paymentMethods, watch, setValue]);
+
+  console.log(errors);
 
   return (
     <FormTemplate>
-      <ControlledFieldText
+      <div className="flex gap-x-3 w-full">
+        <ControlledFieldText
+          size="sm"
+          placeholder="Masukkan nama transaksi"
+          label="Nama Transaksi"
+          control={control}
+          name={"name"}
+          status={errors.name?.message ? "error" : "none"}
+          message={errors.name?.message}
+        />
+        <ControlledFieldSelect
+          size="sm"
+          label="Produk"
+          options={productOptions}
+          control={control}
+          name="product_id"
+          placeholder="Pilih Produk"
+        />
+      </div>
+      <div className="flex gap-x-3 w-full">
+        <ControlledFieldSelect
+          size="sm"
+          label="Metode Pembayaran"
+          options={paymentMethodOptions}
+          control={control}
+          name="payment_id"
+          placeholder="Pilih Metode Pembayaran"
+        />
+        <ControlledFieldSelect
+          size="sm"
+          label="Pelanggan"
+          options={customerOptions}
+          control={control}
+          name="customer_id"
+          placeholder="Pilih Pelanggan"
+        />
+      </div>
+      <div className="flex gap-x-3 w-full">
+        <ControlledFieldText
+          size="sm"
+          placeholder="Pilih Tanggal Transaksi"
+          label="Tanggal Transaksi"
+          control={control}
+          name={"transaction_date"}
+          type="date"
+        />
+        <ControlledFieldText
+          size="sm"
+          placeholder="Pilih Waktu Transaksi"
+          label="Waktu Transaksi"
+          control={control}
+          name={"transaction_time"}
+          type="time"
+        />
+      </div>
+      <div className="flex gap-x-3 w-full">
+        <FieldText
+          size="sm"
+          placeholder="Harga satuan akan muncul disini"
+          label="Harga satuan"
+          name={"price"}
+          value={"Rp" + new Intl.NumberFormat("id").format(totalPrice().price)}
+          type="text"
+          readOnly
+        />
+        <ControlledFieldText
+          size="sm"
+          placeholder="Masukkan Jumlah Barang Yang dibeli"
+          label="Jumlah Barang"
+          control={control}
+          name={"total_selled"}
+          type="number"
+        />
+      </div>
+      <FieldText
         size="sm"
-        placeholder="Masukkan nama transaksi"
-        label="Nama Transaksi"
-        control={control}
-        name={"name"}
+        placeholder="Total harga akan muncul disini"
+        label="Total Harga"
+        name={"total_price"}
+        value={"Rp" + new Intl.NumberFormat("id").format(totalPrice().total_price)}
+        type="text"
+        readOnly
       />
-      <ControlledFieldSelect
-        size="sm"
-        label="Produk"
-        options={productOptions}
-        control={control}
-        name="product_id"
-        placeholder="Pilih Produk"
-      />
-      <ControlledFieldSelect
-        size="sm"
-        label="Metode Pembayaran"
-        options={productOptions}
-        control={control}
-        name="payment_id"
-        placeholder="Pilih Metode Pembayaran"
-      />
+      <Button type="submit" disabled={!isValid}>
+        Simpan
+      </Button>
     </FormTemplate>
   );
 };

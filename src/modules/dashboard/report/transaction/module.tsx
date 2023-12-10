@@ -1,64 +1,76 @@
 "use client";
-
 import { Button, DataTable } from "@/components";
+import { clientTrpc } from "@/libs/trpc/client";
 import { ColumnDef } from "@tanstack/react-table";
-import { useSearchParams } from "next/navigation";
 import { FC, ReactElement, useMemo } from "react";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
-
-type TData = {
-  id: string;
-  name: string;
-  amount: string;
-  date: Date;
-};
+import { format } from "date-fns";
 
 export const DashboardReportTransactionModule: FC = (): ReactElement => {
-  const searchParams = useSearchParams();
+  const { data, isLoading } = clientTrpc.getReportTransaction.useQuery();
 
-  const params = {
-    id: searchParams.get("id"),
-    name: searchParams.get("name"),
-    amount: searchParams.get("amount"),
-    date: searchParams.get("date"),
-    search: searchParams.get("search"),
-  };
+  type Unpacked<T> = T extends (infer U)[] ? U : T;
+  type TData = NonNullable<typeof data>;
 
-  const data: Array<TData> = [
-    {
-      id: "qweqweqwe",
-      name: "Pengeluaran",
-      amount: "Rp. 100.000",
-      date: new Date(),
-    },
-    {
-      id: "qweqweqwe",
-      name: "Pemasukan",
-      amount: "Rp. 100.000",
-      date: new Date(),
-    },
-  ];
-
-  const columns = useMemo<ColumnDef<TData>[]>(
+  const columns = useMemo<ColumnDef<Unpacked<TData>>[]>(
     () => [
       {
-        header: "ID",
-        accessorKey: "id",
+        header: "No",
+        accessorKey: "no",
+        cell: ({ row }) => row.index + 1,
       },
       {
         header: "Name",
         accessorKey: "name",
       },
       {
-        header: "Amount",
-        accessorKey: "amount",
+        header: "Harga Satuan",
+        accessorKey: "price",
+        cell: ({ getValue }) => {
+          const value = getValue<number>();
+          return new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR",
+          }).format(value);
+        },
+      },
+      {
+        header: "Total Harga",
+        accessorKey: "total_price",
+        cell: ({ getValue }) => {
+          const value = getValue<number>();
+          return new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR",
+          }).format(value);
+        },
+      },
+      {
+        header: "Total Terjual",
+        accessorKey: "total_selled",
+      },
+      {
+        header: "Tanggal Transaksi",
+        accessorKey: "transaction_date",
+        cell: ({ getValue }) => {
+          const value = new Date(getValue<Date>());
+          return format(value, "hh:mm dd/MM/yyyy");
+        },
       },
       {
         header: "Tanggal Dibuat",
-        accessorKey: "date",
+        accessorKey: "created_at",
         cell: ({ getValue }) => {
-          const value = getValue<Date>();
-          return value.toLocaleDateString();
+          const value = new Date(getValue<Date>());
+          return format(value, "hh:mm dd/MM/yyyy");
+        },
+      },
+      {
+        header: "Tanggal Diperbarui",
+        accessorKey: "updated_at",
+        cell: ({ getValue }) => {
+          const value = new Date(getValue<Date>());
+          return format(value, "hh:mm dd/MM/yyyy");
         },
       },
       {
@@ -67,7 +79,7 @@ export const DashboardReportTransactionModule: FC = (): ReactElement => {
           return (
             <div className="flex gap-x-2">
               <Button
-                href={`/dashboard/report-transaction/${row.original.id}`}
+                href={`/dashboard/report-transaction/${row.original?.id}`}
                 size="sm"
                 variant="success"
               >
@@ -85,11 +97,12 @@ export const DashboardReportTransactionModule: FC = (): ReactElement => {
   );
 
   return (
-    <section className="flex w-full h-screen">
+    <section className="flex w-full h-full min-h-screen">
       <DataTable
+        isLoading={isLoading}
         createLink="/dashboard/report/transaction/create?title=Tambah Data Transaksi"
         columns={columns}
-        data={data}
+        data={data || []}
       />
     </section>
   );

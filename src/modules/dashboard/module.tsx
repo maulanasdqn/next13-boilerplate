@@ -5,7 +5,7 @@ import Image from "next/image";
 
 export const DashboardModule: FC = (): ReactElement => {
   return (
-    <section className="flex w-full h-full items-center justify-center flex-col">
+    <section className="flex w-full h-full items-center justify-start flex-col">
       <Image src="/dashboard.png" alt="Dashboard" width={600} height={600} />
       <h1 className="sm:text-2xl md:text-3xl text-1xl font-bold text-gray-700">
         Ayo bangun bisnis bersama kami

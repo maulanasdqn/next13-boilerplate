@@ -1,9 +1,6 @@
 import { router } from "@/libs/trpc/init";
-import { authRouter, reportRouter } from "./router";
+import * as routes from "./router";
 
-export const appRouter = router({
-  ...reportRouter,
-  ...authRouter,
-});
+export const appRouter = router(routes);
 
 export type AppRouter = typeof appRouter;

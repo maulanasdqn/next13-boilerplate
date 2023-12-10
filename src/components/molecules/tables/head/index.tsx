@@ -7,7 +7,7 @@ export const TableHead = <T extends Record<string, unknown>>(
   props: TTableHead<T>,
 ): ReactElement => {
   return (
-    <thead className="bg-gray-100 p-2 w-auto h-auto rounded-lg">
+    <thead className="bg-gray-50 p-2 w-auto h-auto rounded-lg">
       {props.tableHead.map((headerGroup) => (
         <tr key={headerGroup.id}>
           {headerGroup.headers.map((header) => (

@@ -6,7 +6,7 @@ export type TSelectOption<T = string | number | boolean | unknown> = {
 };
 
 export type TSelect = Pick<TCommonForms, "status" | "size"> & {
-  options: TSelectOption[];
+  options?: TSelectOption[];
   disabled?: boolean;
   label?: string;
   required?: boolean;

@@ -1,4 +1,4 @@
-import { forwardRef } from "react";
+import { forwardRef, useId } from "react";
 import ReactSelect, { StylesConfig } from "react-select";
 import { TSelect } from "./type";
 import { match } from "ts-pattern";
@@ -24,16 +24,25 @@ export const Select = forwardRef<any, TSelect>((props, ref) => {
     "text-gray-300": props.status === "none" || !props.status,
   });
 
+  const id = useId();
+
   const colourStyles: StylesConfig<Record<string, unknown>> = {
-    option: (styles, { isDisabled, isFocused }) => {
+    option: (styles, { isDisabled, isFocused, isSelected }) => {
       return {
         ...styles,
         border: 0,
         fontSize: "12px",
         transition: "all 0.25s",
         cursor: isFocused ? "pointer" : "",
-        backgroundColor: isDisabled ? "#F3F4F6" : statusBackgroundColor,
-        color: statusTextColor,
+        padding: "6px 12px",
+        backgroundColor: isDisabled ? "#F3F4F6" : isSelected ? "#92afd6" : statusBackgroundColor,
+        color: isSelected ? "white" : statusTextColor,
+        ":hover": {
+          ...styles[":hover"],
+          borderColor: statusBorderColor,
+          backgroundColor: "#92afd6",
+          color: "white",
+        },
       };
     },
     container: (styles) => ({
@@ -107,6 +116,7 @@ export const Select = forwardRef<any, TSelect>((props, ref) => {
   return (
     <ReactSelect
       {...props}
+      id={id}
       ref={ref}
       onChange={(val: any) =>
         props.onChange?.(
@@ -120,7 +130,7 @@ export const Select = forwardRef<any, TSelect>((props, ref) => {
         DropdownIndicator: () => <IoChevronDown className={statusDropdownIconColor} size={20} />,
       }}
       styles={colourStyles}
-      value={props.options.find((option) => option?.value === props.value)}
+      value={props?.options?.find((option) => option?.value === props.value)}
       isDisabled={props?.disabled}
     />
   );

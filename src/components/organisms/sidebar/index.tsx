@@ -4,18 +4,18 @@ import { usePathname } from "next/navigation";
 import { clsx } from "clsx";
 import { IoMdBasket, IoMdDesktop } from "react-icons/io";
 import { AiFillBook, AiFillBoxPlot, AiFillCaretDown, AiFillMoneyCollect } from "react-icons/ai";
+import { PiUsersThreeFill } from "react-icons/pi";
 import { HiArchiveBox, HiUsers } from "react-icons/hi2";
 import Link from "next/link";
 import { useQueryState } from "next-usequerystate";
 
 export const Sidebar: FC = (): ReactElement => {
   const { data } = useSession();
+  const [isSidebarOpen] = useQueryState("isSidebarOpen");
+  const [open, setOpen] = useState("");
   const userName = useMemo(() => data?.user?.fullname, [data]);
   const roleName = useMemo(() => data?.user?.role?.name, [data]);
   const pathname = usePathname();
-  const [isSidebarOpen] = useQueryState("isSidebarOpen");
-
-  const [open, setOpen] = useState("");
 
   const selectedMenu = (url: string) =>
     clsx("flex items-center p-2 rounded-lg text-white hover:bg-gray-700 group", {
@@ -121,6 +121,13 @@ export const Sidebar: FC = (): ReactElement => {
                 >
                   <AiFillBook className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
                   <span className="flex-1 ms-3 whitespace-nowrap">Data Hutang</span>
+                </Link>
+                <Link
+                  href={`/dashboard/customer?title=Data Pelanggan&isSidebarOpen=${isSidebarOpen}`}
+                  className={selectedMenu("/dashboard/customer")}
+                >
+                  <PiUsersThreeFill className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+                  <span className="flex-1 ms-3 whitespace-nowrap">Data Pelanggan</span>
                 </Link>
               </div>
             )}
