@@ -5,7 +5,7 @@ import { Search, Pagination, Button } from "@/components";
 export const Table: FC<TTable> = (props): ReactElement => {
   return (
     <section className="shadow-md bg-white h-full border p-4 rounded-lg w-full gap-y-4 flex flex-col overflow-x-auto">
-      <div className="flex justify-between items-center">
+      <div className="flex gap-x-3 items-center sticky z-10 w-full">
         <Search {...props} />
         {props.createLink && (
           <Button href={props.createLink} variant="cancel" size="sm">

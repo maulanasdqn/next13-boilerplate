@@ -1,0 +1,1 @@
+ALTER TABLE "app_report_transactions" ALTER COLUMN "transaction_date" SET DATA TYPE date;

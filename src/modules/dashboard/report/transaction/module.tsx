@@ -5,6 +5,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { FC, ReactElement, useMemo } from "react";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import { format } from "date-fns";
+import { formatCurrency } from "@/utils";
 
 export const DashboardReportTransactionModule: FC = (): ReactElement => {
   const { data, isLoading } = clientTrpc.getReportTransaction.useQuery();
@@ -14,65 +15,6 @@ export const DashboardReportTransactionModule: FC = (): ReactElement => {
 
   const columns = useMemo<ColumnDef<Unpacked<TData>>[]>(
     () => [
-      {
-        header: "No",
-        accessorKey: "no",
-        cell: ({ row }) => row.index + 1,
-      },
-      {
-        header: "Name",
-        accessorKey: "name",
-      },
-      {
-        header: "Harga Satuan",
-        accessorKey: "price",
-        cell: ({ getValue }) => {
-          const value = getValue<number>();
-          return new Intl.NumberFormat("id-ID", {
-            style: "currency",
-            currency: "IDR",
-          }).format(value);
-        },
-      },
-      {
-        header: "Total Harga",
-        accessorKey: "total_price",
-        cell: ({ getValue }) => {
-          const value = getValue<number>();
-          return new Intl.NumberFormat("id-ID", {
-            style: "currency",
-            currency: "IDR",
-          }).format(value);
-        },
-      },
-      {
-        header: "Total Terjual",
-        accessorKey: "total_selled",
-      },
-      {
-        header: "Tanggal Transaksi",
-        accessorKey: "transaction_date",
-        cell: ({ getValue }) => {
-          const value = new Date(getValue<Date>());
-          return format(value, "hh:mm dd/MM/yyyy");
-        },
-      },
-      {
-        header: "Tanggal Dibuat",
-        accessorKey: "created_at",
-        cell: ({ getValue }) => {
-          const value = new Date(getValue<Date>());
-          return format(value, "hh:mm dd/MM/yyyy");
-        },
-      },
-      {
-        header: "Tanggal Diperbarui",
-        accessorKey: "updated_at",
-        cell: ({ getValue }) => {
-          const value = new Date(getValue<Date>());
-          return format(value, "hh:mm dd/MM/yyyy");
-        },
-      },
       {
         header: "Aksi",
         cell: ({ row }) => {
@@ -90,6 +32,59 @@ export const DashboardReportTransactionModule: FC = (): ReactElement => {
               </Button>
             </div>
           );
+        },
+      },
+      {
+        header: "No",
+        accessorKey: "no",
+        cell: ({ row }) => row.index + 1,
+      },
+      {
+        header: "Name",
+        accessorKey: "name",
+      },
+      {
+        header: "Harga Satuan",
+        accessorKey: "price",
+        cell: ({ getValue }) => {
+          const value = getValue<number>();
+          return formatCurrency(value);
+        },
+      },
+      {
+        header: "Total Harga",
+        accessorKey: "total_price",
+        cell: ({ getValue }) => {
+          const value = getValue<number>();
+          return formatCurrency(value);
+        },
+      },
+      {
+        header: "Total Terjual",
+        accessorKey: "total_selled",
+      },
+      {
+        header: "Tanggal Transaksi",
+        accessorKey: "transaction_date",
+        cell: ({ getValue }) => {
+          const value = new Date(getValue<Date>());
+          return format(value, "dd/MM/yyyy");
+        },
+      },
+      {
+        header: "Tanggal Dibuat",
+        accessorKey: "created_at",
+        cell: ({ getValue }) => {
+          const value = new Date(getValue<Date>());
+          return format(value, "dd/MM/yyyy");
+        },
+      },
+      {
+        header: "Tanggal Diperbarui",
+        accessorKey: "updated_at",
+        cell: ({ getValue }) => {
+          const value = new Date(getValue<Date>());
+          return format(value, "dd/MM/yyyy");
         },
       },
     ],

@@ -38,8 +38,8 @@ export const inputClassName = ({
   );
 
 export const formatCurrency = (value: number | unknown): string =>
-  new Intl.NumberFormat("en-US", {
+  new Intl.NumberFormat("id-ID", {
     style: "currency",
-    currency: "USD",
+    currency: "IDR",
     maximumFractionDigits: 0,
   }).format(Number(value));

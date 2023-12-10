@@ -78,6 +78,27 @@
       "when": 1701876840510,
       "tag": "0010_abandoned_susan_delgado",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "5",
+      "when": 1702183843674,
+      "tag": "0011_common_hellfire_club",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "5",
+      "when": 1702211287768,
+      "tag": "0012_early_proudstar",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "5",
+      "when": 1702211354010,
+      "tag": "0013_broad_la_nuit",
+      "breakpoints": true
     }
   ]
 }

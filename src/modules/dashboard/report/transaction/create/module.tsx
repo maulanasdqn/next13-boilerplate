@@ -1,6 +1,7 @@
 "use client";
 import {
   Button,
+  ControlledFieldDate,
   ControlledFieldSelect,
   ControlledFieldText,
   FieldText,
@@ -9,6 +10,8 @@ import {
 import { TVSReportTransaction, VSReportTransaction } from "@/entities";
 import { clientTrpc } from "@/libs/trpc/client";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useCallback, useMemo } from "react";
 import { useForm } from "react-hook-form";
 
@@ -16,23 +19,28 @@ export const DashboardReportTransactionCreateModule = () => {
   const { data: paymentMethods } = clientTrpc.getPaymentMethods.useQuery();
   const { data: products } = clientTrpc.getProducts.useQuery();
   const { data: customers } = clientTrpc.getCustomers.useQuery();
+  const { data: session } = useSession();
+  const { mutate } = clientTrpc.createReportTransaction.useMutation();
 
   const {
-    control,
     watch,
+    reset,
+    control,
     setValue,
+    handleSubmit,
     formState: { isValid, errors },
   } = useForm<TVSReportTransaction>({
     mode: "all",
     resolver: zodResolver(VSReportTransaction),
     defaultValues: {
-      name: "",
+      name: undefined,
       product_id: undefined,
       payment_id: undefined,
-      user_id: undefined,
-      total_selled: 0,
-      total_price: 0,
-      price: 0,
+      total_selled: undefined,
+      total_price: undefined,
+      price: undefined,
+      transaction_date: undefined,
+      transaction_time: undefined,
     },
   });
 
@@ -63,15 +71,17 @@ export const DashboardReportTransactionCreateModule = () => {
     [customers],
   );
 
+  const router = useRouter();
+
   const totalPrice = useCallback(() => {
     const product = products?.find((product) => product.id === watch("product_id"));
     const payment = paymentMethods?.find((payment) => payment.id === watch("payment_id"));
     if (product && payment) {
       setValue("price", product.price);
-      setValue("total_price", product.price * watch("total_selled"));
+      setValue("total_price", product.price * Number(watch("total_selled")));
       return {
         price: product.price,
-        total_price: product.price * watch("total_selled"),
+        total_price: product.price * Number(watch("total_selled")),
       };
     }
     return {
@@ -80,10 +90,23 @@ export const DashboardReportTransactionCreateModule = () => {
     };
   }, [products, paymentMethods, watch, setValue]);
 
-  console.log(errors);
+  const onSubmit = handleSubmit(async (data) => {
+    mutate(
+      {
+        ...data,
+        user_id: session?.user?.id,
+      },
+      {
+        onSuccess: () => {
+          router.push("/dashboard/report/transaction");
+        },
+      },
+    );
+    reset();
+  });
 
   return (
-    <FormTemplate>
+    <FormTemplate onSubmit={onSubmit}>
       <div className="flex gap-x-3 w-full">
         <ControlledFieldText
           size="sm"
@@ -91,7 +114,7 @@ export const DashboardReportTransactionCreateModule = () => {
           label="Nama Transaksi"
           control={control}
           name={"name"}
-          status={errors.name?.message ? "error" : "none"}
+          status={errors.name ? "error" : "none"}
           message={errors.name?.message}
         />
         <ControlledFieldSelect
@@ -122,13 +145,12 @@ export const DashboardReportTransactionCreateModule = () => {
         />
       </div>
       <div className="flex gap-x-3 w-full">
-        <ControlledFieldText
+        <ControlledFieldDate
           size="sm"
           placeholder="Pilih Tanggal Transaksi"
           label="Tanggal Transaksi"
           control={control}
           name={"transaction_date"}
-          type="date"
         />
         <ControlledFieldText
           size="sm"
@@ -158,18 +180,32 @@ export const DashboardReportTransactionCreateModule = () => {
           type="number"
         />
       </div>
-      <FieldText
-        size="sm"
-        placeholder="Total harga akan muncul disini"
-        label="Total Harga"
-        name={"total_price"}
-        value={"Rp" + new Intl.NumberFormat("id").format(totalPrice().total_price)}
-        type="text"
-        readOnly
-      />
-      <Button type="submit" disabled={!isValid}>
-        Simpan
-      </Button>
+      <div className="w-1/2">
+        <FieldText
+          size="sm"
+          placeholder="Total harga akan muncul disini"
+          label="Total Harga"
+          name={"total_price"}
+          value={"Rp" + new Intl.NumberFormat("id").format(totalPrice().total_price)}
+          type="text"
+          readOnly
+        />
+      </div>
+      <div className="flex gap-x-4">
+        <Button type="submit" size="sm" disabled={!isValid}>
+          Simpan
+        </Button>
+        <Button
+          onClick={() => {
+            reset();
+          }}
+          type="button"
+          size="sm"
+          variant="cancel"
+        >
+          Batal
+        </Button>
+      </div>
     </FormTemplate>
   );
 };

@@ -137,7 +137,7 @@ export const report_transactions = pgTable("app_report_transactions", {
     .references(() => customers.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
   price: bigint("price", { mode: "number" }).notNull(),
-  transaction_date: date("transaction_date", { mode: "date" }).notNull(),
+  transaction_date: text("transaction_date").notNull(),
   transaction_time: text("transaction_time").notNull(),
   total_selled: integer("total_selled").notNull(),
   total_price: bigint("total_price", { mode: "number" }).notNull(),
