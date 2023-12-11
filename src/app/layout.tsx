@@ -31,11 +31,6 @@ export const metadata: Metadata = {
     siteName: "Reservation Management System",
     locale: "en-US",
   },
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 1,
-  },
 };
 
 const isMaintenance = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === "1";
