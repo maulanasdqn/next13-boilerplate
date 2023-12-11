@@ -17,20 +17,6 @@ export const metadata: Metadata = {
     icon: "/icon.png",
   },
   keywords: ["hotel", "restaurant", "event", "booking", "reservation", "booking management"],
-  openGraph: {
-    title: "Reservation Management System | Seamless Booking Experience",
-    description,
-    url: "https://reservation-management.vercel.app/",
-    images: [
-      {
-        url: "https://reservation-management.vercel.app/api/og",
-        width: 1200,
-        height: 630,
-      },
-    ],
-    siteName: "Reservation Management System",
-    locale: "en-US",
-  },
 };
 
 const isMaintenance = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === "1";
