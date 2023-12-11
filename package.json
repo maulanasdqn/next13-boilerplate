@@ -1,6 +1,6 @@
 {
-  "name": "next13-boilerplate",
-  "version": "0.1.0",
+  "name": "reservation-management",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "dev": "next dev",
