@@ -1,12 +1,15 @@
 import { VSReportTransaction } from "@/entities";
 import { publicProcedure } from "@/libs/trpc/init";
 import { db, report_transactions } from "@/server";
-import { eq } from "drizzle-orm";
+import { eq, asc } from "drizzle-orm";
 import { z } from "zod";
 
 export const getReportTransaction = publicProcedure.query(async () => {
   try {
-    const res = await db.select().from(report_transactions);
+    const res = await db
+      .select()
+      .from(report_transactions)
+      .orderBy(asc(report_transactions.created_at));
     return res;
   } catch (err) {
     throw new Error(err as string);

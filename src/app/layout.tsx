@@ -7,16 +7,15 @@ import "@/styles/global.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
-const description =
-  "Elevate your booking process with our NextJS Reservation System Management. Fast, user-friendly, and efficient - perfect for hotels, restaurants, and event planners.";
+const description = "NextJS 14 Boilerplate";
 
 export const metadata: Metadata = {
-  title: "Reservation Management System | Seamless Booking Experience",
+  title: "NextJS 14 Boilerplate",
   description,
   icons: {
     icon: "/icon.png",
   },
-  keywords: ["hotel", "restaurant", "event", "booking", "reservation", "booking management"],
+  keywords: ["boilerplate", "NextJS14", "NodeJS", "Frontend", "React", "TRPC", "Drizzle"],
 };
 
 const isMaintenance = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === "1";

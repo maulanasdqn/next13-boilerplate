@@ -158,6 +158,8 @@ export const DashboardReportTransactionCreateModule = () => {
           label="Waktu Transaksi"
           control={control}
           name={"transaction_time"}
+          status={errors.transaction_time ? "error" : "none"}
+          message={errors.transaction_time?.message}
           type="time"
         />
       </div>
@@ -177,6 +179,8 @@ export const DashboardReportTransactionCreateModule = () => {
           label="Jumlah Barang"
           control={control}
           name={"total_selled"}
+          status={errors.total_selled ? "error" : "none"}
+          message={errors.total_selled?.message}
           type="number"
         />
       </div>
