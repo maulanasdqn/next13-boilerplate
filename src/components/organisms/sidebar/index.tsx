@@ -8,6 +8,7 @@ import { PiUsersThreeFill } from "react-icons/pi";
 import { HiArchiveBox, HiUsers } from "react-icons/hi2";
 import Link from "next/link";
 import { useQueryState } from "next-usequerystate";
+import { BiSolidUser } from "react-icons/bi";
 
 export const Sidebar: FC = (): ReactElement => {
   const { data } = useSession();
@@ -32,10 +33,12 @@ export const Sidebar: FC = (): ReactElement => {
       <div className="h-full px-3 py-4 overflow-y-auto bg-gray-800">
         <div className="flex flex-col gap-y-4 mb-4">
           <span className="text-white font-medium  w-full block text-2xl">POS UMKM</span>
-          <div className="bg-gray-600 p-2 rounded-lg flex flex-col">
-            <span className="text-white text-base">{userName}</span>
-            <span className="text-white text-sm">{roleName}</span>
-          </div>
+          <Link href={"/dashboard/profile?title=Profile"}>
+            <div className="bg-gray-600 p-2 rounded-lg flex flex-col cursor-pointer">
+              <span className="text-white text-base">{userName}</span>
+              <span className="text-white text-sm">{roleName}</span>
+            </div>
+          </Link>
         </div>
         <ul className="space-y-2 font-medium">
           <li>
@@ -159,6 +162,51 @@ export const Sidebar: FC = (): ReactElement => {
                 >
                   <AiFillBoxPlot className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
                   <span className="flex-1 ms-3 whitespace-nowrap">Data Barang</span>
+                </Link>
+              </div>
+            )}
+          </li>
+          <li className="text-white">
+            <div
+              onClick={() => (open === "" || open !== "user" ? setOpen("user") : setOpen(""))}
+              className="flex gap-x-3 cursor-pointer justify-between select-none items-center p-2 rounded-lg text-white hover:bg-gray-700"
+            >
+              <div className="flex gap-x-3 items-center">
+                <BiSolidUser className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-white" />
+                Man. Pengguna
+              </div>
+              <AiFillCaretDown
+                className={clsx(
+                  "flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-white",
+                  {
+                    "rotate-180": open === "user",
+                  },
+                )}
+              />
+            </div>
+            <div className="my-3" />
+            {open === "user" && (
+              <div className="flex flex-col gap-y-2 p-2 ml-2 bg-gray-600 rounded-lg">
+                <Link
+                  href={`/dashboard/report/transaction?title=Data Transaksi&isSidebarOpen=${isSidebarOpen}`}
+                  className={selectedMenu("/dashboard/report/transaction")}
+                >
+                  <AiFillBook className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+                  <span className="flex-1 ms-3 whitespace-nowrap">Data Pengguna</span>
+                </Link>
+                <Link
+                  href={`/dashboard/report/payment?title=Data Pembayaran&isSidebarOpen=${isSidebarOpen}`}
+                  className={selectedMenu("/dashboard/report/payment")}
+                >
+                  <AiFillMoneyCollect className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+                  <span className="flex-1 ms-3 whitespace-nowrap">Data Role</span>
+                </Link>
+                <Link
+                  href={`/dashboard/report/financial?title=Data Keuangan&isSidebarOpen=${isSidebarOpen}`}
+                  className={selectedMenu("/dashboard/report/financial")}
+                >
+                  <IoMdBasket className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+                  <span className="flex-1 ms-3 whitespace-nowrap">Data Hak Akses</span>
                 </Link>
               </div>
             )}

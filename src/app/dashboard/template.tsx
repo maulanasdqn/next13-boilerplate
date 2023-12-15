@@ -3,7 +3,7 @@ import { DashboardHeadTemplate, Navbar, Sidebar } from "@/components";
 import { clsx } from "clsx";
 import { NextPage } from "next";
 import { useQueryState } from "next-usequerystate";
-import { PropsWithChildren, ReactElement } from "react";
+import { PropsWithChildren, ReactElement, Suspense } from "react";
 
 const DashboardTemplate: NextPage = (props: PropsWithChildren): ReactElement => {
   const [isSidebarOpen] = useQueryState("isSidebarOpen");
@@ -21,8 +21,10 @@ const DashboardTemplate: NextPage = (props: PropsWithChildren): ReactElement => 
   );
   return (
     <section className="flex bg-gray-50 w-full h-full min-h-screen overflow-x-auto">
-      <Sidebar />
-      <Navbar />
+      <Suspense fallback="Loading...">
+        <Sidebar />
+        <Navbar />
+      </Suspense>
       <div className={className}>
         <DashboardHeadTemplate />
         <div className="w-full overflow-x-auto">{props.children}</div>

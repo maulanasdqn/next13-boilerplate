@@ -5,6 +5,7 @@ import { RxAvatar } from "react-icons/rx";
 import Image from "next/image";
 import { useQueryState } from "next-usequerystate";
 import { clsx } from "clsx";
+import Link from "next/link";
 
 export const Navbar: FC = (): ReactElement => {
   const { data: session } = useSession();
@@ -48,10 +49,12 @@ export const Navbar: FC = (): ReactElement => {
       )}
       {isOpen && (
         <div className="absolute top-16 select-none right-3 p-4 gap-y-4 rounded-lg shadow-md h-auto w-[300px] flex flex-col bg-white">
-          <span className="flex gap-x-2  hover:bg-gray-200 p-2 rounded-lg items-center font-medium text-gray-500 cursor-pointer">
-            <IoMdPerson size={20} />
-            Profile
-          </span>
+          <Link href={"/dashboard/profile?title=Profile"}>
+            <span className="flex gap-x-2  hover:bg-gray-200 p-2 rounded-lg items-center font-medium text-gray-500 cursor-pointer">
+              <IoMdPerson size={20} />
+              Profile
+            </span>
+          </Link>
           <hr />
           <span
             onClick={() => signOut()}
