@@ -4,7 +4,7 @@ import {
   getSortedRowModel,
   SortingState,
 } from "@tanstack/react-table";
-import { Fragment, ReactElement, useState } from "react";
+import { ReactElement, useState } from "react";
 import { TDataTable } from "./type";
 import { TableHead, TableBody, Table } from "@/components";
 import clsx from "clsx";
