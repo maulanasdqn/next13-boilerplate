@@ -4,7 +4,7 @@ import { db, report_transactions } from "@/server";
 import { eq, asc } from "drizzle-orm";
 import { z } from "zod";
 
-export const getReportTransaction = publicProcedure.query(async () => {
+export const getReportTransaction = publicProcedure.query(async ({ ctx }) => {
   try {
     const res = await db
       .select()

@@ -8,6 +8,7 @@ import {
   bigint,
   timestamp,
   primaryKey,
+  boolean,
 } from "drizzle-orm/pg-core";
 import { AdapterAccount } from "@auth/core/adapters";
 
@@ -59,6 +60,11 @@ export const roles = pgTable("app_roles", {
   permissions: text("permissions").notNull().array(),
   created_at: date("created_at", { mode: "date" }).notNull().defaultNow(),
   updated_at: date("updated_at", { mode: "date" }).notNull().defaultNow(),
+});
+
+export const mixins = pgTable("app_mixins", {
+  sidebar: boolean("sidebar").notNull().default(true),
+  navbar: boolean("navbar").default(true),
 });
 
 export const users = pgTable("user", {

@@ -1,4 +1,5 @@
 import { TCommonForms } from "@/entities";
+import { PERMISSIONS } from "@/server/database/schema";
 import { clsx } from "clsx";
 
 export const inputClassName = ({
@@ -43,3 +44,36 @@ export const formatCurrency = (value: number | unknown): string =>
     currency: "IDR",
     maximumFractionDigits: 0,
   }).format(Number(value));
+
+export function hasCommonElements<T>(arr1: T[], arr2: T[]): boolean {
+  const [shorter, longer] = arr1.length < arr2.length ? [arr1, arr2] : [arr2, arr1];
+  const set = new Set<T>(shorter);
+  return longer.some((element) => set.has(element));
+}
+
+export const permissionMapper = [
+  {
+    url: "/dashboard/product",
+    permissions: [PERMISSIONS.PRODUCT_READ],
+  },
+  {
+    url: "/dashboard/customer",
+    permissions: [PERMISSIONS.CUSTOMER_READ],
+  },
+  {
+    url: "/dashboard/report/transaction",
+    permissions: [PERMISSIONS.REPORT_TRANSACTION_READ],
+  },
+  {
+    url: "/dashboard/report/payment",
+    permissions: [PERMISSIONS.REPORT_PAYMENT_READ],
+  },
+  {
+    url: "/dashboard/report/financial",
+    permissions: [PERMISSIONS.REPORT_FINANCIAL_READ],
+  },
+  {
+    url: "/dashboard/user",
+    permissions: [PERMISSIONS.USER_READ],
+  },
+];

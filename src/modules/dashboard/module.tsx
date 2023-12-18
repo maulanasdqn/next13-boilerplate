@@ -1,5 +1,4 @@
 "use client";
-
 import { FC, ReactElement } from "react";
 import Image from "next/image";
 

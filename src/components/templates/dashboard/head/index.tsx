@@ -8,7 +8,7 @@ export const DashboardHeadTemplate: FC = (): ReactElement => {
   const searcParams = useSearchParams();
   const title = searcParams.get("title");
   return (
-    <div className="flex w-full justify-between items-center">
+    <div className="flex w-full justify-between items-center mb-5">
       <h1 className="sm:text-4xl text-2xl font-bold">{title}</h1>
       {title?.match(re) && (
         <Button onClick={() => window.history.back()} size="sm" variant="cancel">

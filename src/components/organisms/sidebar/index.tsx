@@ -1,5 +1,5 @@
-import { FC, ReactElement, useMemo, useState } from "react";
-import { useSession } from "next-auth/react";
+"use client";
+import { FC, Fragment, ReactElement, useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
 import { clsx } from "clsx";
 import { IoMdBasket, IoMdDesktop } from "react-icons/io";
@@ -9,13 +9,15 @@ import { HiArchiveBox, HiUsers } from "react-icons/hi2";
 import Link from "next/link";
 import { useQueryState } from "next-usequerystate";
 import { BiSolidUser } from "react-icons/bi";
+import { TUser } from "@/entities/user";
+import { PERMISSIONS } from "@/server/database/schema";
+import { hasCommonElements } from "@/utils";
 
-export const Sidebar: FC = (): ReactElement => {
-  const { data } = useSession();
+export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
   const [isSidebarOpen] = useQueryState("isSidebarOpen");
   const [open, setOpen] = useState("");
-  const userName = useMemo(() => data?.user?.fullname, [data]);
-  const roleName = useMemo(() => data?.user?.role?.name, [data]);
+  const userName = useMemo(() => user?.fullname, [user]);
+  const roleName = useMemo(() => user?.role?.name, [user]);
   const pathname = usePathname();
 
   const selectedMenu = (url: string) =>
@@ -27,6 +29,45 @@ export const Sidebar: FC = (): ReactElement => {
     "translate-x-0": isSidebarOpen === "open" || isSidebarOpen === "null" || !isSidebarOpen,
     "-translate-x-full": isSidebarOpen === "close",
   });
+
+  const iconClassName =
+    "flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white";
+
+  const sidebarData = [
+    {
+      name: "Man. Laporan",
+      icon: <AiFillBook className={iconClassName} />,
+      path: "report",
+      permissions: [
+        PERMISSIONS.REPORT_TRANSACTION_READ,
+        PERMISSIONS.REPORT_PAYMENT_READ,
+        PERMISSIONS.REPORT_FINANCIAL_READ,
+      ],
+      children: [
+        {
+          name: "Data Transaksi",
+          icon: <AiFillBoxPlot className={iconClassName} />,
+          path: "/dashboard/report/transaction",
+          url: `/dashboard/report/transaction?title=Data Transaksi&isSidebarOpen=${isSidebarOpen}`,
+          permissions: [PERMISSIONS.REPORT_TRANSACTION_READ],
+        },
+        {
+          name: "Data Keuangan",
+          icon: <AiFillMoneyCollect className={iconClassName} />,
+          path: "/dashboard/report/financial",
+          url: `/dashboard/report/financial?title=Data Keuangan&isSidebarOpen=${isSidebarOpen}`,
+          permissions: [PERMISSIONS.REPORT_FINANCIAL_READ],
+        },
+        {
+          name: "Data Pembayaran",
+          icon: <AiFillBook className={iconClassName} />,
+          path: "/dashboard/report/payment",
+          url: `/dashboard/report/financial?title=Data Pembayaran&isSidebarOpen=${isSidebarOpen}`,
+          permissions: [PERMISSIONS.REPORT_PAYMENT_READ],
+        },
+      ],
+    },
+  ];
 
   return (
     <aside id="default-sidebar" className={sidebarClassName} aria-label="Sidebar">
@@ -50,167 +91,50 @@ export const Sidebar: FC = (): ReactElement => {
               <span className="ms-3">Dashboard</span>
             </Link>
           </li>
-          <li className="text-white">
-            <div
-              onClick={() => (open === "" || open !== "report" ? setOpen("report") : setOpen(""))}
-              className="flex gap-x-3 cursor-pointer justify-between select-none items-center p-2 rounded-lg text-white hover:bg-gray-700"
-            >
-              <div className="flex gap-x-3 items-center">
-                <AiFillBook className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-white" />
-                Man. Laporan
-              </div>
-              <AiFillCaretDown
-                className={clsx(
-                  "flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-white",
-                  {
-                    "rotate-180": open === "report",
-                  },
-                )}
-              />
-            </div>
-            <div className="my-3" />
-            {open === "report" && (
-              <div className="flex flex-col gap-y-2 p-2 ml-2 bg-gray-600 rounded-lg">
-                <Link
-                  href={`/dashboard/report/transaction?title=Data Transaksi&isSidebarOpen=${isSidebarOpen}`}
-                  className={selectedMenu("/dashboard/report/transaction")}
-                >
-                  <AiFillBook className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-                  <span className="flex-1 ms-3 whitespace-nowrap">Data Transaksi</span>
-                </Link>
-                <Link
-                  href={`/dashboard/report/payment?title=Data Pembayaran&isSidebarOpen=${isSidebarOpen}`}
-                  className={selectedMenu("/dashboard/report/payment")}
-                >
-                  <AiFillMoneyCollect className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-                  <span className="flex-1 ms-3 whitespace-nowrap">Data Pembayaran</span>
-                </Link>
-                <Link
-                  href={`/dashboard/report/financial?title=Data Keuangan&isSidebarOpen=${isSidebarOpen}`}
-                  className={selectedMenu("/dashboard/report/financial")}
-                >
-                  <IoMdBasket className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-                  <span className="flex-1 ms-3 whitespace-nowrap">Data Keuangan</span>
-                </Link>
-              </div>
-            )}
-          </li>
-          <li className="text-white">
-            <div
-              onClick={() =>
-                open === "" || open !== "customer" ? setOpen("customer") : setOpen("")
-              }
-              className="flex gap-x-3 cursor-pointer select-none justify-between items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-            >
-              <div className="flex gap-x-3 items-center">
-                <HiUsers className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-white" />
-                Man. Pelanggan
-              </div>
-              <AiFillCaretDown
-                className={clsx(
-                  "flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-white",
-                  {
-                    "rotate-180": open === "customer",
-                  },
-                )}
-              />
-            </div>
-            <div className="my-3" />
-            {open === "customer" && (
-              <div className="flex flex-col gap-y-2 p-2 ml-2 bg-gray-600 rounded-lg">
-                <Link
-                  href={`/dashboard/customer/debt?title=Data Hutang Pelanggan&isSidebarOpen=${isSidebarOpen}`}
-                  className={selectedMenu("/dashboard/customer/debt")}
-                >
-                  <AiFillBook className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-                  <span className="flex-1 ms-3 whitespace-nowrap">Data Hutang</span>
-                </Link>
-                <Link
-                  href={`/dashboard/customer?title=Data Pelanggan&isSidebarOpen=${isSidebarOpen}`}
-                  className={selectedMenu("/dashboard/customer")}
-                >
-                  <PiUsersThreeFill className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-                  <span className="flex-1 ms-3 whitespace-nowrap">Data Pelanggan</span>
-                </Link>
-              </div>
-            )}
-          </li>
-          <li className="text-white">
-            <div
-              onClick={() => (open === "" || open !== "item" ? setOpen("item") : setOpen(""))}
-              className="flex gap-x-3 cursor-pointer select-none justify-between items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-            >
-              <div className="flex gap-x-3 items-center">
-                <HiArchiveBox className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-white" />
-                Man. Barang
-              </div>
-              <AiFillCaretDown
-                className={clsx(
-                  "flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-white",
-                  {
-                    "rotate-180": open === "item",
-                  },
-                )}
-              />
-            </div>
-            <div className="my-3" />
-            {open === "item" && (
-              <div className="flex flex-col gap-y-2 p-2 ml-2 bg-gray-600 rounded-lg">
-                <Link
-                  href={`/dashboard/item?title=Data Barang&isSidebarOpen=${isSidebarOpen}`}
-                  className={selectedMenu("/dashboard/item")}
-                >
-                  <AiFillBoxPlot className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-                  <span className="flex-1 ms-3 whitespace-nowrap">Data Barang</span>
-                </Link>
-              </div>
-            )}
-          </li>
-          <li className="text-white">
-            <div
-              onClick={() => (open === "" || open !== "user" ? setOpen("user") : setOpen(""))}
-              className="flex gap-x-3 cursor-pointer justify-between select-none items-center p-2 rounded-lg text-white hover:bg-gray-700"
-            >
-              <div className="flex gap-x-3 items-center">
-                <BiSolidUser className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-white" />
-                Man. Pengguna
-              </div>
-              <AiFillCaretDown
-                className={clsx(
-                  "flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-white",
-                  {
-                    "rotate-180": open === "user",
-                  },
-                )}
-              />
-            </div>
-            <div className="my-3" />
-            {open === "user" && (
-              <div className="flex flex-col gap-y-2 p-2 ml-2 bg-gray-600 rounded-lg">
-                <Link
-                  href={`/dashboard/report/transaction?title=Data Transaksi&isSidebarOpen=${isSidebarOpen}`}
-                  className={selectedMenu("/dashboard/report/transaction")}
-                >
-                  <AiFillBook className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-                  <span className="flex-1 ms-3 whitespace-nowrap">Data Pengguna</span>
-                </Link>
-                <Link
-                  href={`/dashboard/report/payment?title=Data Pembayaran&isSidebarOpen=${isSidebarOpen}`}
-                  className={selectedMenu("/dashboard/report/payment")}
-                >
-                  <AiFillMoneyCollect className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-                  <span className="flex-1 ms-3 whitespace-nowrap">Data Role</span>
-                </Link>
-                <Link
-                  href={`/dashboard/report/financial?title=Data Keuangan&isSidebarOpen=${isSidebarOpen}`}
-                  className={selectedMenu("/dashboard/report/financial")}
-                >
-                  <IoMdBasket className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-                  <span className="flex-1 ms-3 whitespace-nowrap">Data Hak Akses</span>
-                </Link>
-              </div>
-            )}
-          </li>
+          {sidebarData.map((item, index) => (
+            <Fragment key={index}>
+              {hasCommonElements(item.permissions, user?.role?.permissions) && (
+                <li key={index} className="text-white">
+                  <div
+                    onClick={() =>
+                      open === "" || open !== item.path ? setOpen(item.path) : setOpen("")
+                    }
+                    className="flex gap-x-3 cursor-pointer justify-between select-none items-center p-2 rounded-lg text-white hover:bg-gray-700"
+                  >
+                    <div className="flex gap-x-3 items-center">
+                      <div className="flex-shrink-0 w-5 h-5 text-gray-400 transition duration-75  group-hover:text-white">
+                        {item.icon}
+                      </div>
+                      {item.name}
+                    </div>
+                    <AiFillCaretDown
+                      className={clsx(
+                        "flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-white",
+                        {
+                          "rotate-180": open === item.path,
+                        },
+                      )}
+                    />
+                  </div>
+                  <div className="my-3" />
+                  {open === item.path && (
+                    <div className="flex flex-col gap-y-2 p-2 ml-2 bg-gray-600 rounded-lg">
+                      {item.children?.map((child, index) => (
+                        <Fragment key={index}>
+                          {hasCommonElements(child.permissions, user?.role?.permissions) && (
+                            <Link key={index} href={child.url} className={selectedMenu(child.path)}>
+                              {child.icon}
+                              <span className="flex-1 ms-3 whitespace-nowrap">{child.name}</span>
+                            </Link>
+                          )}
+                        </Fragment>
+                      ))}
+                    </div>
+                  )}
+                </li>
+              )}
+            </Fragment>
+          ))}
         </ul>
       </div>
     </aside>

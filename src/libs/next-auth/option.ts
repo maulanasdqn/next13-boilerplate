@@ -6,7 +6,7 @@ import { eq } from "drizzle-orm";
 import { googleProvider } from "./google";
 import { credentialProvider } from "./credential";
 
-export const config = {
+export const authOptions = {
   pages: {
     signIn: "/auth/login",
   },
