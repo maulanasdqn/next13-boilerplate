@@ -65,6 +65,10 @@ export const permissionMapper = [
     permissions: [PERMISSIONS.REPORT_TRANSACTION_READ],
   },
   {
+    url: "/dashboard/report/transaction/create",
+    permissions: [PERMISSIONS.REPORT_TRANSACTION_CREATE],
+  },
+  {
     url: "/dashboard/report/payment",
     permissions: [PERMISSIONS.REPORT_PAYMENT_READ],
   },
