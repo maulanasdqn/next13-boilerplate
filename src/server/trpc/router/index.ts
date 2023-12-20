@@ -5,3 +5,4 @@ export * from "./payment-method";
 export * from "./customer";
 export * from "./profile";
 export * from "./mixin";
+export * from "./role";

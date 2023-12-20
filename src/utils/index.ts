@@ -1,4 +1,4 @@
-import { TCommonForms } from "@/entities";
+import { TCommonForms, TMetaItem, TMetaResponse } from "@/entities";
 import { PERMISSIONS } from "@/server/database/schema";
 import { clsx } from "clsx";
 
@@ -81,3 +81,20 @@ export const permissionMapper = [
     permissions: [PERMISSIONS.USER_READ],
   },
 ];
+
+export const metaResponsePrefix = <T>({
+  data,
+  meta,
+}: {
+  data: T;
+  meta: TMetaItem;
+}): TMetaResponse<T> => {
+  return {
+    data,
+    meta,
+  };
+};
+
+export function calculateTotalPages(totalItems: number, itemsPerPage: number): number {
+  return Math.ceil(totalItems / itemsPerPage);
+}

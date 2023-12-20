@@ -1,0 +1,1 @@
+ALTER TABLE "app_report_transactions" ALTER COLUMN "total_price" SET DATA TYPE text;

@@ -37,7 +37,7 @@ export const Modal: FC<TModal> = (props): ReactElement => {
                   width: props.width + "px",
                   height: props.height + "px",
                 }}
-                className="mt-4"
+                className="justify-end flex-col h-full flex"
               >
                 {props.children}
               </div>

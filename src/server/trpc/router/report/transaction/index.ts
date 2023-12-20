@@ -1,20 +1,58 @@
-import { VSReportTransaction } from "@/entities";
+import { VSMetaRequest, VSReportTransaction } from "@/entities";
 import { publicProcedure } from "@/libs/trpc/init";
 import { db, report_transactions } from "@/server";
-import { eq, asc } from "drizzle-orm";
+import { calculateTotalPages, metaResponsePrefix } from "@/utils";
+import { eq, asc, ilike, or, and } from "drizzle-orm";
 import { z } from "zod";
 
-export const getReportTransaction = publicProcedure.query(async ({ ctx }) => {
-  try {
-    const res = await db
-      .select()
-      .from(report_transactions)
-      .orderBy(asc(report_transactions.created_at));
-    return res;
-  } catch (err) {
-    throw new Error(err as string);
-  }
-});
+export const getReportTransaction = publicProcedure
+  .input(VSMetaRequest)
+  .query(async ({ input, ctx }) => {
+    try {
+      const page = input?.page || 1;
+      const perPage = input?.perPage || 10;
+      const offset = (page - 1) * perPage;
+
+      const data = await db
+        .select()
+        .from(report_transactions)
+        .where(
+          and(
+            eq(report_transactions.user_id, ctx?.session?.user?.id as string),
+            or(ilike(report_transactions.name, `%${input?.search || ""}%`)),
+          ),
+        )
+        .limit(perPage)
+        .offset(input?.search ? 0 : offset)
+        .orderBy(report_transactions.created_at, asc(report_transactions.created_at));
+
+      const count = await db
+        .select({ id: report_transactions.id })
+        .from(report_transactions)
+        .then((res) => res.length);
+
+      const totalPage = calculateTotalPages(count, perPage);
+      const nextPage = page < totalPage ? page + 1 : null;
+      const prevPage = page > 1 ? page - 1 : null;
+
+      const metaPrefix = {
+        data,
+        meta: {
+          code: 200,
+          status: "success",
+          message: "Berhasil menampilkan reservasi",
+          page,
+          perPage,
+          totalPage,
+          nextPage,
+          prevPage,
+        },
+      };
+      return metaResponsePrefix(metaPrefix);
+    } catch (err) {
+      throw new Error(err as string);
+    }
+  });
 
 export const updateReportTransaction = publicProcedure
   .input(VSReportTransaction)
@@ -25,8 +63,6 @@ export const updateReportTransaction = publicProcedure
         .set({
           ...input,
           total_selled: Number(input.total_selled),
-          user_id: input.user_id as string,
-          transaction_date: String(input.transaction_date),
         })
         .where(eq(report_transactions.id, input.id as string));
       return {
@@ -73,8 +109,6 @@ export const createReportTransaction = publicProcedure
         .values({
           ...input,
           total_selled: Number(input.total_selled),
-          user_id: input.user_id as string,
-          transaction_date: String(input.transaction_date),
         })
         .returning();
       return {

@@ -77,8 +77,8 @@ export const DashboardReportTransactionCreateModule = () => {
     const product = products?.find((product) => product.id === watch("product_id"));
     const payment = paymentMethods?.find((payment) => payment.id === watch("payment_id"));
     if (product && payment) {
-      setValue("price", product.price);
-      setValue("total_price", product.price * Number(watch("total_selled")));
+      setValue("price", String(product.price));
+      setValue("total_price", String(product.price * Number(watch("total_selled"))));
       return {
         price: product.price,
         total_price: product.price * Number(watch("total_selled")),
@@ -94,7 +94,7 @@ export const DashboardReportTransactionCreateModule = () => {
     mutate(
       {
         ...data,
-        user_id: session?.user?.id,
+        user_id: session?.user?.id as string,
       },
       {
         onSuccess: () => {

@@ -1,4 +1,5 @@
 import { AxiosError } from "axios";
+import { z } from "zod";
 
 export type TMetaItem = {
   code: number;
@@ -11,8 +12,17 @@ export type TMetaItem = {
   prevPage: number | null;
 };
 
-export type TMetaResponse<T> = {
+export const VSMetaRequest = z
+  .object({
+    search: z.string(),
+    page: z.number(),
+    perPage: z.number(),
+  })
+  .optional();
+
+export type TMetaResponse<T, M = TMetaItem> = {
   data: T;
-} & TMetaItem;
+  meta: M;
+};
 
 export type TMetaErrorResponse = AxiosError<TMetaItem>;

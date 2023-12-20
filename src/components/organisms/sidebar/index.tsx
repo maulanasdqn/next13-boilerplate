@@ -3,7 +3,13 @@ import { FC, Fragment, ReactElement, useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
 import { clsx } from "clsx";
 import { IoMdBasket, IoMdDesktop } from "react-icons/io";
-import { AiFillBook, AiFillBoxPlot, AiFillCaretDown, AiFillMoneyCollect } from "react-icons/ai";
+import {
+  AiFillBook,
+  AiFillBoxPlot,
+  AiFillCaretDown,
+  AiFillMoneyCollect,
+  AiFillSetting,
+} from "react-icons/ai";
 import { PiUsersThreeFill } from "react-icons/pi";
 import { HiArchiveBox, HiUsers } from "react-icons/hi2";
 import Link from "next/link";
@@ -64,6 +70,22 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
           path: "/dashboard/report/payment",
           url: `/dashboard/report/financial?title=Data Pembayaran&isSidebarOpen=${isSidebarOpen}`,
           permissions: [PERMISSIONS.REPORT_PAYMENT_READ],
+        },
+      ],
+    },
+
+    {
+      name: "Man. User",
+      icon: <AiFillSetting className={iconClassName} />,
+      path: "role",
+      permissions: [PERMISSIONS.ROLE_READ, PERMISSIONS.USER_READ],
+      children: [
+        {
+          name: "Data Role",
+          icon: <AiFillSetting className={iconClassName} />,
+          path: "/dashboard/user/role",
+          url: `/dashboard/user/role?title=Data Role&isSidebarOpen=${isSidebarOpen}`,
+          permissions: [PERMISSIONS.ROLE_READ],
         },
       ],
     },

@@ -21,11 +21,6 @@ export async function middleware(req: NextRequest, _event: NextFetchEvent) {
     const userRole = session?.role as TUser["role"];
     const matchingRoute = permissionMapper.find((route) => url.pathname.startsWith(route.url));
 
-    console.log("Route", matchingRoute);
-    console.log(
-      matchingRoute?.permissions.some((permission) => userRole?.permissions.includes(permission)),
-    );
-
     if (matchingRoute) {
       const isAuthorized =
         matchingRoute.permissions.length === 0 ||

@@ -18,7 +18,7 @@
     "studio": "drizzle-kit studio",
     "generate": "drizzle-kit generate:pg",
     "push": "drizzle-kit push:pg",
-    "seed": "node --loader esbuild-register/loader -r esbuild-register ./src/server/database/seed.ts"
+    "seed": "tsx ./src/server/database/seed.ts"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^0.3.9",
@@ -89,6 +89,7 @@
     "storybook": "^7.5.1",
     "tailwindcss": "latest",
     "ts-node": "^10.9.1",
+    "tsx": "^4.7.0",
     "typescript": "latest",
     "vitest": "^0.34.6"
   }

@@ -33,17 +33,21 @@ export const AuthLoginModule: FC = (): ReactElement => {
 
   const onSubmit = handleSubmit(async (data) => {
     setIsLoading(true);
-    try {
-      await signIn("login", {
-        email: data.email,
-        password: data.password,
-        redirect: true,
-        redirectTo: callbackUrl,
-      });
+
+    const login = await signIn("login", {
+      email: data.email,
+      password: data.password,
+      redirect: false,
+    });
+
+    if (login?.error) {
+      setError(login.error);
+    } else if (login?.ok) {
       router.push(callbackUrl);
-    } catch (error) {
-      setError(`${error}`);
+    } else {
+      setError("Something went wrong");
     }
+
     setIsLoading(false);
   });
 
