@@ -18,7 +18,7 @@ export const Table: FC<TTable> = (props): ReactElement => {
           {props.children}
         </table>
       </div>
-      <Pagination {...props} />
+      {props.meta && <Pagination {...props} />}
     </section>
   );
 };

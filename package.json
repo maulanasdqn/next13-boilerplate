@@ -30,6 +30,7 @@
     "@trpc/next": "^10.44.1",
     "@trpc/react-query": "^10.44.1",
     "@trpc/server": "^10.44.1",
+    "@vercel/postgres": "^0.5.1",
     "axios": "^1.5.1",
     "bcryptjs": "^2.4.3",
     "clsx": "^2.0.0",

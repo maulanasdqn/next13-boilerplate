@@ -9,6 +9,7 @@ import {
   AiFillCaretDown,
   AiFillMoneyCollect,
   AiFillSetting,
+  AiFillTag,
 } from "react-icons/ai";
 import { PiUsersThreeFill } from "react-icons/pi";
 import { HiArchiveBox, HiUsers } from "react-icons/hi2";
@@ -86,6 +87,22 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
           path: "/dashboard/user/role",
           url: `/dashboard/user/role?title=Data Role&isSidebarOpen=${isSidebarOpen}`,
           permissions: [PERMISSIONS.ROLE_READ],
+        },
+      ],
+    },
+
+    {
+      name: "Man. Product",
+      icon: <AiFillTag className={iconClassName} />,
+      path: "product",
+      permissions: [PERMISSIONS.PRODUCT_READ],
+      children: [
+        {
+          name: "Data Product",
+          icon: <AiFillSetting className={iconClassName} />,
+          path: "/dashboard/product",
+          url: `/dashboard/product?title=Data Produk&isSidebarOpen=${isSidebarOpen}`,
+          permissions: [PERMISSIONS.PRODUCT_READ],
         },
       ],
     },

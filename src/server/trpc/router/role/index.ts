@@ -59,3 +59,16 @@ export const deleteRole = publicProcedure
       throw new Error(err as string);
     }
   });
+
+export const createRole = publicProcedure
+  .input(z.object({ name: z.string(), permissions: z.array(z.string()).optional() }))
+  .mutation(async ({ input }) => {
+    try {
+      await db.insert(roles).values(input).returning();
+      return {
+        message: "Berhasil membuat role baru!",
+      };
+    } catch (err) {
+      throw new Error(err as string);
+    }
+  });

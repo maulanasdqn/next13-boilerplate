@@ -29,6 +29,7 @@ export const getReportTransaction = publicProcedure
       const count = await db
         .select({ id: report_transactions.id })
         .from(report_transactions)
+        .where(eq(report_transactions.user_id, ctx?.session?.user?.id as string))
         .then((res) => res.length);
 
       const totalPage = calculateTotalPages(count, perPage);
