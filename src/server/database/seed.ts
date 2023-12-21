@@ -54,13 +54,12 @@ export const SeedTransaction = async () => {
     };
     dataToInsert.push(newData);
   }
-  console.log("Seeding reservations... 🚀");
-  console.log(dataToInsert);
+  console.log("Seeding transactions... 🚀");
   dataToInsert.forEach(async (data) => {
+    console.log("Inserting transaction", data.name);
     await db.insert(report_transactions).values(data).returning();
   });
-  console.log("Seeding reservations done! 🎊");
-  return;
+  console.log("Seeding transactions! 🎊");
 };
 
 export const SeedRole = async () => {
@@ -76,7 +75,6 @@ export const SeedRole = async () => {
     dataToInsert.push(newData);
   }
   console.log("Seeding roles... 🚀");
-  console.log(dataToInsert);
   dataToInsert.forEach(async (data) => {
     await db.insert(roles_db).values(data).returning();
   });
@@ -106,7 +104,6 @@ export const SeedUser = async () => {
     dataToInsert.push(newData);
   }
   console.log("Seeding users... 🚀");
-  console.log(dataToInsert);
   dataToInsert.forEach(async (data) => {
     await db.insert(users).values(data).returning();
   });
@@ -128,9 +125,69 @@ export const SeedProduct = async () => {
     dataToInsert.push(newData);
   }
   console.log("Seeding products... 🚀");
-  console.log(dataToInsert);
   dataToInsert.forEach(async (data) => {
+    console.log("Inserting product", data.name);
     await db.insert(products).values(data).returning();
   });
   console.log("Seeding products done! 🎊");
 };
+
+export const SeedPaymentMethod = async () => {
+  let dataToInsert = [];
+
+  for (let i = 0; i < 10; i++) {
+    let newData = {
+      name: "Methode Pembayaran " + i + 1,
+      provider_name: "Methode Pembayaran " + i + 1,
+      account_number: faker.finance.accountNumber(),
+      account_name: faker.finance.accountName(),
+      created_at: new Date(),
+      updated_at: new Date(),
+    };
+    dataToInsert.push(newData);
+  }
+  console.log("Seeding payment method... 🚀");
+  dataToInsert.forEach(async (data) => {
+    setTimeout(async () => {
+      console.log("Inserting payment method...", data.name);
+      await db.insert(payment_methods).values(data).returning();
+    }, 1000);
+  });
+  console.log("Seeding payment method done! 🎊");
+};
+
+export const SeedCustomer = async () => {
+  let dataToInsert = [];
+
+  for (let i = 0; i < 10; i++) {
+    let newData = {
+      name: faker.person.fullName(),
+      created_at: new Date(),
+      updated_at: new Date(),
+    };
+    dataToInsert.push(newData);
+  }
+  console.log("Seeding customer... 🚀");
+  dataToInsert.forEach(async (data) => {
+    try {
+      console.log("Inserting customer", data.name);
+      await db.insert(customers).values(data).returning();
+    } catch (error) {
+      console.error(error);
+    }
+  });
+  console.log("Seeding customer done! 🎊");
+};
+
+async function processAsyncOperations() {
+  try {
+    await SeedCustomer();
+    await SeedPaymentMethod();
+    await SeedProduct();
+    await SeedTransaction();
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+processAsyncOperations();
