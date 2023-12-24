@@ -5,6 +5,11 @@ export type TUser = {
   fullname: string;
   image?: string;
   email: string;
+  business?: {
+    id: string;
+    name: string;
+    owner_id: string;
+  };
   role: {
     id: string;
     name: string;

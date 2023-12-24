@@ -2,8 +2,10 @@
 import { FC, Fragment, ReactElement, useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
 import { clsx } from "clsx";
-import { IoMdBasket, IoMdDesktop, IoMdLogOut } from "react-icons/io";
+import { IoMdBasket, IoMdDesktop, IoMdLogOut, IoMdSettings } from "react-icons/io";
 import {
+  AiFillAccountBook,
+  AiFillBell,
   AiFillBook,
   AiFillBoxPlot,
   AiFillCaretDown,
@@ -49,6 +51,21 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
     );
 
   const sidebarData = [
+    {
+      name: "Man. Pesanan",
+      icon: <AiFillAccountBook className={iconClassName} />,
+      path: "order",
+      permissions: [PERMISSIONS.ORDER_READ],
+      children: [
+        {
+          name: "Data Pesanan",
+          icon: <AiFillBell className={iconClassName} />,
+          path: "/dashboard/order",
+          url: `/dashboard/order?title=Data Order&isSidebarOpen=${isSidebarOpen}`,
+          permissions: [PERMISSIONS.ORDER_READ],
+        },
+      ],
+    },
     {
       name: "Man. Laporan",
       icon: <AiFillBook className={iconClassName} />,
@@ -191,6 +208,15 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
               )}
             </Fragment>
           ))}
+          <li>
+            <Link
+              href={`/dashboard/setting?title=Pengaturan&isSidebarOpen=${isSidebarOpen}`}
+              className={selectedMenu("/dashboard/setting")}
+            >
+              <IoMdSettings className={iconClassName} />
+              <span className="ms-3">Pengaturan</span>
+            </Link>
+          </li>
           <li>
             <span onClick={() => setIsSidebarOpen("close")} className={selectedMenu("")}>
               <IoMdLogOut className={iconClassName} />

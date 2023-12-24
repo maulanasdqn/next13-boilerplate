@@ -1,6 +1,6 @@
 import { NextAuthOptions } from "next-auth";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import { ROLES, db, roles, users } from "@/server";
+import { ROLES, business, db, roles, users } from "@/server";
 import { TUser } from "@/entities";
 import { eq } from "drizzle-orm";
 import { googleProvider } from "./google";
@@ -22,6 +22,12 @@ export const authOptions = {
           .select({ name: roles.name, id: roles.id, permissions: roles.permissions })
           .from(roles)
           .where(eq(roles.name, ROLES.USER))
+          .then((res) => res.at(0));
+
+        const busines = await db
+          .select({ name: business.name, id: business.id, owner_id: business.owner_id })
+          .from(business)
+          .where(eq(business.id, users.business_id))
           .then((res) => res.at(0));
 
         const user = await db
@@ -56,6 +62,7 @@ export const authOptions = {
           email: profile.email,
           image: p?.picture,
           role,
+          business: busines,
         };
       }
 
@@ -71,6 +78,11 @@ export const authOptions = {
             name: u.role.name,
             permissions: u.role.permissions,
           },
+          business: {
+            id: u.business?.id,
+            name: u.business?.name,
+            owner_id: u.business?.owner_id,
+          },
         };
       }
       return token;
@@ -83,6 +95,7 @@ export const authOptions = {
         image: token?.image,
         email: token.email,
         role: token.role,
+        business: token.business,
       } as TUser;
       return session;
     },

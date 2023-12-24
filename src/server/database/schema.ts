@@ -18,6 +18,7 @@ export enum ROLES {
 }
 
 export enum PERMISSIONS {
+  ORDER_READ = "Read Order",
   REPORT_TRANSACTION_CREATE = "Create Report Transaction",
   REPORT_TRANSACTION_READ = "Read Report Transaction",
   REPORT_TRANSACTION_UPDATE = "Update Report Transaction",
@@ -75,6 +76,7 @@ export const mixins = pgTable("app_mixins", {
 export const users = pgTable("user", {
   id: uuid("id").notNull().primaryKey().defaultRandom(),
   role_id: uuid("role_id").references(() => roles.id, { onDelete: "cascade" }),
+  business_id: uuid("business_id").references(() => business.id, { onDelete: "cascade" }),
   fullname: text("name"),
   image: text("image"),
   email: text("email").notNull().unique(),
@@ -87,6 +89,15 @@ export const users = pgTable("user", {
 export const customers = pgTable("app_customers", {
   id: uuid("id").notNull().primaryKey().defaultRandom(),
   name: text("name").notNull(),
+  created_at: date("created_at", { mode: "date" }).notNull().defaultNow(),
+  updated_at: date("updated_at", { mode: "date" }).notNull().defaultNow(),
+});
+
+export const business = pgTable("app_business", {
+  id: uuid("id").notNull().primaryKey().defaultRandom(),
+  owner_id: uuid("owner_id").notNull(),
+  name: text("name").notNull(),
+  phone_number: text("phone_number").notNull(),
   created_at: date("created_at", { mode: "date" }).notNull().defaultNow(),
   updated_at: date("updated_at", { mode: "date" }).notNull().defaultNow(),
 });
@@ -219,6 +230,10 @@ export const rolesRelations = relations(roles, ({ many }) => ({
   users: many(users),
 }));
 
+export const businessMemberRelations = relations(business, ({ many }) => ({
+  users: many(users),
+}));
+
 export const userReportTransactionRelations = relations(users, ({ many }) => ({
   report_transactions: many(report_transactions),
 }));
@@ -235,6 +250,10 @@ export const usersRelations = relations(users, ({ one }) => ({
   roles: one(roles, {
     fields: [users.role_id],
     references: [roles.id],
+  }),
+  business: one(business, {
+    fields: [users.business_id],
+    references: [business.id],
   }),
 }));
 

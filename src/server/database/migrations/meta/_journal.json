@@ -127,6 +127,13 @@
       "when": 1703067453018,
       "tag": "0017_empty_puppet_master",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "5",
+      "when": 1703445380334,
+      "tag": "0018_broad_hobgoblin",
+      "breakpoints": true
     }
   ]
 }
