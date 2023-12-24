@@ -49,7 +49,9 @@ export const DashboardReportTransactionModule: FC = (): ReactElement => {
           return (
             <div className="flex gap-x-2">
               <Button
-                href={`/dashboard/report-transaction/${row.original?.id}`}
+                href={`/dashboard/report/transaction/update/${row.original?.id}?title=${
+                  "Perbarui Data " + row.original?.name
+                }`}
                 size="sm"
                 variant="success"
               >
@@ -120,7 +122,7 @@ export const DashboardReportTransactionModule: FC = (): ReactElement => {
   );
 
   return (
-    <section className="flex w-full h-full min-h-screen">
+    <>
       <DataTable
         isLoading={isLoading}
         createLink="/dashboard/report/transaction/create?title=Tambah Data Transaksi"
@@ -130,10 +132,9 @@ export const DashboardReportTransactionModule: FC = (): ReactElement => {
         meta={transaction?.meta}
       />
       <Modal
-        width="440"
+        width="200"
         height="100"
-        title="Apakah anda yakin ingin hapus Laporan Transaksi?"
-        onClose={() => setDeleteModal(false)}
+        title="Apakah anda yakin ingin menghapus ini?"
         isOpen={deleteModal}
       >
         <div className="flex justify-start gap-x-4 w-full">
@@ -159,6 +160,6 @@ export const DashboardReportTransactionModule: FC = (): ReactElement => {
           </Button>
         </div>
       </Modal>
-    </section>
+    </>
   );
 };

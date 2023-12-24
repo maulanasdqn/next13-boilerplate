@@ -20,8 +20,8 @@ export const Modal: FC<TModal> = (props): ReactElement => {
       {props?.isOpen &&
         createPortal(
           <section className="fixed h-screen top-0 left-0 right-0 bottom-0 bg-gray-200/80 bg-blur z-50 flex justify-center items-center">
-            <div className="bg-white transition-all duration-300 ease-in-out w-fit p-4 shadow rounded-lg h-auto">
-              <div className="flex justify-between w-full items-center">
+            <div className="bg-white transition-all duration-300 ease-in-out w-fit p-4 shadow rounded-lg h-auto mx-4">
+              <div className="flex justify-between w-full items-start">
                 <h1 className="text-base font-medium select-none">{props.title}</h1>
                 {props.onClose && (
                   <IoMdClose

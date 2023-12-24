@@ -76,3 +76,5 @@ export const Navbar: FC<{ user: TUser }> = ({ user }): ReactElement => {
     </nav>
   );
 };
+
+export * from "./landing";

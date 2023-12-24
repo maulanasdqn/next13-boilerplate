@@ -107,7 +107,7 @@ export const DashboardReportTransactionCreateModule = () => {
 
   return (
     <FormTemplate onSubmit={onSubmit}>
-      <div className="flex gap-x-3 w-full">
+      <div className="flex md:flex-row flex-col gap-y-3 md:gap-x-3 w-full">
         <ControlledFieldText
           size="sm"
           placeholder="Masukkan nama transaksi"
@@ -126,7 +126,7 @@ export const DashboardReportTransactionCreateModule = () => {
           placeholder="Pilih Produk"
         />
       </div>
-      <div className="flex gap-x-3 w-full">
+      <div className="flex md:flex-row flex-col gap-y-3 md:gap-x-3 w-full">
         <ControlledFieldSelect
           size="sm"
           label="Metode Pembayaran"
@@ -144,7 +144,7 @@ export const DashboardReportTransactionCreateModule = () => {
           placeholder="Pilih Pelanggan"
         />
       </div>
-      <div className="flex gap-x-3 w-full">
+      <div className="flex md:flex-row flex-col gap-y-3 md:gap-x-3 w-full">
         <ControlledFieldDate
           size="sm"
           placeholder="Pilih Tanggal Transaksi"
@@ -163,7 +163,7 @@ export const DashboardReportTransactionCreateModule = () => {
           type="time"
         />
       </div>
-      <div className="flex gap-x-3 w-full">
+      <div className="flex md:flex-row flex-col gap-y-3 md:gap-x-3 w-full">
         <FieldText
           size="sm"
           placeholder="Harga satuan akan muncul disini"
@@ -184,7 +184,7 @@ export const DashboardReportTransactionCreateModule = () => {
           type="number"
         />
       </div>
-      <div className="w-1/2">
+      <div className="flex md:flex-row flex-col gap-y-3 md:gap-x-3 md:w-1/2 w-full">
         <FieldText
           size="sm"
           placeholder="Total harga akan muncul disini"
@@ -195,7 +195,7 @@ export const DashboardReportTransactionCreateModule = () => {
           readOnly
         />
       </div>
-      <div className="flex gap-x-4">
+      <div className="flex md:flex-row flex-col gap-y-3 md:gap-x-3 w-full">
         <Button type="submit" size="sm" disabled={!isValid}>
           Simpan
         </Button>

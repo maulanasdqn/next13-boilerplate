@@ -10,7 +10,7 @@ export const Button: FC<TButton> = (props): ReactElement => {
     "rounded-lg border hover:opacity-80",
     "disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400 disabled:text-white",
     {
-      "bg-gray-500 text-white": variant === "primary",
+      "bg-primary text-white": variant === "primary",
       "bg-white text-blue-500 border-blue-500": variant === "secondary",
       "bg-red-500 text-white": variant === "error",
       "bg-white text-gray-600 border-gray-600": variant === "cancel",

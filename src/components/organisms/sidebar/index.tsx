@@ -2,7 +2,7 @@
 import { FC, Fragment, ReactElement, useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
 import { clsx } from "clsx";
-import { IoMdBasket, IoMdDesktop } from "react-icons/io";
+import { IoMdBasket, IoMdDesktop, IoMdLogOut } from "react-icons/io";
 import {
   AiFillBook,
   AiFillBoxPlot,
@@ -19,17 +19,18 @@ import { BiSolidUser } from "react-icons/bi";
 import { TUser } from "@/entities/user";
 import { PERMISSIONS } from "@/server/database/schema";
 import { hasCommonElements } from "@/utils";
+import { SiMarketo } from "react-icons/si";
 
 export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
-  const [isSidebarOpen] = useQueryState("isSidebarOpen");
+  const [isSidebarOpen, setIsSidebarOpen] = useQueryState("isSidebarOpen");
   const [open, setOpen] = useState("");
   const userName = useMemo(() => user?.fullname, [user]);
   const roleName = useMemo(() => user?.role?.name, [user]);
   const pathname = usePathname();
 
   const selectedMenu = (url: string) =>
-    clsx("flex items-center p-2 rounded-lg text-white hover:bg-gray-700 group", {
-      "bg-gray-700": pathname === url,
+    clsx("flex items-center p-2 text-primary rounded-lg group hover:text-white hover:bg-primary", {
+      "bg-primary text-white": pathname === url,
     });
 
   const sidebarClassName = clsx("fixed top-0 left-0 z-40 w-64 h-screen transition-transform", {
@@ -37,8 +38,15 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
     "-translate-x-full": isSidebarOpen === "close",
   });
 
-  const iconClassName =
-    "flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white";
+  const iconClassName = (url: string) =>
+    clsx(
+      "flex-shrink-0 w-5 h-5 transition duration-75 group-hover:text-white group-hover:text-white hover:text-white",
+      {
+        "text-primary ": pathname !== url,
+
+        "text-white": pathname === url,
+      },
+    );
 
   const sidebarData = [
     {
@@ -69,7 +77,7 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
           name: "Data Pembayaran",
           icon: <AiFillBook className={iconClassName} />,
           path: "/dashboard/report/payment",
-          url: `/dashboard/report/financial?title=Data Pembayaran&isSidebarOpen=${isSidebarOpen}`,
+          url: `/dashboard/report/payment?title=Data Pembayaran&isSidebarOpen=${isSidebarOpen}`,
           permissions: [PERMISSIONS.REPORT_PAYMENT_READ],
         },
       ],
@@ -86,6 +94,14 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
           icon: <AiFillSetting className={iconClassName} />,
           path: "/dashboard/user/role",
           url: `/dashboard/user/role?title=Data Role&isSidebarOpen=${isSidebarOpen}`,
+          permissions: [PERMISSIONS.ROLE_READ],
+        },
+
+        {
+          name: "Data Pengguna",
+          icon: <PiUsersThreeFill className={iconClassName} />,
+          path: "/dashboard/user/user",
+          url: `/dashboard/user/user?title=Data Pengguna&isSidebarOpen=${isSidebarOpen}`,
           permissions: [PERMISSIONS.ROLE_READ],
         },
       ],
@@ -110,13 +126,16 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
 
   return (
     <aside id="default-sidebar" className={sidebarClassName} aria-label="Sidebar">
-      <div className="h-full px-3 py-4 overflow-y-auto bg-gray-800">
+      <div className="h-full px-3 py-4 overflow-y-auto bg-white shadow-md">
         <div className="flex flex-col gap-y-4 mb-4">
-          <span className="text-white font-medium  w-full block text-2xl">POS UMKM</span>
+          <div className="flex gap-x-3 items-center">
+            <SiMarketo className="text-primary" size={24} />
+            <span className="text-primary font-bold  w-full block text-2xl">POS UMKM</span>
+          </div>
           <Link href={"/dashboard/profile?title=Profile"}>
-            <div className="bg-gray-600 p-2 rounded-lg flex flex-col cursor-pointer">
-              <span className="text-white text-base">{userName}</span>
-              <span className="text-white text-sm">{roleName}</span>
+            <div className="bg-gray-100 p-2 rounded-lg flex flex-col cursor-pointer">
+              <span className="text-gray-600 text-base">{userName}</span>
+              <span className="text-gray-600 text-sm">{roleName}</span>
             </div>
           </Link>
         </div>
@@ -126,7 +145,7 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
               href={`/dashboard?title=Dashboard&isSidebarOpen=${isSidebarOpen}`}
               className={selectedMenu("/dashboard")}
             >
-              <IoMdDesktop className="flex-shrink-0 w-5 h-5 text-gray-400 transition duration-75  group-hover:text-white" />
+              <IoMdDesktop className={iconClassName} />
               <span className="ms-3">Dashboard</span>
             </Link>
           </li>
@@ -138,12 +157,10 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
                     onClick={() =>
                       open === "" || open !== item.path ? setOpen(item.path) : setOpen("")
                     }
-                    className="flex gap-x-3 cursor-pointer justify-between select-none items-center p-2 rounded-lg text-white hover:bg-gray-700"
+                    className="flex gap-x-3 cursor-pointer group justify-between select-none items-center p-2 rounded-lg text-primary hover:bg-primary hover:text-white"
                   >
-                    <div className="flex gap-x-3 items-center">
-                      <div className="flex-shrink-0 w-5 h-5 text-gray-400 transition duration-75  group-hover:text-white">
-                        {item.icon}
-                      </div>
+                    <div className="flex gap-x-3 items-center group">
+                      {item.icon}
                       {item.name}
                     </div>
                     <AiFillCaretDown
@@ -157,7 +174,7 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
                   </div>
                   <div className="my-3" />
                   {open === item.path && (
-                    <div className="flex flex-col gap-y-2 p-2 ml-2 bg-gray-600 rounded-lg">
+                    <div className="flex flex-col gap-y-2 p-2 bg-gray-100 ml-2 text-primary rounded-lg">
                       {item.children?.map((child, index) => (
                         <Fragment key={index}>
                           {hasCommonElements(child.permissions, user?.role?.permissions) && (
@@ -174,6 +191,12 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
               )}
             </Fragment>
           ))}
+          <li>
+            <span onClick={() => setIsSidebarOpen("close")} className={selectedMenu("")}>
+              <IoMdLogOut className={iconClassName} />
+              <span className="ms-3">Tutup Sidebar</span>
+            </span>
+          </li>
         </ul>
       </div>
     </aside>
