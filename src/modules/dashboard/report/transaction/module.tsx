@@ -7,11 +7,13 @@ import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import { format } from "date-fns";
 import { formatCurrency } from "@/utils";
 import { parseAsInteger, parseAsString, useQueryState } from "next-usequerystate";
+import { useSession } from "next-auth/react";
 
 export const DashboardReportTransactionModule: FC = (): ReactElement => {
   const [search, setSearch] = useQueryState("search", parseAsString.withDefault(""));
   const [page] = useQueryState("page", parseAsInteger.withDefault(1));
   const [perPage] = useQueryState("perPage", parseAsInteger.withDefault(10));
+  const { data: session } = useSession();
 
   const {
     data: transaction,
@@ -83,7 +85,7 @@ export const DashboardReportTransactionModule: FC = (): ReactElement => {
       },
       {
         header: "Total Harga",
-        accessorKey: "total_price",
+        accessorKey: "totalPrice",
         cell: ({ getValue }) => {
           const value = getValue<number>();
           return formatCurrency(value);
@@ -91,11 +93,11 @@ export const DashboardReportTransactionModule: FC = (): ReactElement => {
       },
       {
         header: "Total Terjual",
-        accessorKey: "total_selled",
+        accessorKey: "totalSelled",
       },
       {
         header: "Tanggal Transaksi",
-        accessorKey: "transaction_date",
+        accessorKey: "transactionDate",
         cell: ({ getValue }) => {
           const value = new Date(getValue<Date>());
           return format(value, "dd/MM/yyyy");
@@ -103,7 +105,7 @@ export const DashboardReportTransactionModule: FC = (): ReactElement => {
       },
       {
         header: "Tanggal Dibuat",
-        accessorKey: "created_at",
+        accessorKey: "createdAt",
         cell: ({ getValue }) => {
           const value = new Date(getValue<Date>());
           return format(value, "dd/MM/yyyy");
@@ -111,7 +113,7 @@ export const DashboardReportTransactionModule: FC = (): ReactElement => {
       },
       {
         header: "Tanggal Diperbarui",
-        accessorKey: "updated_at",
+        accessorKey: "updatedAt",
         cell: ({ getValue }) => {
           const value = new Date(getValue<Date>());
           return format(value, "dd/MM/yyyy");
@@ -123,43 +125,52 @@ export const DashboardReportTransactionModule: FC = (): ReactElement => {
 
   return (
     <>
-      <DataTable
-        isLoading={isLoading}
-        createLink="/dashboard/report/transaction/create?title=Tambah Data Transaksi"
-        columns={columns}
-        handleSearch={handleSearch}
-        data={data || []}
-        meta={transaction?.meta}
-      />
-      <Modal
-        width="200"
-        height="100"
-        title="Apakah anda yakin ingin menghapus ini?"
-        isOpen={deleteModal}
-      >
-        <div className="flex justify-start gap-x-4 w-full">
-          <Button
-            onClick={() =>
-              mutate(
-                { id },
-                {
-                  onSuccess: () => {
-                    refetch();
-                    setDeleteModal(false);
-                    setId("");
-                  },
-                },
-              )
-            }
-            variant="error"
+      {session?.user?.business?.name ? (
+        <>
+          <DataTable
+            isLoading={isLoading}
+            columns={columns}
+            handleSearch={handleSearch}
+            data={data || []}
+            meta={transaction?.meta}
+          />
+          <Modal
+            width="200"
+            height="100"
+            title="Apakah anda yakin ingin menghapus ini?"
+            isOpen={deleteModal}
           >
-            Hapus
-          </Button>
-          <Button onClick={() => setDeleteModal(false)} variant="cancel">
-            Batal
-          </Button>
-        </div>
-      </Modal>
+            <div className="flex justify-start gap-x-4 w-full">
+              <Button
+                onClick={() =>
+                  mutate(
+                    { id },
+                    {
+                      onSuccess: () => {
+                        refetch();
+                        setDeleteModal(false);
+                        setId("");
+                      },
+                    },
+                  )
+                }
+                variant="error"
+              >
+                Hapus
+              </Button>
+              <Button onClick={() => setDeleteModal(false)} variant="cancel">
+                Batal
+              </Button>
+            </div>
+          </Modal>
+        </>
+      ) : (
+        <>
+          <h1 className="text-3xl font-bold text-gray-900">
+            Anda harus mempunyai bisnis dulu untuk mengakses halaman ini
+          </h1>
+        </>
+      )}
     </>
   );
 };

@@ -8,7 +8,10 @@ export type TUser = {
   business?: {
     id: string;
     name: string;
-    owner_id: string;
+    image: string;
+    ownerId: string;
+    address: string;
+    phoneNumber: string;
   };
   role: {
     id: string;

@@ -8,16 +8,17 @@ import {
   bigint,
   timestamp,
   primaryKey,
-  boolean,
 } from "drizzle-orm/pg-core";
 import { AdapterAccount } from "@auth/core/adapters";
 
 export enum ROLES {
   ADMIN = "Admin",
-  USER = "User",
+  MEMBER = "Member",
+  OWNER = "Owner",
 }
 
 export enum PERMISSIONS {
+  DASHBOARD = "Dashboard",
   ORDER_READ = "Read Order",
   REPORT_TRANSACTION_CREATE = "Create Report Transaction",
   REPORT_TRANSACTION_READ = "Read Report Transaction",
@@ -64,42 +65,39 @@ export const roles = pgTable("app_roles", {
   id: uuid("id").notNull().primaryKey().defaultRandom(),
   name: text("name").notNull().unique(),
   permissions: text("permissions").notNull().array(),
-  created_at: date("created_at", { mode: "date" }).notNull().defaultNow(),
-  updated_at: date("updated_at", { mode: "date" }).notNull().defaultNow(),
-});
-
-export const mixins = pgTable("app_mixins", {
-  sidebar: boolean("sidebar").notNull().default(true),
-  navbar: boolean("navbar").default(true),
+  createdAt: date("created_at", { mode: "date" }).notNull().defaultNow(),
+  updatedAt: date("updated_at", { mode: "date" }).notNull().defaultNow(),
 });
 
 export const users = pgTable("user", {
   id: uuid("id").notNull().primaryKey().defaultRandom(),
-  role_id: uuid("role_id").references(() => roles.id, { onDelete: "cascade" }),
-  business_id: uuid("business_id").references(() => business.id, { onDelete: "cascade" }),
+  roleId: uuid("role_id").references(() => roles.id, { onDelete: "cascade" }),
   fullname: text("name"),
   image: text("image"),
   email: text("email").notNull().unique(),
-  email_verified_at: timestamp("emailVerified", { mode: "date" }),
+  emailVerifiedAt: timestamp("emailVerified", { mode: "date" }),
   password: text("password"),
-  created_at: date("created_at", { mode: "date" }).notNull().defaultNow(),
-  updated_at: date("updated_at", { mode: "date" }).notNull().defaultNow(),
+  createdAt: date("created_at", { mode: "date" }).notNull().defaultNow(),
+  updatedAt: date("updated_at", { mode: "date" }).notNull().defaultNow(),
 });
 
 export const customers = pgTable("app_customers", {
   id: uuid("id").notNull().primaryKey().defaultRandom(),
   name: text("name").notNull(),
-  created_at: date("created_at", { mode: "date" }).notNull().defaultNow(),
-  updated_at: date("updated_at", { mode: "date" }).notNull().defaultNow(),
+  phoneNumber: text("phone_number").unique(),
+  createdAt: date("created_at", { mode: "date" }).notNull().defaultNow(),
+  updatedAt: date("updated_at", { mode: "date" }).notNull().defaultNow(),
 });
 
 export const business = pgTable("app_business", {
   id: uuid("id").notNull().primaryKey().defaultRandom(),
-  owner_id: uuid("owner_id").notNull(),
+  ownerId: uuid("owner_id").notNull(),
   name: text("name").notNull(),
-  phone_number: text("phone_number").notNull(),
-  created_at: date("created_at", { mode: "date" }).notNull().defaultNow(),
-  updated_at: date("updated_at", { mode: "date" }).notNull().defaultNow(),
+  image: text("image"),
+  address: text("address"),
+  phoneNumber: text("phone_number").notNull().unique(),
+  createdAt: date("created_at", { mode: "date" }).notNull().defaultNow(),
+  updatedAt: date("updated_at", { mode: "date" }).notNull().defaultNow(),
 });
 
 export const accounts = pgTable(
@@ -145,75 +143,74 @@ export const verificationTokens = pgTable(
 );
 export const report_transactions = pgTable("app_report_transactions", {
   id: uuid("id").notNull().primaryKey().defaultRandom(),
-  product_id: uuid("product_id")
+  productId: uuid("product_id")
     .notNull()
     .references(() => products.id, { onDelete: "cascade" }),
-  payment_id: uuid("payment_id")
+  paymentId: uuid("payment_id")
     .notNull()
     .references(() => payment_methods.id, { onDelete: "cascade" }),
-  user_id: uuid("user_id")
+  userId: uuid("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
-  customer_id: uuid("customer_id")
+  customerId: uuid("customer_id")
     .notNull()
     .references(() => customers.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
   price: text("price").notNull(),
-  transaction_date: text("transaction_date").notNull(),
-  transaction_time: text("transaction_time").notNull(),
-  total_selled: integer("total_selled").notNull(),
-  total_price: text("total_price").notNull(),
-  created_at: date("created_date", { mode: "date" }).notNull().defaultNow(),
-  updated_at: date("updated_date", { mode: "date" }).notNull().defaultNow(),
+  transactionDate: date("transaction_date", { mode: "date" }).notNull(),
+  transactionTime: text("transaction_time").notNull(),
+  totalSelled: integer("total_selled").notNull(),
+  totalPrice: text("total_price").notNull(),
+  createdAt: date("created_date", { mode: "date" }).notNull().defaultNow(),
+  updatedAt: date("updated_date", { mode: "date" }).notNull().defaultNow(),
 });
 
 export const payment_methods = pgTable("app_payment_methods", {
   id: uuid("id").notNull().primaryKey().defaultRandom(),
-  provider_name: text("provider_name").notNull(),
-  account_name: text("name").notNull(),
-  account_number: text("account_number").notNull(),
-  created_at: date("created_date", { mode: "date" }).notNull().defaultNow(),
-  updated_at: date("updated_date", { mode: "date" }).notNull().defaultNow(),
+  providerName: text("provider_name").notNull(),
+  accountName: text("name").notNull(),
+  accountNumber: text("account_number").notNull(),
+  createdAt: date("created_date", { mode: "date" }).notNull().defaultNow(),
+  updatedAt: date("updated_date", { mode: "date" }).notNull().defaultNow(),
 });
 
 export const report_payments = pgTable("app_report_payments", {
   id: uuid("id").notNull().primaryKey().defaultRandom(),
-  user_id: uuid("user_id")
+  userId: uuid("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
-  customer_id: uuid("customer_id")
+  customerId: uuid("customer_id")
     .notNull()
     .references(() => customers.id, { onDelete: "cascade" }),
-
   name: text("name").notNull(),
   price: text("price").notNull(),
   description: text("description").notNull(),
-  total_payment: bigint("total_payment", { mode: "number" }).notNull(),
-  created_at: date("created_date", { mode: "date" }).notNull().defaultNow(),
-  updated_at: date("updated_date", { mode: "date" }).notNull().defaultNow(),
+  totalPayment: bigint("total_payment", { mode: "number" }).notNull(),
+  createdAt: date("created_date", { mode: "date" }).notNull().defaultNow(),
+  updatedAt: date("updated_date", { mode: "date" }).notNull().defaultNow(),
 });
 
 export const report_financials = pgTable("app_report_financials", {
   id: uuid("id").notNull().primaryKey().defaultRandom(),
-  gross_income: bigint("gross_income", { mode: "number" }).notNull(),
-  net_income: bigint("net_income", { mode: "number" }).notNull(),
-  operational_cost: bigint("operational_cost", { mode: "number" }).notNull(),
+  grossIncome: bigint("gross_income", { mode: "number" }).notNull(),
+  netIncome: bigint("net_income", { mode: "number" }).notNull(),
+  operationalCost: bigint("operational_cost", { mode: "number" }).notNull(),
   description: text("description").notNull(),
-  created_at: date("created_date", { mode: "date" }).notNull().defaultNow(),
-  updated_at: date("updated_date", { mode: "date" }).notNull().defaultNow(),
+  createdAt: date("created_date", { mode: "date" }).notNull().defaultNow(),
+  updatedAt: date("updated_date", { mode: "date" }).notNull().defaultNow(),
 });
 
 export const customer_debts = pgTable("app_customer_debts", {
   id: uuid("id").notNull().primaryKey().defaultRandom(),
-  customer_id: uuid("customer_id")
+  customerId: uuid("customer_id")
     .notNull()
     .references(() => customers.id, { onDelete: "cascade" }),
-  total_product: integer("total_product").notNull(),
+  totalProduct: integer("total_product").notNull(),
   name: text("name").notNull(),
   amount: bigint("amount", { mode: "number" }).notNull(),
   date: date("date").notNull(),
-  created_at: date("created_date", { mode: "date" }).notNull().defaultNow(),
-  updated_at: date("updated_date", { mode: "date" }).notNull().defaultNow(),
+  createdAt: date("created_date", { mode: "date" }).notNull().defaultNow(),
+  updatedAt: date("updated_date", { mode: "date" }).notNull().defaultNow(),
 });
 
 export const products = pgTable("app_products", {
@@ -222,8 +219,8 @@ export const products = pgTable("app_products", {
   price: bigint("price", { mode: "number" }).notNull(),
   quantity: integer("quantity").notNull(),
   description: text("description").notNull(),
-  created_at: date("created_date", { mode: "date" }).notNull().defaultNow(),
-  updated_at: date("updated_date", { mode: "date" }).notNull().defaultNow(),
+  createdAt: date("created_date", { mode: "date" }).notNull().defaultNow(),
+  updatedAt: date("updated_date", { mode: "date" }).notNull().defaultNow(),
 });
 
 export const rolesRelations = relations(roles, ({ many }) => ({
@@ -231,7 +228,37 @@ export const rolesRelations = relations(roles, ({ many }) => ({
 }));
 
 export const businessMemberRelations = relations(business, ({ many }) => ({
-  users: many(users),
+  usersToGroups: many(usersToBusiness),
+}));
+
+export const usersMemberRelations = relations(users, ({ many }) => ({
+  usersToGroups: many(usersToBusiness),
+}));
+
+export const usersToBusiness = pgTable(
+  "app_users_to_business",
+  {
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id),
+    businessId: uuid("business_id")
+      .notNull()
+      .references(() => business.id),
+  },
+  (t) => ({
+    pk: primaryKey(t.userId, t.businessId),
+  }),
+);
+
+export const usersToBussinesRelations = relations(usersToBusiness, ({ one }) => ({
+  business: one(business, {
+    fields: [usersToBusiness.businessId],
+    references: [business.id],
+  }),
+  user: one(users, {
+    fields: [usersToBusiness.userId],
+    references: [users.id],
+  }),
 }));
 
 export const userReportTransactionRelations = relations(users, ({ many }) => ({
@@ -248,12 +275,8 @@ export const productReportTransactionRelations = relations(products, ({ many }) 
 
 export const usersRelations = relations(users, ({ one }) => ({
   roles: one(roles, {
-    fields: [users.role_id],
+    fields: [users.roleId],
     references: [roles.id],
-  }),
-  business: one(business, {
-    fields: [users.business_id],
-    references: [business.id],
   }),
 }));
 
@@ -263,19 +286,19 @@ export const paymetMethodReportTransactionRelations = relations(payment_methods,
 
 export const reportTransactionRelations = relations(report_transactions, ({ one }) => ({
   user: one(users, {
-    fields: [report_transactions.user_id],
+    fields: [report_transactions.userId],
     references: [users.id],
   }),
   customer: one(customers, {
-    fields: [report_transactions.customer_id],
+    fields: [report_transactions.customerId],
     references: [customers.id],
   }),
   product: one(products, {
-    fields: [report_transactions.product_id],
+    fields: [report_transactions.productId],
     references: [products.id],
   }),
   payment: one(payment_methods, {
-    fields: [report_transactions.payment_id],
+    fields: [report_transactions.paymentId],
     references: [payment_methods.id],
   }),
 }));

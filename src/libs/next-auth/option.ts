@@ -18,29 +18,23 @@ export const authOptions = {
       if (account?.provider === "google" && profile) {
         const p = profile as any;
 
-        const role = await db
-          .select({ name: roles.name, id: roles.id, permissions: roles.permissions })
+        const roleId = await db
+          .select({ id: roles.id })
           .from(roles)
-          .where(eq(roles.name, ROLES.USER))
-          .then((res) => res.at(0));
+          .where(eq(roles.name, ROLES.MEMBER))
+          .then((res) => res.at(0)?.id);
 
-        const busines = await db
-          .select({ name: business.name, id: business.id, owner_id: business.owner_id })
-          .from(business)
-          .where(eq(business.id, users.business_id))
-          .then((res) => res.at(0));
-
-        const user = await db
-          .select({ role_id: users.role_id, id: users.id })
+        const userData = await db
+          .select({ id: users.id, roleId: users.roleId })
           .from(users)
           .where(eq(users.email, profile.email as string))
           .then((res) => res.at(0));
 
-        if (!user?.id) {
+        if (!userData?.id) {
           await db
             .insert(users)
             .values({
-              role_id: role?.id as string,
+              roleId,
               fullname: profile?.name as string,
               email: profile?.email as string,
               image: p?.picture as string,
@@ -48,21 +42,37 @@ export const authOptions = {
             .returning();
         }
 
-        if (!user?.role_id) {
+        if (!userData?.roleId) {
           await db
             .update(users)
-            .set({ role_id: role?.id })
-            .where(eq(users.email, profile.email as string));
+            .set({ roleId })
+            .where(eq(users.id, userData?.id as string))
+            .returning();
         }
+
+        const data = await db
+          .select()
+          .from(users)
+          .leftJoin(roles, eq(users.roleId, roles.id))
+          .leftJoin(business, eq(users.id, business.ownerId))
+          .where(eq(users.email, profile.email as string))
+          .then((res) => res.at(0));
 
         return {
           ...token,
-          id: user?.id || "",
-          fullname: profile.name,
-          email: profile.email,
-          image: p?.picture,
-          role,
-          business: busines,
+          ...data?.user,
+          role: {
+            id: data?.app_roles?.id,
+            name: data?.app_roles?.name,
+            permissions: data?.app_roles?.permissions,
+          },
+          business: {
+            id: data?.app_business?.id,
+            name: data?.app_business?.name,
+            ownerId: data?.app_business?.ownerId,
+            phoneNumber: data?.app_business?.phoneNumber,
+            address: data?.app_business?.address,
+          },
         };
       }
 
@@ -73,6 +83,7 @@ export const authOptions = {
           id: u.id,
           fullname: u.fullname,
           email: u.email,
+          image: u.image,
           role: {
             id: u.role.id,
             name: u.role.name,
@@ -81,7 +92,9 @@ export const authOptions = {
           business: {
             id: u.business?.id,
             name: u.business?.name,
-            owner_id: u.business?.owner_id,
+            ownerId: u.business?.ownerId,
+            phoneNumber: u.business?.phoneNumber,
+            address: u.business?.address,
           },
         };
       }

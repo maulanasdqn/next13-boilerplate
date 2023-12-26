@@ -18,18 +18,18 @@ export const getReportTransaction = publicProcedure
         .from(report_transactions)
         .where(
           and(
-            eq(report_transactions.user_id, ctx?.session?.user?.id as string),
+            eq(report_transactions.userId, ctx?.session?.user?.id as string),
             or(ilike(report_transactions.name, `%${input?.search || ""}%`)),
           ),
         )
         .limit(perPage)
         .offset(input?.search ? 0 : offset)
-        .orderBy(report_transactions.created_at, asc(report_transactions.created_at));
+        .orderBy(report_transactions.createdAt, asc(report_transactions.createdAt));
 
       const count = await db
         .select({ id: report_transactions.id })
         .from(report_transactions)
-        .where(eq(report_transactions.user_id, ctx?.session?.user?.id as string))
+        .where(eq(report_transactions.userId, ctx?.session?.user?.id as string))
         .then((res) => res.length);
 
       const totalPage = calculateTotalPages(count, perPage);
@@ -63,7 +63,7 @@ export const updateReportTransaction = publicProcedure
         .update(report_transactions)
         .set({
           ...input,
-          total_selled: Number(input.total_selled),
+          totalSelled: Number(input.totalSelled),
         })
         .where(eq(report_transactions.id, input.id as string));
       return {
@@ -109,7 +109,7 @@ export const createReportTransaction = publicProcedure
         .insert(report_transactions)
         .values({
           ...input,
-          total_selled: Number(input.total_selled),
+          totalSelled: Number(input.totalSelled),
         })
         .returning();
       return {

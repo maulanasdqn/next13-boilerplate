@@ -17,7 +17,7 @@ export const getRole = publicProcedure.input(VSMetaRequest).query(async ({ input
       .where(or(ilike(roles.name, `%${input?.search || ""}%`)))
       .limit(perPage)
       .offset(input?.search ? 0 : offset)
-      .orderBy(roles.created_at, asc(roles.created_at));
+      .orderBy(roles.createdAt, asc(roles.createdAt));
 
     const count = await db
       .select({ id: roles.id })

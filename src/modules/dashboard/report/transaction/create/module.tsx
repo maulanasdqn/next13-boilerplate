@@ -34,13 +34,13 @@ export const DashboardReportTransactionCreateModule = () => {
     resolver: zodResolver(VSReportTransaction),
     defaultValues: {
       name: undefined,
-      product_id: undefined,
-      payment_id: undefined,
-      total_selled: undefined,
-      total_price: undefined,
+      productId: undefined,
+      paymentId: undefined,
+      totalSelled: undefined,
+      totalPrice: undefined,
       price: undefined,
-      transaction_date: undefined,
-      transaction_time: undefined,
+      transactionDate: undefined,
+      transactionTime: undefined,
     },
   });
 
@@ -56,7 +56,7 @@ export const DashboardReportTransactionCreateModule = () => {
   const paymentMethodOptions = useMemo(
     () =>
       paymentMethods?.map((payment) => ({
-        label: payment.provider_name,
+        label: payment.providerName,
         value: payment.id,
       })),
     [paymentMethods],
@@ -74,14 +74,15 @@ export const DashboardReportTransactionCreateModule = () => {
   const router = useRouter();
 
   const totalPrice = useCallback(() => {
-    const product = products?.find((product) => product.id === watch("product_id"));
-    const payment = paymentMethods?.find((payment) => payment.id === watch("payment_id"));
+    const product = products?.find((product) => product.id === watch("productId"));
+    const payment = paymentMethods?.find((payment) => payment.id === watch("paymentId"));
+
     if (product && payment) {
       setValue("price", String(product.price));
-      setValue("total_price", String(product.price * Number(watch("total_selled"))));
+      setValue("totalPrice", String(product.price * Number(watch("totalSelled"))));
       return {
         price: product.price,
-        total_price: product.price * Number(watch("total_selled")),
+        total_price: product.price * Number(watch("totalSelled")),
       };
     }
     return {
@@ -94,7 +95,7 @@ export const DashboardReportTransactionCreateModule = () => {
     mutate(
       {
         ...data,
-        user_id: session?.user?.id as string,
+        userId: session?.user?.id as string,
       },
       {
         onSuccess: () => {
@@ -122,7 +123,7 @@ export const DashboardReportTransactionCreateModule = () => {
           label="Produk"
           options={productOptions}
           control={control}
-          name="product_id"
+          name="productId"
           placeholder="Pilih Produk"
         />
       </div>
@@ -132,7 +133,7 @@ export const DashboardReportTransactionCreateModule = () => {
           label="Metode Pembayaran"
           options={paymentMethodOptions}
           control={control}
-          name="payment_id"
+          name="paymentId"
           placeholder="Pilih Metode Pembayaran"
         />
         <ControlledFieldSelect
@@ -140,7 +141,7 @@ export const DashboardReportTransactionCreateModule = () => {
           label="Pelanggan"
           options={customerOptions}
           control={control}
-          name="customer_id"
+          name="customerId"
           placeholder="Pilih Pelanggan"
         />
       </div>
@@ -150,16 +151,16 @@ export const DashboardReportTransactionCreateModule = () => {
           placeholder="Pilih Tanggal Transaksi"
           label="Tanggal Transaksi"
           control={control}
-          name={"transaction_date"}
+          name={"transactionDate"}
         />
         <ControlledFieldText
           size="sm"
           placeholder="Pilih Waktu Transaksi"
           label="Waktu Transaksi"
           control={control}
-          name={"transaction_time"}
-          status={errors.transaction_time ? "error" : "none"}
-          message={errors.transaction_time?.message}
+          name={"transactionTime"}
+          status={errors.transactionTime ? "error" : "none"}
+          message={errors.transactionTime?.message}
           type="time"
         />
       </div>
@@ -178,9 +179,9 @@ export const DashboardReportTransactionCreateModule = () => {
           placeholder="Masukkan Jumlah Barang Yang dibeli"
           label="Jumlah Barang"
           control={control}
-          name={"total_selled"}
-          status={errors.total_selled ? "error" : "none"}
-          message={errors.total_selled?.message}
+          name={"totalSelled"}
+          status={errors.totalSelled ? "error" : "none"}
+          message={errors.totalSelled?.message}
           type="number"
         />
       </div>

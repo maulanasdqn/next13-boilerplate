@@ -11,12 +11,13 @@ export const createUser = publicProcedure.input(VSRegister).mutation(async ({ in
     const roleId = await db
       .select({ id: roles.id })
       .from(roles)
-      .where(eq(roles.name, ROLES.USER))
-      .limit(1);
+      .where(eq(roles.name, ROLES.MEMBER))
+      .limit(1)
+      .then((res) => res.at(0)?.id);
 
     await db
       .insert(users)
-      .values({ ...input, password, role_id: roleId[0].id })
+      .values({ ...input, password, roleId })
       .returning();
     return {
       message: "Registrasi Berhasil",

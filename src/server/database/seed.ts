@@ -7,6 +7,8 @@ import {
   report_transactions,
   users,
   roles as roles_db,
+  PERMISSIONS,
+  business,
 } from ".";
 import { faker } from "@faker-js/faker";
 import * as bs from "bcryptjs";
@@ -39,18 +41,18 @@ export const SeedTransaction = async () => {
     const randomCustomer = Math.floor(Math.random() * customer.length);
 
     let newData = {
-      product_id: product[randomProduct],
-      payment_id: paymentMethod[randomPaymentMethod],
-      user_id: user[randomUser],
-      customer_id: customer[randomCustomer],
+      productId: product[randomProduct],
+      paymentId: paymentMethod[randomPaymentMethod],
+      userId: user[randomUser],
+      customerId: customer[randomCustomer],
       name: faker.person.fullName(),
       price: faker.finance.amount(),
-      transaction_date: String(faker.date.recent()),
-      transaction_time: "12.40",
-      total_selled: 2,
-      total_price: String(Number(faker.finance.amount()) * 2),
-      created_at: new Date(),
-      updated_at: new Date(),
+      transactionDate: faker.date.recent(),
+      transactionTime: "12.40",
+      totalSelled: 2,
+      totalPrice: String(Number(faker.finance.amount()) * 2),
+      createdAt: new Date(),
+      updatedAt: new Date(),
     };
     dataToInsert.push(newData);
   }
@@ -64,21 +66,30 @@ export const SeedTransaction = async () => {
 
 export const SeedRole = async () => {
   let dataToInsert = [];
-  const roles = [ROLES_DATA.USER, ROLES_DATA.ADMIN];
+  const roles = [ROLES_DATA.MEMBER, ROLES_DATA.ADMIN, ROLES_DATA.OWNER];
 
-  for (let i = 0; i < roles.length; i++) {
-    let newData = {
-      name: roles[i],
-      created_at: new Date(),
-      updated_at: new Date(),
-    };
-    dataToInsert.push(newData);
+  const roleIsExist = await db.select({ id: roles_db.id }).from(roles_db);
+
+  if (roleIsExist.length > 0) {
+    return;
   }
-  console.log("Seeding roles... 🚀");
-  dataToInsert.forEach(async (data) => {
-    await db.insert(roles_db).values(data).returning();
-  });
-  console.log("Seeding roles done! 🎊");
+
+  if (!roleIsExist) {
+    for (let i = 0; i < roles.length; i++) {
+      let newData = {
+        name: roles[i],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        permissions: [PERMISSIONS.DASHBOARD],
+      };
+      dataToInsert.push(newData);
+    }
+    console.log("Seeding roles... 🚀");
+    dataToInsert.forEach(async (data) => {
+      await db.insert(roles_db).values(data).returning();
+    });
+    console.log("Seeding roles done! 🎊");
+  }
 };
 
 export const SeedUser = async () => {
@@ -88,18 +99,18 @@ export const SeedUser = async () => {
   const roleId = await db
     .select({ id: roles_db.id })
     .from(roles_db)
-    .where(eq(roles_db.name, ROLES_DATA.USER))
+    .where(eq(roles_db.name, ROLES_DATA.MEMBER))
     .then((res) => res.map((item) => item.id).at(0));
 
   for (let i = 0; i < 10; i++) {
     let newData = {
       fullname: faker.person.fullName(),
       image: faker.image.avatar(),
-      email: `test${i}@mail.com`,
-      role_id: roleId,
+      email: faker.internet.email(),
+      roleId: roleId,
       password,
-      created_at: new Date(),
-      updated_at: new Date(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
     };
     dataToInsert.push(newData);
   }
@@ -119,8 +130,8 @@ export const SeedProduct = async () => {
       price: parseInt(faker.finance.amount()),
       quantity: parseInt(faker.finance.amount()),
       description: faker.commerce.productDescription(),
-      created_at: new Date(),
-      updated_at: new Date(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
     };
     dataToInsert.push(newData);
   }
@@ -138,11 +149,11 @@ export const SeedPaymentMethod = async () => {
   for (let i = 0; i < 10; i++) {
     let newData = {
       name: "Methode Pembayaran " + i + 1,
-      provider_name: "Methode Pembayaran " + i + 1,
-      account_number: faker.finance.accountNumber(),
-      account_name: faker.finance.accountName(),
-      created_at: new Date(),
-      updated_at: new Date(),
+      providerName: "Methode Pembayaran " + i + 1,
+      accountNumber: faker.finance.accountNumber(),
+      accountName: faker.finance.accountName(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
     };
     dataToInsert.push(newData);
   }
@@ -162,8 +173,8 @@ export const SeedCustomer = async () => {
   for (let i = 0; i < 10; i++) {
     let newData = {
       name: faker.person.fullName(),
-      created_at: new Date(),
-      updated_at: new Date(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
     };
     dataToInsert.push(newData);
   }
@@ -179,8 +190,41 @@ export const SeedCustomer = async () => {
   console.log("Seeding customer done! 🎊");
 };
 
+export const SeedBussines = async () => {
+  let dataToInsert = [];
+  const user = await db
+    .select({ id: users.id })
+    .from(users)
+    .then((res) => res.map((item) => item.id));
+
+  const randomUser = Math.floor(Math.random() * user.length);
+  for (let i = 0; i < 10; i++) {
+    let newData = {
+      name: faker.person.fullName(),
+      phoneNumber: faker.phone.number(),
+      ownerId: user[randomUser],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    dataToInsert.push(newData);
+  }
+  console.log("Seeding customer... 🚀");
+  dataToInsert.forEach(async (data) => {
+    try {
+      console.log("Inserting customer", data.name);
+      await db.insert(business).values(data).returning();
+    } catch (error) {
+      console.error(error);
+    }
+  });
+  console.log("Seeding customer done! 🎊");
+};
+
 async function processAsyncOperations() {
   try {
+    await SeedRole();
+    await SeedUser();
+    await SeedBussines();
     await SeedCustomer();
     await SeedPaymentMethod();
     await SeedProduct();

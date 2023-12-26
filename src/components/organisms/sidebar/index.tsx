@@ -2,7 +2,7 @@
 import { FC, Fragment, ReactElement, useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
 import { clsx } from "clsx";
-import { IoMdBasket, IoMdDesktop, IoMdLogOut, IoMdSettings } from "react-icons/io";
+import { IoMdDesktop, IoMdLogOut, IoMdSettings } from "react-icons/io";
 import {
   AiFillAccountBook,
   AiFillBell,
@@ -14,12 +14,10 @@ import {
   AiFillTag,
 } from "react-icons/ai";
 import { PiUsersThreeFill } from "react-icons/pi";
-import { HiArchiveBox, HiUsers } from "react-icons/hi2";
 import Link from "next/link";
 import { useQueryState } from "next-usequerystate";
-import { BiSolidUser } from "react-icons/bi";
 import { TUser } from "@/entities/user";
-import { PERMISSIONS } from "@/server/database/schema";
+import { PERMISSIONS, ROLES } from "@/server/database/schema";
 import { hasCommonElements } from "@/utils";
 import { SiMarketo } from "react-icons/si";
 
@@ -28,6 +26,7 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
   const [open, setOpen] = useState("");
   const userName = useMemo(() => user?.fullname, [user]);
   const roleName = useMemo(() => user?.role?.name, [user]);
+  const businessName = useMemo(() => user?.business?.name, [user]);
   const pathname = usePathname();
 
   const selectedMenu = (url: string) =>
@@ -52,7 +51,7 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
 
   const sidebarData = [
     {
-      name: "Man. Pesanan",
+      name: "Pesanan",
       icon: <AiFillAccountBook className={iconClassName} />,
       path: "order",
       permissions: [PERMISSIONS.ORDER_READ],
@@ -67,7 +66,7 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
       ],
     },
     {
-      name: "Man. Laporan",
+      name: "Laporan",
       icon: <AiFillBook className={iconClassName} />,
       path: "report",
       permissions: [
@@ -80,34 +79,34 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
           name: "Data Transaksi",
           icon: <AiFillBoxPlot className={iconClassName} />,
           path: "/dashboard/report/transaction",
-          url: `/dashboard/report/transaction?title=Data Transaksi&isSidebarOpen=${isSidebarOpen}`,
+          url: `/dashboard/report/transaction?title=Riwayat Data Transaksi&isSidebarOpen=${isSidebarOpen}`,
           permissions: [PERMISSIONS.REPORT_TRANSACTION_READ],
         },
         {
           name: "Data Keuangan",
           icon: <AiFillMoneyCollect className={iconClassName} />,
           path: "/dashboard/report/financial",
-          url: `/dashboard/report/financial?title=Data Keuangan&isSidebarOpen=${isSidebarOpen}`,
+          url: `/dashboard/report/financial?title=Riwayat Data Keuangan&isSidebarOpen=${isSidebarOpen}`,
           permissions: [PERMISSIONS.REPORT_FINANCIAL_READ],
         },
         {
           name: "Data Pembayaran",
           icon: <AiFillBook className={iconClassName} />,
           path: "/dashboard/report/payment",
-          url: `/dashboard/report/payment?title=Data Pembayaran&isSidebarOpen=${isSidebarOpen}`,
+          url: `/dashboard/report/payment?title=Riwayat Data Pembayaran&isSidebarOpen=${isSidebarOpen}`,
           permissions: [PERMISSIONS.REPORT_PAYMENT_READ],
         },
       ],
     },
 
     {
-      name: "Man. User",
+      name: "Pengguna",
       icon: <AiFillSetting className={iconClassName} />,
       path: "role",
       permissions: [PERMISSIONS.ROLE_READ, PERMISSIONS.USER_READ],
       children: [
         {
-          name: "Data Role",
+          name: "Data Hak Akses",
           icon: <AiFillSetting className={iconClassName} />,
           path: "/dashboard/user/role",
           url: `/dashboard/user/role?title=Data Role&isSidebarOpen=${isSidebarOpen}`,
@@ -125,7 +124,7 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
     },
 
     {
-      name: "Man. Product",
+      name: "Produk",
       icon: <AiFillTag className={iconClassName} />,
       path: "product",
       permissions: [PERMISSIONS.PRODUCT_READ],
@@ -147,12 +146,15 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
         <div className="flex flex-col gap-y-4 mb-4">
           <div className="flex gap-x-3 items-center">
             <SiMarketo className="text-primary" size={24} />
-            <span className="text-primary font-bold  w-full block text-2xl">POS UMKM</span>
+            <span className="text-primary font-bold  w-full block text-2xl">iPOS UMKM</span>
           </div>
           <Link href={"/dashboard/profile?title=Profile"}>
             <div className="bg-gray-100 p-2 rounded-lg flex flex-col cursor-pointer">
               <span className="text-gray-600 text-base">{userName}</span>
-              <span className="text-gray-600 text-sm">{roleName}</span>
+
+              <span className="text-gray-600 text-sm">
+                {roleName === ROLES.MEMBER ? roleName : roleName + " - " + businessName}
+              </span>
             </div>
           </Link>
         </div>
@@ -210,7 +212,7 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
           ))}
           <li>
             <Link
-              href={`/dashboard/setting?title=Pengaturan&isSidebarOpen=${isSidebarOpen}`}
+              href={`/dashboard/setting?title=Pengaturan&isSidebarOpen=${isSidebarOpen}&menu=account`}
               className={selectedMenu("/dashboard/setting")}
             >
               <IoMdSettings className={iconClassName} />

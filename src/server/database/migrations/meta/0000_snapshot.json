@@ -1,5 +1,5 @@
 {
-  "id": "164232fd-e9ae-49a0-8181-f4014092ddb0",
+  "id": "21210d83-7c8b-4458-963d-5f5c8b7c268f",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -102,6 +102,55 @@
       },
       "uniqueConstraints": {}
     },
+    "app_business": {
+      "name": "app_business",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "owner_id": {
+          "name": "owner_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "phone_number": {
+          "name": "phone_number",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "app_customer_debts": {
       "name": "app_customer_debts",
       "schema": "",
@@ -113,8 +162,8 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "user_id": {
-          "name": "user_id",
+        "customer_id": {
+          "name": "customer_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
@@ -160,12 +209,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "app_customer_debts_user_id_user_id_fk": {
-          "name": "app_customer_debts_user_id_user_id_fk",
+        "app_customer_debts_customer_id_app_customers_id_fk": {
+          "name": "app_customer_debts_customer_id_app_customers_id_fk",
           "tableFrom": "app_customer_debts",
-          "tableTo": "user",
+          "tableTo": "app_customers",
           "columnsFrom": [
-            "user_id"
+            "customer_id"
           ],
           "columnsTo": [
             "id"
@@ -174,6 +223,92 @@
           "onUpdate": "no action"
         }
       },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "app_customers": {
+      "name": "app_customers",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "app_payment_methods": {
+      "name": "app_payment_methods",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "provider_name": {
+          "name": "provider_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "account_number": {
+          "name": "account_number",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_date": {
+          "name": "created_date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_date": {
+          "name": "updated_date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -304,6 +439,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "customer_id": {
+          "name": "customer_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
         "name": {
           "name": "name",
           "type": "text",
@@ -357,6 +498,19 @@
           ],
           "onDelete": "cascade",
           "onUpdate": "no action"
+        },
+        "app_report_payments_customer_id_app_customers_id_fk": {
+          "name": "app_report_payments_customer_id_app_customers_id_fk",
+          "tableFrom": "app_report_payments",
+          "tableTo": "app_customers",
+          "columnsFrom": [
+            "customer_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -373,8 +527,8 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "item_id": {
-          "name": "item_id",
+        "product_id": {
+          "name": "product_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
@@ -391,6 +545,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "customer_id": {
+          "name": "customer_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
         "name": {
           "name": "name",
           "type": "text",
@@ -399,7 +559,7 @@
         },
         "price": {
           "name": "price",
-          "type": "bigint",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -423,12 +583,6 @@
         },
         "total_price": {
           "name": "total_price",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "payment_method": {
-          "name": "payment_method",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -450,12 +604,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "app_report_transactions_item_id_app_products_id_fk": {
-          "name": "app_report_transactions_item_id_app_products_id_fk",
+        "app_report_transactions_product_id_app_products_id_fk": {
+          "name": "app_report_transactions_product_id_app_products_id_fk",
           "tableFrom": "app_report_transactions",
           "tableTo": "app_products",
           "columnsFrom": [
-            "item_id"
+            "product_id"
           ],
           "columnsTo": [
             "id"
@@ -463,10 +617,10 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "app_report_transactions_payment_id_app_report_payments_id_fk": {
-          "name": "app_report_transactions_payment_id_app_report_payments_id_fk",
+        "app_report_transactions_payment_id_app_payment_methods_id_fk": {
+          "name": "app_report_transactions_payment_id_app_payment_methods_id_fk",
           "tableFrom": "app_report_transactions",
-          "tableTo": "app_report_payments",
+          "tableTo": "app_payment_methods",
           "columnsFrom": [
             "payment_id"
           ],
@@ -482,6 +636,19 @@
           "tableTo": "user",
           "columnsFrom": [
             "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "app_report_transactions_customer_id_app_customers_id_fk": {
+          "name": "app_report_transactions_customer_id_app_customers_id_fk",
+          "tableFrom": "app_report_transactions",
+          "tableTo": "app_customers",
+          "columnsFrom": [
+            "customer_id"
           ],
           "columnsTo": [
             "id"
@@ -601,10 +768,10 @@
           "name": "role_id",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
-        "fullname": {
-          "name": "fullname",
+        "name": {
+          "name": "name",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -621,8 +788,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "email_verified_at": {
-          "name": "email_verified_at",
+        "emailVerified": {
+          "name": "emailVerified",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": false
@@ -631,7 +798,7 @@
           "name": "password",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "created_at": {
           "name": "created_at",
@@ -675,6 +842,63 @@
         }
       }
     },
+    "app_users_to_business": {
+      "name": "app_users_to_business",
+      "schema": "",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "business_id": {
+          "name": "business_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "app_users_to_business_user_id_user_id_fk": {
+          "name": "app_users_to_business_user_id_user_id_fk",
+          "tableFrom": "app_users_to_business",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "app_users_to_business_business_id_app_business_id_fk": {
+          "name": "app_users_to_business_business_id_app_business_id_fk",
+          "tableFrom": "app_users_to_business",
+          "tableTo": "app_business",
+          "columnsFrom": [
+            "business_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "app_users_to_business_user_id_business_id_pk": {
+          "name": "app_users_to_business_user_id_business_id_pk",
+          "columns": [
+            "user_id",
+            "business_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
     "verificationToken": {
       "name": "verificationToken",
       "schema": "",
@@ -715,8 +939,8 @@
   "enums": {},
   "schemas": {},
   "_meta": {
+    "columns": {},
     "schemas": {},
-    "tables": {},
-    "columns": {}
+    "tables": {}
   }
 }

@@ -1,5 +1,5 @@
 import CredentialsProvider from "next-auth/providers/credentials";
-import { db, roles, users } from "@/server";
+import { business, db, roles, users } from "@/server";
 import { eq } from "drizzle-orm";
 import * as bs from "bcryptjs";
 
@@ -19,7 +19,8 @@ export const credentialProvider = CredentialsProvider({
     const user = await db
       .select()
       .from(users)
-      .leftJoin(roles, eq(users.role_id, roles.id))
+      .leftJoin(roles, eq(users.roleId, roles.id))
+      .leftJoin(business, eq(users.id, business.ownerId))
       .where(eq(users.email, credentials.email as string))
       .then((res) => res.at(0));
 
@@ -36,6 +37,14 @@ export const credentialProvider = CredentialsProvider({
       id: user?.user.id,
       email: user?.user.email,
       fullname: user?.user.fullname,
+      image: user?.user.image,
+      business: {
+        id: user?.app_business?.id,
+        name: user?.app_business?.name,
+        ownerId: user?.app_business?.ownerId,
+        image: user?.app_business?.image,
+        address: user?.app_business?.address,
+      },
       role: {
         id: user?.app_roles?.id,
         name: user?.app_roles?.name,

@@ -53,6 +53,10 @@ export function hasCommonElements<T>(arr1: T[], arr2: T[]): boolean {
 
 export const permissionMapper = [
   {
+    url: "/dashboard",
+    permissions: [PERMISSIONS.DASHBOARD],
+  },
+  {
     url: "/dashboard/product",
     permissions: [PERMISSIONS.PRODUCT_READ],
   },

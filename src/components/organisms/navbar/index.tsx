@@ -8,6 +8,7 @@ import { useQueryState } from "next-usequerystate";
 import { clsx } from "clsx";
 import Link from "next/link";
 import { TUser } from "@/entities";
+import Avatar from "react-avatar";
 
 export const Navbar: FC<{ user: TUser }> = ({ user }): ReactElement => {
   const [isOpen, setIsOpen] = useState(false);
@@ -54,11 +55,16 @@ export const Navbar: FC<{ user: TUser }> = ({ user }): ReactElement => {
           className="w-8 h-8 rounded-full"
         />
       ) : (
-        <RxAvatar className="cursor-pointer" onClick={() => setIsOpen(!isOpen)} size={30} />
+        <Avatar
+          name={userName}
+          className="cursor-pointer"
+          onClick={() => setIsOpen(!isOpen)}
+          size={"30"}
+        />
       )}
       {isOpen && (
         <div className="absolute top-16 select-none right-3 p-4 gap-y-4 rounded-lg shadow-md h-auto w-[300px] flex flex-col bg-white">
-          <Link href={"/dashboard/profile?title=Profile"}>
+          <Link href={"/dashboard/setting?title=Pengaturan&menu=account"}>
             <span className="flex gap-x-2  hover:bg-gray-200 p-2 rounded-lg items-center font-medium text-gray-500 cursor-pointer">
               <IoMdPerson size={20} />
               Profile
