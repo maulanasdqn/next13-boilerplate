@@ -92,7 +92,7 @@ export const customers = pgTable("app_customers", {
 export const business = pgTable("app_business", {
   id: uuid("id").notNull().primaryKey().defaultRandom(),
   ownerId: uuid("owner_id").notNull(),
-  name: text("name").notNull(),
+  name: text("name").notNull().unique(),
   image: text("image"),
   address: text("address"),
   phoneNumber: text("phone_number").notNull().unique(),

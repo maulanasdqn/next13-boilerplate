@@ -10,13 +10,14 @@ import Avatar from "react-avatar";
 import { ROLES } from "@/server/database/schema";
 import { IoMdAlert } from "react-icons/io";
 import { useForm } from "react-hook-form";
+import { notifyMessage } from "@/utils";
 
 export const SettingModule: FC = (): ReactElement => {
   const { data } = clientTrpc.getProfile.useQuery();
-  const { data: password } = clientTrpc.getPassword.useQuery();
+  const { data: password, refetch } = clientTrpc.getPassword.useQuery();
   const { mutate: setPassword } = clientTrpc.updatePassword.useMutation();
   const [isAccountEdited, setIsAccountEdited] = useState(false);
-  const [isBusinessEdited, setIsBussinesEdited] = useState(false);
+  const [isBusinessEdited, setIsBusinessEdited] = useState(false);
 
   const router = useRouter();
 
@@ -98,7 +99,13 @@ export const SettingModule: FC = (): ReactElement => {
                       { password: watch("password") },
                       {
                         onSuccess: () => {
+                          refetch();
                           router.push("/dashboard/setting?title=Pengaturan&menu=account");
+                          notifyMessage({ type: "success", message: "Kata sandi berhasil dibuat" });
+                        },
+
+                        onError: (err) => {
+                          notifyMessage({ type: "error", message: err?.message });
                         },
                       },
                     )
@@ -216,14 +223,30 @@ export const SettingModule: FC = (): ReactElement => {
                 <p>Disini kamu bisa atur bisnis kamu</p>
               </div>
               <div>
-                <Button size="sm" onClick={() => console.log("")} variant="primary">
-                  Perbarui Bisnis
-                </Button>
+                {isBusinessEdited ? (
+                  <Button
+                    size="sm"
+                    onClick={() => setIsBusinessEdited(false)}
+                    type="button"
+                    variant="cancel"
+                  >
+                    Batal
+                  </Button>
+                ) : (
+                  <Button
+                    size="sm"
+                    onClick={() => setIsBusinessEdited(true)}
+                    variant="primary"
+                    type="button"
+                  >
+                    Perbarui Bisnis
+                  </Button>
+                )}
               </div>
             </div>
             {data?.user?.business?.image ? (
               <Image
-                src={(data?.user?.business?.image as string) || "/no-image.png"}
+                src={data?.user?.business?.image as string}
                 alt="Dashboard"
                 className="rounded-lg"
                 width={100}
@@ -233,13 +256,22 @@ export const SettingModule: FC = (): ReactElement => {
               <Avatar name={data?.user?.business?.name} size="100" className="rounded-lg" />
             )}
 
-            <FieldText readOnly value={data?.user?.business?.name} label="Nama Bisnis" />
             <FieldText
-              readOnly
+              disabled={!isBusinessEdited}
+              value={data?.user?.business?.name}
+              label="Nama Bisnis"
+            />
+            <FieldText
+              disabled={!isBusinessEdited}
               value={data?.user?.business?.phoneNumber}
               label="Nomor Telepon Bisnis"
             />
-            <FieldTextArea label="Alamat Bisnis" readOnly value={data?.user?.business?.address} />
+            <FieldTextArea
+              disabled={!isBusinessEdited}
+              label="Alamat Bisnis"
+              readOnly
+              value={data?.user?.business?.address}
+            />
           </div>
         )}
       </div>

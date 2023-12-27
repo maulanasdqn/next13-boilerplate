@@ -1,6 +1,6 @@
 import { VSMetaRequest } from "@/entities";
 import { publicProcedure } from "@/libs/trpc/init";
-import { db, roles } from "@/server";
+import { db, roles, ROLES as ROLES_DATA } from "@/server";
 import { calculateTotalPages, metaResponsePrefix } from "@/utils";
 import { asc, eq, ilike, or } from "drizzle-orm";
 import { z } from "zod";
@@ -72,3 +72,17 @@ export const createRole = publicProcedure
       throw new Error(err as string);
     }
   });
+
+export const getOwner = publicProcedure.query(async () => {
+  try {
+    const data = await db
+      .select()
+      .from(roles)
+      .where(eq(roles.name, ROLES_DATA.OWNER))
+      .limit(1)
+      .then((res) => res.at(0));
+    return data;
+  } catch (err) {
+    throw new Error(err as string);
+  }
+});

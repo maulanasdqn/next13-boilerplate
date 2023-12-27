@@ -16,7 +16,7 @@ export const LandingModule: FC = (): ReactElement => {
     },
     {
       icon: <FaLaptopFile size={80} />,
-      desc: "Web builder pintar dan mudah digunakan 1",
+      desc: "Tampilan dan antar muka yang mudah di operasikan",
     },
     {
       icon: <TbTruckDelivery size={80} />,
@@ -44,13 +44,13 @@ export const LandingModule: FC = (): ReactElement => {
             </span>
           </div>
           <span className="lg:text-6xl text-4xl text-white lg:text-left text-center font-bold">
-            Solusi POS Terbaik untuk UMKM Anda!
+            Solusi POS Terbaik untuk UMKM Kamu!
           </span>
           <p className="text-lg text-white lg:text-left text-justify">
-            Apakah Anda pemilik UMKM yang berjuang untuk mengelola bisnis Anda dengan lebih efisien?
-            Kami memahami bahwa setiap transaksi dan pelanggan sangat berharga bagi Anda. Oleh
-            karena itu, kami hadir dengan solusi POS yang dirancang khusus untuk memenuhi kebutuhan
-            unik UMKM Anda.
+            Apakah Kamu pemilik UMKM yang berjuang untuk mengelola bisnis dengan lebih efisien? Kami
+            memahami bahwa setiap transaksi dan pelanggan sangat berharga bagi Kamu. Oleh karena
+            itu, kami hadir dengan solusi POS yang dirancang khusus untuk memenuhi kebutuhan unik
+            UMKM Anda.
           </p>
           {data ? (
             <div>

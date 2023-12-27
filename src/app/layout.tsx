@@ -3,6 +3,8 @@ import { AuthProvider, QueryProvider } from "@/libs";
 import { Inter } from "next/font/google";
 import { FC, PropsWithChildren, ReactElement } from "react";
 import { Maintenance } from "@/modules";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "@/styles/global.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -28,7 +30,10 @@ const RootLayout: FC<PropsWithChildren> = ({ children }): ReactElement => {
           <Maintenance />
         ) : (
           <AuthProvider>
-            <QueryProvider>{children}</QueryProvider>
+            <QueryProvider>
+              {children}
+              <ToastContainer />
+            </QueryProvider>
           </AuthProvider>
         )}
       </body>

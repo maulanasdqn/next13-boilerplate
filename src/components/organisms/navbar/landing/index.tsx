@@ -7,9 +7,19 @@ import Image from "next/image";
 import { RxAvatar } from "react-icons/rx";
 import { FaChevronDown } from "react-icons/fa6";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { usePathname } from "next/navigation";
+import clsx from "clsx";
 
 export const NavbarLanding: FC = (): ReactElement => {
   const { data } = clientTrpc.getProfile.useQuery();
+  const pathname = usePathname();
+
+  const navbarClassName = (url: string) =>
+    clsx({
+      "border-b-2 border-transparent hover:border-white border-white": pathname === url,
+      "border-b-2 border-transparent hover:border-white": pathname !== url,
+    });
+
   return (
     <header className="bg-primary w-full py-4 px-10 text-white font-medium">
       {/* dekstop */}
@@ -20,16 +30,16 @@ export const NavbarLanding: FC = (): ReactElement => {
         </div>
 
         <div className="flex gap-x-4 cursor-pointer">
-          <Link href="/" className="border-b-2 border-transparent hover:border-white">
+          <Link href="/" className={navbarClassName("/")}>
             Beranda
           </Link>
-          <Link href="/services" className="border-b-2 border-transparent hover:border-white">
+          <Link href="/services" className={navbarClassName("/services")}>
             Layanan
           </Link>
-          <Link href="/about" className="border-b-2 border-transparent hover:border-white">
+          <Link href="/about" className={navbarClassName("/about")}>
             Tentang Kami
           </Link>
-          <Link href="/contact" className="border-b-2 border-transparent hover:border-white">
+          <Link href="/contact" className={navbarClassName("/contact")}>
             Hubungi Kami
           </Link>
         </div>

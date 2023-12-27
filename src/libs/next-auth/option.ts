@@ -14,7 +14,63 @@ export const authOptions = {
   adapter: DrizzleAdapter(db),
   session: { strategy: "jwt" },
   callbacks: {
-    async jwt({ user: us, token, account, profile }) {
+    async jwt({ user: us, token, account, profile, trigger }) {
+      const newToken = token;
+      const t = token as TUser;
+
+      if (trigger === "update") {
+        console.log(t?.email);
+        const roleId = await db
+          .select({ id: roles.id })
+          .from(roles)
+          .where(eq(roles.name, ROLES.OWNER))
+          .then((res) => res.at(0)?.id);
+
+        const userData = await db
+          .select({ id: users.id, roleId: users.roleId })
+          .from(users)
+          .where(eq(users.email, t?.email as string))
+          .then((res) => res.at(0));
+
+        await db
+          .update(users)
+          .set({ roleId })
+          .where(eq(users.id, userData?.id as string))
+          .returning();
+
+        await db
+          .update(business)
+          .set({ ownerId: userData?.id })
+          .where(eq(business.ownerId, userData?.id as string));
+
+        const data = await db
+          .select()
+          .from(users)
+          .leftJoin(roles, eq(users.roleId, roles.id))
+          .leftJoin(business, eq(users.id, business.ownerId))
+          .where(eq(users.email, t.email as string))
+          .then((res) => res.at(0));
+
+        const newData = {
+          ...data?.user,
+          isPasswordSet: !!data?.user?.password,
+          role: {
+            id: data?.app_roles?.id,
+            name: data?.app_roles?.name,
+            permissions: data?.app_roles?.permissions,
+          },
+          business: {
+            id: data?.app_business?.id,
+            name: data?.app_business?.name,
+            ownerId: data?.app_business?.ownerId,
+            phoneNumber: data?.app_business?.phoneNumber,
+            address: data?.app_business?.address,
+          },
+        };
+        newToken.user = newData;
+        return newData;
+      }
+
       if (account?.provider === "google" && profile) {
         const p = profile as any;
 
@@ -100,7 +156,7 @@ export const authOptions = {
           },
         };
       }
-      return token;
+      return newToken;
     },
 
     async session({ session, token }) {

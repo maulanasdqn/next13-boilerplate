@@ -1,6 +1,7 @@
 import { TCommonForms, TMetaItem, TMetaResponse } from "@/entities";
 import { PERMISSIONS } from "@/server/database/schema";
 import { clsx } from "clsx";
+import { toast } from "react-toastify";
 
 export const inputClassName = ({
   size,
@@ -102,3 +103,22 @@ export const metaResponsePrefix = <T>({
 export function calculateTotalPages(totalItems: number, itemsPerPage: number): number {
   return Math.ceil(totalItems / itemsPerPage);
 }
+
+export const notifyMessage = ({
+  message,
+  type = "success",
+}: {
+  message: string;
+  type: "success" | "error";
+}) =>
+  toast(message, {
+    position: "top-right",
+    type,
+    theme: "light",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  });

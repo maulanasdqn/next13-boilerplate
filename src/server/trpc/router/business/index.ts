@@ -31,6 +31,8 @@ export const createBusiness = publicProcedure
       await db.insert(business).values(input).returning();
       await db.update(users).set({ roleId }).returning();
     } catch (err) {
-      throw new Error(err as string);
+      throw new Error(
+        "Bisnis tidak dapat dibuat, karena nama atau nomor telepon sudah ada yang menggunakan",
+      );
     }
   });

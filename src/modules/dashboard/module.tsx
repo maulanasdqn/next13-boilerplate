@@ -7,6 +7,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { clientTrpc } from "@/libs/trpc/client";
 import { useSession } from "next-auth/react";
+import { notifyMessage } from "@/utils";
+import { useRouter } from "next/navigation";
 
 const VSBusiness = z.object({
   name: z.string().min(1, { message: "Nama bisnis Wajib diisi" }),
@@ -17,8 +19,9 @@ const VSBusiness = z.object({
 export const DashboardModule: FC = (): ReactElement => {
   const [isOpen, setIsOpen] = useState(false);
   const { mutate } = clientTrpc.createBusiness.useMutation();
-  const { data: session } = clientTrpc.getProfile.useQuery();
+  const { data: session, refetch } = clientTrpc.getProfile.useQuery();
   const { update } = useSession();
+  const router = useRouter();
 
   const {
     control,
@@ -41,20 +44,17 @@ export const DashboardModule: FC = (): ReactElement => {
         ownerId: session?.user?.id as string,
       },
       {
-        onSuccess: () => {
+        onSuccess: async () => {
           setIsOpen(false);
-          update({
-            ...session,
-            user: {
-              ...session?.user,
-              business: {
-                name: data.name,
-                phoneNumber: data.phoneNumber,
-                ownerId: session?.user?.id,
-                address: data.address,
-              },
-            },
+          await update({
+            info: "update",
           });
+          notifyMessage({ type: "success", message: "Bisnis berhasil dibuat" });
+          refetch();
+          router.refresh();
+        },
+        onError: (err) => {
+          notifyMessage({ type: "error", message: err?.message });
         },
       },
     );

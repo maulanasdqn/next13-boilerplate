@@ -76,21 +76,21 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
       ],
       children: [
         {
-          name: "Data Transaksi",
+          name: "Transaksi",
           icon: <AiFillBoxPlot className={iconClassName} />,
           path: "/dashboard/report/transaction",
           url: `/dashboard/report/transaction?title=Riwayat Data Transaksi&isSidebarOpen=${isSidebarOpen}`,
           permissions: [PERMISSIONS.REPORT_TRANSACTION_READ],
         },
         {
-          name: "Data Keuangan",
+          name: "Keuangan",
           icon: <AiFillMoneyCollect className={iconClassName} />,
           path: "/dashboard/report/financial",
           url: `/dashboard/report/financial?title=Riwayat Data Keuangan&isSidebarOpen=${isSidebarOpen}`,
           permissions: [PERMISSIONS.REPORT_FINANCIAL_READ],
         },
         {
-          name: "Data Pembayaran",
+          name: "Pembayaran",
           icon: <AiFillBook className={iconClassName} />,
           path: "/dashboard/report/payment",
           url: `/dashboard/report/payment?title=Riwayat Data Pembayaran&isSidebarOpen=${isSidebarOpen}`,
@@ -146,7 +146,7 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
         <div className="flex flex-col gap-y-4 mb-4">
           <div className="flex gap-x-3 items-center">
             <SiMarketo className="text-primary" size={24} />
-            <span className="text-primary font-bold  w-full block text-2xl">iPOS UMKM</span>
+            <span className="text-primary font-bold  w-full block text-2xl">iPOS</span>
           </div>
           <Link href={"/dashboard/profile?title=Profile"}>
             <div className="bg-gray-100 p-2 rounded-lg flex flex-col cursor-pointer">
@@ -219,7 +219,7 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
               <span className="ms-3">Pengaturan</span>
             </Link>
           </li>
-          <li>
+          <li className="block md:hidden">
             <span onClick={() => setIsSidebarOpen("close")} className={selectedMenu("")}>
               <IoMdLogOut className={iconClassName} />
               <span className="ms-3">Tutup Sidebar</span>
