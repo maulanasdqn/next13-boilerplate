@@ -24,7 +24,9 @@ export async function middleware(req: NextRequest, _event: NextFetchEvent) {
     if (matchingRoute) {
       const isAuthorized =
         matchingRoute.permissions.length === 0 ||
-        matchingRoute.permissions.some((permission) => userRole?.permissions.includes(permission));
+        matchingRoute.permissions.some((permission) =>
+          userRole?.permissions?.includes?.(permission),
+        );
 
       if (!isAuthorized) {
         return NextResponse.redirect(deniedUrl);

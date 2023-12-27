@@ -222,13 +222,11 @@ export const SeedBussines = async () => {
 
 async function processAsyncOperations() {
   try {
-    await SeedRole();
     await SeedUser();
     await SeedBussines();
     await SeedCustomer();
     await SeedPaymentMethod();
     await SeedProduct();
-    await SeedTransaction();
   } catch (error) {
     console.error(error);
   }
