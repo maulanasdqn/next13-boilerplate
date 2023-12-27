@@ -12,7 +12,6 @@ import { IoMdAlert } from "react-icons/io";
 
 export const SettingModule: FC = (): ReactElement => {
   const { data } = clientTrpc.getProfile.useQuery();
-  const { data: password } = clientTrpc.getPassword.useQuery();
   const params = useSearchParams();
 
   const menu = params?.get("menu");
@@ -46,7 +45,7 @@ export const SettingModule: FC = (): ReactElement => {
 
         {menu === "account" && (
           <div className="flex flex-col gap-y-6 w-full h-full">
-            {!password && (
+            {!data?.user?.isPasswordSet && (
               <div className="flex p-2 border-yellow-500 border rounded-lg text-yellow-500 bg-yellow-50 items-center gap-x-4">
                 <IoMdAlert className="text-3xl" /> Kata sandi di akun anda belum di atur, segera
                 atur kata sandi anda!

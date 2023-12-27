@@ -5,16 +5,16 @@ import { FC, ReactElement } from "react";
 import { SiMarketo } from "react-icons/si";
 import Image from "next/image";
 import { RxAvatar } from "react-icons/rx";
+import { FaChevronDown } from "react-icons/fa6";
 
 export const NavbarLanding: FC = (): ReactElement => {
   const { data } = clientTrpc.getProfile.useQuery();
-  console.log(data);
   return (
     <header className="bg-primary w-full py-4 px-10 text-white font-medium">
       <nav className="flex w-full justify-between items-center">
         <div className="flex gap-x-2">
           <SiMarketo size={24} />
-          <span className="font-bold">POS UMKM</span>
+          <span className="font-bold">iPOS</span>
         </div>
 
         <div className="flex gap-x-4 cursor-pointer">
@@ -47,6 +47,7 @@ export const NavbarLanding: FC = (): ReactElement => {
                 <RxAvatar className="cursor-pointer" size={30} />
               )}
               <span className="text-lg">{data?.user?.fullname}</span>
+              <FaChevronDown size={20} />
             </span>
           ) : (
             <div className="flex gap-x-2">

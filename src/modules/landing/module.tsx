@@ -2,6 +2,7 @@
 import { Button, NavbarLanding } from "@/components";
 import { clientTrpc } from "@/libs/trpc/client";
 import { FC, Fragment, ReactElement } from "react";
+import Image from "next/image";
 
 export const LandingModule: FC = (): ReactElement => {
   const { data } = clientTrpc.getProfile.useQuery();
@@ -9,7 +10,9 @@ export const LandingModule: FC = (): ReactElement => {
     <Fragment>
       <NavbarLanding />
       <section className="flex px-10 py-24 bg-primary h-auto w-full">
-        <div className="flex w-1/2"></div>
+        <div className="flex w-1/2">
+          <Image src="/hero.png" alt="landing" width={500} height={500} />
+        </div>
         <div className="flex flex-col w-1/2 gap-y-8">
           <div className="flex gap-x-4 w-full">
             <span className="rounded-full border-white border-2 md:p-3 p-2 w-fit text-white">

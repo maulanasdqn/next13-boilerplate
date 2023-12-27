@@ -24,6 +24,8 @@ export const credentialProvider = CredentialsProvider({
       .where(eq(users.email, credentials.email as string))
       .then((res) => res.at(0));
 
+    const isHaveAPassword = user?.user?.password;
+
     const isPasswordCorrect = await bs.compare(
       credentials.password as string,
       user?.user?.password as string,
@@ -38,6 +40,7 @@ export const credentialProvider = CredentialsProvider({
       email: user?.user.email,
       fullname: user?.user.fullname,
       image: user?.user.image,
+      isPasswordSet: !!isHaveAPassword,
       business: {
         id: user?.app_business?.id,
         name: user?.app_business?.name,

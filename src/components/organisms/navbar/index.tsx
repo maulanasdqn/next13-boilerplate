@@ -57,7 +57,7 @@ export const Navbar: FC<{ user: TUser }> = ({ user }): ReactElement => {
       ) : (
         <Avatar
           name={userName}
-          className="cursor-pointer"
+          className="cursor-pointer rounded-full"
           onClick={() => setIsOpen(!isOpen)}
           size={"30"}
         />

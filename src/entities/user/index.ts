@@ -5,6 +5,7 @@ export type TUser = {
   fullname: string;
   image?: string;
   email: string;
+  isPasswordSet: boolean;
   business?: {
     id: string;
     name: string;
