@@ -9,6 +9,9 @@ import { clientTrpc } from "@/libs/trpc/client";
 import { useSession } from "next-auth/react";
 import { notifyMessage } from "@/utils";
 import { useRouter } from "next/navigation";
+import { CardChart, LineChart, PopularProduck } from "./charts";
+import { ProductBar } from "./charts/bar-chart/product";
+import { ProductViewBar } from "./charts/bar-chart/earning";
 
 const VSBusiness = z.object({
   name: z.string().min(1, { message: "Nama bisnis Wajib diisi" }),
@@ -61,10 +64,30 @@ export const DashboardModule: FC = (): ReactElement => {
   });
 
   return (
-    <section className="flex w-full h-screen overflow-hidden items-center justify-start flex-col">
+    <section className="flex w-full min-h-screen items-center justify-start flex-col">
       {session?.user?.business?.name ? (
-        <div className="flex items-start justify-start w-full">
+        <div className="flex flex-col items-start justify-start w-full">
           <h1 className="text-2xl font-medium">{session?.user?.business?.name}</h1>
+          {/*ini chart */}
+          <div className="w-full">
+            <CardChart />
+          </div>
+          <div className="flex flex-col md:flex-row gap-x-2 w-full">
+            <div className="w-full md:w-1/2">
+              <LineChart />
+            </div>
+            <div className="w-full md:w-1/2">
+              <ProductViewBar />
+            </div>
+          </div>
+          <div className="flex flex-col md:flex-row gap-x-2 w-full">
+            <div className="w-full md:w-1/2">
+              <ProductBar />
+            </div>
+            <div className="w-full md:w-1/2">
+              <PopularProduck />
+            </div>
+          </div>
         </div>
       ) : (
         <>
