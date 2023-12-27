@@ -20,6 +20,7 @@ export enum ROLES {
 export enum PERMISSIONS {
   DASHBOARD = "Dashboard",
   ORDER_READ = "Read Order",
+  HAS_BUSINESS = "Has Business",
   REPORT_TRANSACTION_CREATE = "Create Report Transaction",
   REPORT_TRANSACTION_READ = "Read Report Transaction",
   REPORT_TRANSACTION_UPDATE = "Update Report Transaction",
@@ -40,6 +41,11 @@ export enum PERMISSIONS {
   PRODUCT_UPDATE = "Update Product",
   PRODUCT_DELETE = "Delete Product",
   PRODUCT_DETAIL = "Detail Product",
+  PRODUCT_CATEGORY_CREATE = "Create Product Category",
+  PRODUCT_CATEGORY_READ = "Read Product Category",
+  PRODUCT_CATEGORY_UPDATE = "Update Product Category",
+  PRODUCT_CATEGORY_DELETE = "Delete Product Category",
+  PRODUCT_CATEGORY_DETAIL = "Detail Product Category",
   USER_CREATE = "Create User",
   USER_READ = "Read User",
   USER_UPDATE = "Update User",
@@ -215,10 +221,18 @@ export const customer_debts = pgTable("app_customer_debts", {
 
 export const products = pgTable("app_products", {
   id: uuid("id").notNull().primaryKey().defaultRandom(),
+  categoryId: uuid("category_id"),
   name: text("name").notNull(),
   price: bigint("price", { mode: "number" }).notNull(),
   quantity: integer("quantity").notNull(),
   description: text("description").notNull(),
+  createdAt: date("created_date", { mode: "date" }).notNull().defaultNow(),
+  updatedAt: date("updated_date", { mode: "date" }).notNull().defaultNow(),
+});
+
+export const product_categories = pgTable("app_product_categories", {
+  id: uuid("id").notNull().primaryKey().defaultRandom(),
+  name: text("name").notNull(),
   createdAt: date("created_date", { mode: "date" }).notNull().defaultNow(),
   updatedAt: date("updated_date", { mode: "date" }).notNull().defaultNow(),
 });

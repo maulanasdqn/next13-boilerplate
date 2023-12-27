@@ -59,31 +59,31 @@ export const permissionMapper = [
   },
   {
     url: "/dashboard/product",
-    permissions: [PERMISSIONS.PRODUCT_READ],
+    permissions: [PERMISSIONS.PRODUCT_READ, PERMISSIONS.HAS_BUSINESS],
   },
   {
     url: "/dashboard/customer",
-    permissions: [PERMISSIONS.CUSTOMER_READ],
+    permissions: [PERMISSIONS.CUSTOMER_READ, PERMISSIONS.HAS_BUSINESS],
   },
   {
     url: "/dashboard/report/transaction",
-    permissions: [PERMISSIONS.REPORT_TRANSACTION_READ],
+    permissions: [PERMISSIONS.REPORT_TRANSACTION_READ, PERMISSIONS.HAS_BUSINESS],
   },
   {
     url: "/dashboard/report/transaction/create",
-    permissions: [PERMISSIONS.REPORT_TRANSACTION_CREATE],
+    permissions: [PERMISSIONS.REPORT_TRANSACTION_CREATE, PERMISSIONS.HAS_BUSINESS],
   },
   {
     url: "/dashboard/report/payment",
-    permissions: [PERMISSIONS.REPORT_PAYMENT_READ],
+    permissions: [PERMISSIONS.REPORT_PAYMENT_READ, PERMISSIONS.HAS_BUSINESS],
   },
   {
     url: "/dashboard/report/financial",
-    permissions: [PERMISSIONS.REPORT_FINANCIAL_READ],
+    permissions: [PERMISSIONS.REPORT_FINANCIAL_READ, PERMISSIONS.HAS_BUSINESS],
   },
   {
     url: "/dashboard/user",
-    permissions: [PERMISSIONS.USER_READ],
+    permissions: [PERMISSIONS.USER_READ, PERMISSIONS.HAS_BUSINESS],
   },
 ];
 

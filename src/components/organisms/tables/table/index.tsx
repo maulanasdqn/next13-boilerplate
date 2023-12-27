@@ -10,7 +10,7 @@ export const Table: FC<TTable> = (props): ReactElement => {
         {props.createLink && (
           <div>
             <Button href={props.createLink} variant="cancel" size="sm">
-              + Tambah Data
+              {props.createLabel}
             </Button>
           </div>
         )}
@@ -20,7 +20,7 @@ export const Table: FC<TTable> = (props): ReactElement => {
           {props.children}
         </table>
       </div>
-      {props.meta && <Pagination {...props} />}
+      {props.meta && props?.data?.length > 0 && <Pagination {...props} />}
     </section>
   );
 };

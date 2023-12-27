@@ -5,7 +5,6 @@ import { clsx } from "clsx";
 import { IoMdDesktop, IoMdLogOut, IoMdSettings } from "react-icons/io";
 import {
   AiFillAccountBook,
-  AiFillBell,
   AiFillBook,
   AiFillBoxPlot,
   AiFillCaretDown,
@@ -21,6 +20,8 @@ import { TUser } from "@/entities/user";
 import { PERMISSIONS, ROLES } from "@/server/database/schema";
 import { hasCommonElements } from "@/utils";
 import { SiMarketo } from "react-icons/si";
+import { FaBox } from "react-icons/fa";
+import { BiSolidCategory } from "react-icons/bi";
 
 export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
   const [isSidebarOpen, setIsSidebarOpen] = useQueryState("isSidebarOpen");
@@ -64,7 +65,7 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
           name: "Data Pesanan",
           icon: <FaShoppingCart className={iconClassName} />,
           path: "/dashboard/order",
-          url: `/dashboard/order?title=Data Order&isSidebarOpen=${isSidebarOpen}`,
+          url: `/dashboard/order?title=Manajamen Pesanan&isSidebarOpen=${isSidebarOpen}`,
           permissions: [PERMISSIONS.ORDER_READ],
         },
       ],
@@ -77,6 +78,7 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
         PERMISSIONS.REPORT_TRANSACTION_READ,
         PERMISSIONS.REPORT_PAYMENT_READ,
         PERMISSIONS.REPORT_FINANCIAL_READ,
+        PERMISSIONS.HAS_BUSINESS,
       ],
       children: [
         {
@@ -131,14 +133,22 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
       name: "Produk",
       icon: <AiFillTag className={iconClassName} />,
       path: "product",
-      permissions: [PERMISSIONS.PRODUCT_READ],
+      permissions: [PERMISSIONS.PRODUCT_READ, PERMISSIONS.PRODUCT_CATEGORY_READ],
       children: [
         {
-          name: "Data Product",
-          icon: <AiFillSetting className={iconClassName} />,
+          name: "Produk",
+          icon: <FaBox className={iconClassName} />,
           path: "/dashboard/product",
           url: `/dashboard/product?title=Data Produk&isSidebarOpen=${isSidebarOpen}`,
           permissions: [PERMISSIONS.PRODUCT_READ],
+        },
+
+        {
+          name: "Kategori Produk",
+          icon: <BiSolidCategory className={iconClassName} />,
+          path: "/dashboard/product/category",
+          url: `/dashboard/product/category?title=Data Kategori Produk&isSidebarOpen=${isSidebarOpen}`,
+          permissions: [PERMISSIONS.PRODUCT_CATEGORY_READ],
         },
       ],
     },
@@ -157,7 +167,9 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
               <span className="text-gray-600 text-base">{userName}</span>
 
               <span className="text-gray-600 text-sm">
-                {roleName === ROLES.MEMBER ? roleName : roleName + " - " + businessName}
+                {hasCommonElements(user?.role?.permissions, [PERMISSIONS.HAS_BUSINESS])
+                  ? roleName + " - " + businessName
+                  : roleName}
               </span>
             </div>
           </Link>

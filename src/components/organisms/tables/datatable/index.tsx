@@ -51,6 +51,7 @@ export const DataTable = <T extends Record<string, unknown>>(
           </svg>
         </div>
       )}
+
       <Table {...props}>
         <TableHead tableHead={table.getHeaderGroups()} />
         {!props.isLoading && <TableBody tableBody={table.getRowModel()} />}

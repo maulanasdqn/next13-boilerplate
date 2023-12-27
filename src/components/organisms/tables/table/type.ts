@@ -5,4 +5,6 @@ export type TTable = DetailedHTMLProps<HTMLAttributes<HTMLTableElement>, HTMLTab
   meta?: TMetaItem;
   handleSearch?: ChangeEventHandler<HTMLInputElement>;
   createLink?: string;
+  createLabel?: string;
+  data: Array<any>;
 };

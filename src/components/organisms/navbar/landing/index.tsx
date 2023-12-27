@@ -1,7 +1,7 @@
 import { Button } from "@/components";
 import { clientTrpc } from "@/libs/trpc/client";
 import Link from "next/link";
-import { FC, ReactElement } from "react";
+import { FC, ReactElement, useState } from "react";
 import { SiMarketo } from "react-icons/si";
 import Image from "next/image";
 import { RxAvatar } from "react-icons/rx";
@@ -9,9 +9,12 @@ import { FaChevronDown } from "react-icons/fa6";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
+import { IoMdLogOut, IoMdPerson } from "react-icons/io";
+import { signOut } from "next-auth/react";
 
 export const NavbarLanding: FC = (): ReactElement => {
   const { data } = clientTrpc.getProfile.useQuery();
+  const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
 
   const navbarClassName = (url: string) =>
@@ -46,7 +49,10 @@ export const NavbarLanding: FC = (): ReactElement => {
 
         <div className="flex gap-x-2">
           {data ? (
-            <span className="rounded-full flex items-center gap-x-2 w-fit text-primary py-2 px-4 text-xs bg-white">
+            <span
+              onClick={() => setIsOpen(!isOpen)}
+              className="rounded-full cursor-pointer flex items-center gap-x-2 w-fit text-primary py-2 px-4 text-xs bg-white"
+            >
               {data?.user?.image ? (
                 <Image
                   src={data?.user?.image}
@@ -83,6 +89,24 @@ export const NavbarLanding: FC = (): ReactElement => {
           <GiHamburgerMenu size={32} />
         </div>
       </nav>
+
+      {isOpen && (
+        <div className="absolute top-16 select-none right-3 p-4 gap-y-4 rounded-lg shadow-md h-auto w-[300px] flex flex-col bg-white">
+          <Link href={"/dashboard/setting?title=Pengaturan&menu=account"}>
+            <span className="flex gap-x-2  hover:bg-gray-200 p-2 rounded-lg items-center font-medium text-gray-500 cursor-pointer">
+              <IoMdPerson size={20} />
+              Profile
+            </span>
+          </Link>
+          <hr />
+          <span
+            onClick={() => signOut()}
+            className="flex gap-x-2  hover:bg-gray-200 p-2 rounded-lg items-center font-medium text-gray-500 cursor-pointer"
+          >
+            <IoMdLogOut size={20} /> Keluar
+          </span>
+        </div>
+      )}
     </header>
   );
 };

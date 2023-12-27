@@ -7,6 +7,7 @@ export type TDataTable<T extends Record<string, unknown>> = {
   meta?: TMetaItem;
   columns: ColumnDef<T>[];
   createLink?: string;
+  createLabel?: string;
   isLoading?: boolean;
   handleSearch: ChangeEventHandler<HTMLInputElement>;
 };

@@ -33,6 +33,7 @@
     "@vercel/postgres": "^0.5.1",
     "axios": "^1.5.1",
     "bcryptjs": "^2.4.3",
+    "chartjs": "^0.3.24",
     "clsx": "^2.0.0",
     "date-fns": "^2.30.0",
     "drizzle-orm": "^0.29.1",

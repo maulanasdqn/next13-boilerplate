@@ -20,7 +20,7 @@ export const LandingModule: FC = (): ReactElement => {
     },
     {
       icon: <TbTruckDelivery size={80} />,
-      desc: "Terintegrasi pengiriman dan pembayaran",
+      desc: "Terintegrasi pengiriman dan pembayaran / Coming Soon",
     },
   ];
 
@@ -60,7 +60,7 @@ export const LandingModule: FC = (): ReactElement => {
             </div>
           ) : (
             <div className="xl:w-1/2 w-full justify-start md:justify-center lg:justify-start flex gap-x-3">
-              <Button>Mulai Bisnis</Button>
+              <Button href="/auth/register">Mulai Bisnis</Button>
               <Button variant="cancel">Fitur Kami</Button>
             </div>
           )}
@@ -73,7 +73,7 @@ export const LandingModule: FC = (): ReactElement => {
             Solusi Yang Kami Tawarkan
           </span>
 
-          <span className="text-2xl md:text-xl text-lg text-black text-justify xl:w-2/3 w-fit pb-8">
+          <span className="text-2xl md:text-xl  text-black text-justify xl:w-2/3 w-fit pb-8">
             Berbagai solusi yang telah kami sediakan membantu Kamu, Tim dan Bisnismu lebih gesit.
           </span>
         </div>
