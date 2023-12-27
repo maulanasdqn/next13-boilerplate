@@ -223,6 +223,20 @@ export const products = pgTable("app_products", {
   updatedAt: date("updated_date", { mode: "date" }).notNull().defaultNow(),
 });
 
+export const orders = pgTable("app_orders", {
+  id: uuid("id").notNull().primaryKey().defaultRandom(),
+  userId: uuid("user_id").notNull(),
+  productId: uuid("product_id").notNull(),
+  customerId: uuid("customer_id").notNull(),
+  paymentId: uuid("payment_id").notNull(),
+  name: text("name").notNull(),
+  price: bigint("price", { mode: "number" }).notNull(),
+  quantity: integer("quantity").notNull(),
+  description: text("description").notNull(),
+  createdAt: date("created_date", { mode: "date" }).notNull().defaultNow(),
+  updatedAt: date("updated_date", { mode: "date" }).notNull().defaultNow(),
+});
+
 export const rolesRelations = relations(roles, ({ many }) => ({
   users: many(users),
 }));

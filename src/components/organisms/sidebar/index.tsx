@@ -13,6 +13,7 @@ import {
   AiFillSetting,
   AiFillTag,
 } from "react-icons/ai";
+import { FaShoppingCart } from "react-icons/fa";
 import { PiUsersThreeFill } from "react-icons/pi";
 import Link from "next/link";
 import { useQueryState } from "next-usequerystate";
@@ -30,9 +31,12 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
   const pathname = usePathname();
 
   const selectedMenu = (url: string) =>
-    clsx("flex items-center p-2 text-primary rounded-lg group hover:text-white hover:bg-primary", {
-      "bg-primary text-white": pathname === url,
-    });
+    clsx(
+      "flex items-center p-2 text-primary rounded-lg group hover:text-white hover:bg-primary hover:bg-opacity-70",
+      {
+        "bg-primary text-white": pathname === url,
+      },
+    );
 
   const sidebarClassName = clsx("fixed top-0 left-0 z-40 w-64 h-screen transition-transform", {
     "translate-x-0": isSidebarOpen === "open" || isSidebarOpen === "null" || !isSidebarOpen,
@@ -58,7 +62,7 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
       children: [
         {
           name: "Data Pesanan",
-          icon: <AiFillBell className={iconClassName} />,
+          icon: <FaShoppingCart className={iconClassName} />,
           path: "/dashboard/order",
           url: `/dashboard/order?title=Data Order&isSidebarOpen=${isSidebarOpen}`,
           permissions: [PERMISSIONS.ORDER_READ],
@@ -176,7 +180,7 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
                     onClick={() =>
                       open === "" || open !== item.path ? setOpen(item.path) : setOpen("")
                     }
-                    className="flex gap-x-3 cursor-pointer group justify-between select-none items-center p-2 rounded-lg text-primary hover:bg-primary hover:text-white"
+                    className="flex gap-x-3 cursor-pointer group justify-between select-none items-center p-2 rounded-lg text-primary hover:bg-primary hover:text-white hover:bg-opacity-70"
                   >
                     <div className="flex gap-x-3 items-center group">
                       {item.icon}
