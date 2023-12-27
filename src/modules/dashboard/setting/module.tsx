@@ -1,17 +1,30 @@
 "use client";
-import { Button, FieldText, FieldTextArea, FormTemplate } from "@/components";
+import { Button, ControlledFieldText, FieldText, FieldTextArea, FormTemplate } from "@/components";
 import { clientTrpc } from "@/libs/trpc/client";
 import Link from "next/link";
-import { FC, ReactElement } from "react";
+import { FC, ReactElement, useEffect, useState } from "react";
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import clsx from "clsx";
 import Avatar from "react-avatar";
 import { ROLES } from "@/server/database/schema";
 import { IoMdAlert } from "react-icons/io";
+import { useForm } from "react-hook-form";
 
 export const SettingModule: FC = (): ReactElement => {
   const { data } = clientTrpc.getProfile.useQuery();
+  const { mutate: setPassword } = clientTrpc.updatePassword.useMutation();
+  const [isAccountEdited, setIsAccountEdited] = useState(false);
+  const [isBusinessEdited, setIsBussinesEdited] = useState(false);
+
+  const router = useRouter();
+
+  const { control: accountControl, reset, watch } = useForm();
+
+  useEffect(() => {
+    reset(data?.user);
+  }, [data?.user, reset]);
+
   const params = useSearchParams();
 
   const menu = params?.get("menu");
@@ -43,12 +56,74 @@ export const SettingModule: FC = (): ReactElement => {
           )}
         </div>
 
+        {menu === "account-password" && (
+          <div className="flex flex-col gap-y-6 w-full h-full">
+            <div className="flex justify-between">
+              <div className="flex flex-col">
+                <h1 className="text-3xl font-semibold">Atur Kata sandi</h1>
+              </div>
+            </div>
+            <form className="flex flex-col gap-y-4">
+              <ControlledFieldText
+                size="sm"
+                control={accountControl}
+                name="password"
+                type="password"
+                label="Kata Sandi"
+                placeholder="Masukkan Kata sandi anda"
+                hint="Kata sandi harus terdiri dari 8 karakter"
+                status={watch("password")?.length < 8 ? "error" : "none"}
+                message="Kata sandi kurang dari 8 karakter"
+              />
+
+              <ControlledFieldText
+                size="sm"
+                type="password"
+                control={accountControl}
+                name="confirm_password"
+                label="Konfirmasi Kata Sandi"
+                placeholder="Masukkan konfirmasi kata sandi anda"
+                status={watch("password") !== watch("confirm_password") ? "error" : "none"}
+                message="Kata sandi tidak sama"
+              />
+              <div>
+                <Button
+                  size="sm"
+                  disabled={
+                    watch("password") !== watch("confirm_password") || watch("password")?.length < 8
+                  }
+                  onClick={() =>
+                    setPassword(
+                      { password: watch("password") },
+                      {
+                        onSuccess: () => {
+                          router.push("/dashboard/setting?title=Pengaturan&menu=account");
+                        },
+                      },
+                    )
+                  }
+                  variant="primary"
+                  type="button"
+                >
+                  Simpan
+                </Button>
+              </div>
+            </form>
+          </div>
+        )}
+
         {menu === "account" && (
           <div className="flex flex-col gap-y-6 w-full h-full">
             {!data?.user?.isPasswordSet && (
-              <div className="flex p-2 border-yellow-500 border rounded-lg text-yellow-500 bg-yellow-50 items-center gap-x-4">
-                <IoMdAlert className="text-3xl" /> Kata sandi di akun anda belum di atur, segera
-                atur kata sandi anda!
+              <div className="flex p-2 border-yellow-500 border rounded-lg text-yellow-500 bg-yellow-50 items-center gap-x-1">
+                <IoMdAlert className="text-3xl" /> Kata sandi akun anda belum di atur
+                <Link
+                  href="/dashboard/setting?title=Pengaturan&menu=account-password"
+                  className="underline"
+                >
+                  Klik disini
+                </Link>
+                untuk mengatur nya sekarang
               </div>
             )}
             <div className="flex justify-between">
@@ -57,24 +132,73 @@ export const SettingModule: FC = (): ReactElement => {
                 <p>Disini kamu bisa atur akun kamu</p>
               </div>
               <div>
-                <Button size="sm" onClick={() => console.log("")} variant="primary">
-                  Perbarui Akun
-                </Button>
+                {isAccountEdited ? (
+                  <Button
+                    size="sm"
+                    onClick={() => setIsAccountEdited(false)}
+                    type="button"
+                    variant="cancel"
+                  >
+                    Batal
+                  </Button>
+                ) : (
+                  <Button
+                    size="sm"
+                    onClick={() => setIsAccountEdited(true)}
+                    variant="primary"
+                    type="button"
+                  >
+                    Perbarui Akun
+                  </Button>
+                )}
               </div>
             </div>
-            {data?.user?.image ? (
-              <Image
-                src={data?.user?.image as string}
-                alt="Dashboard"
-                className="rounded-lg"
-                width={100}
-                height={100}
+            <form className="flex flex-col gap-y-4">
+              {data?.user?.image ? (
+                <Image
+                  src={data?.user?.image as string}
+                  alt="Dashboard"
+                  className="rounded-lg"
+                  width={100}
+                  height={100}
+                />
+              ) : (
+                <Avatar name={data?.user?.fullname} size="100" round={true} />
+              )}
+              <ControlledFieldText
+                size="sm"
+                control={accountControl}
+                name="email"
+                disabled
+                label="Email"
               />
-            ) : (
-              <Avatar name={data?.user?.fullname} size="100" round={true} />
-            )}
-            <FieldText readOnly value={data?.user?.email} label="Email" />
-            <FieldText readOnly value={data?.user?.fullname} label="Nama Lengkap" />
+              <ControlledFieldText
+                size="sm"
+                control={accountControl}
+                name="fullname"
+                disabled={!isAccountEdited}
+                label="Nama Lengkap"
+              />
+              <ControlledFieldText
+                size="sm"
+                control={accountControl}
+                name="role.name"
+                label="Hak Akses"
+                disabled
+              />
+              {isAccountEdited && (
+                <div>
+                  <Button
+                    size="sm"
+                    onClick={() => setIsAccountEdited(true)}
+                    variant="primary"
+                    type="button"
+                  >
+                    Simpan
+                  </Button>
+                </div>
+              )}
+            </form>
           </div>
         )}
 

@@ -61,6 +61,7 @@ export const authOptions = {
         return {
           ...token,
           ...data?.user,
+          isPasswordSet: !!data?.user?.password,
           role: {
             id: data?.app_roles?.id,
             name: data?.app_roles?.name,
@@ -84,6 +85,7 @@ export const authOptions = {
           fullname: u.fullname,
           email: u.email,
           image: u.image,
+          isPasswordSet: !!u.isPasswordSet,
           role: {
             id: u.role.id,
             name: u.role.name,

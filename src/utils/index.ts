@@ -10,8 +10,8 @@ export const inputClassName = ({
 }: Pick<TCommonForms, "size" | "status" | "append" | "preppend">): string =>
   clsx(
     "rounded-lg border border-1 outline-none w-full",
-    "disabled:bg-gray-100 disabled:placeholder:text-gray-300 disabled:border-gray-200",
-    "disable:cursor-not-allowed disable:opacity-50 disable:select-none disabled:text-gray-300",
+    "disabled:bg-gray-100 disabled:placeholder:text-gray-500 disabled:border-gray-200",
+    "disable:cursor-not-allowed disable:opacity-50 disable:select-none disabled:text-gray-400",
     {
       "text-sm placeholder:text-xs pl-2 pr-3 py-2": size === "sm" && !preppend && !append,
       "text-sm placeholder:text-xs pl-7 pr-3 py-2": size === "sm" && preppend && !append,
