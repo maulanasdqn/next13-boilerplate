@@ -6,12 +6,14 @@ import { SiMarketo } from "react-icons/si";
 import Image from "next/image";
 import { RxAvatar } from "react-icons/rx";
 import { FaChevronDown } from "react-icons/fa6";
+import { GiHamburgerMenu } from "react-icons/gi";
 
 export const NavbarLanding: FC = (): ReactElement => {
   const { data } = clientTrpc.getProfile.useQuery();
   return (
     <header className="bg-primary w-full py-4 px-10 text-white font-medium">
-      <nav className="flex w-full justify-between items-center">
+      {/* dekstop */}
+      <nav className="lg:flex hidden w-full justify-between items-center">
         <div className="flex gap-x-2">
           <SiMarketo size={24} />
           <span className="font-bold">iPOS</span>
@@ -59,6 +61,16 @@ export const NavbarLanding: FC = (): ReactElement => {
               </Button>
             </div>
           )}
+        </div>
+      </nav>
+      {/* mobile */}
+      <nav className="lg:hidden flex  justify-between">
+        <div className="flex gap-x-2 py-2">
+          <SiMarketo size={24} />
+          <span className="font-bold">iPOS</span>
+        </div>
+        <div>
+          <GiHamburgerMenu size={32} />
         </div>
       </nav>
     </header>
