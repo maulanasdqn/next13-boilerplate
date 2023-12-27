@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 
 export const SettingModule: FC = (): ReactElement => {
   const { data } = clientTrpc.getProfile.useQuery();
+  const { data: password } = clientTrpc.getPassword.useQuery();
   const { mutate: setPassword } = clientTrpc.updatePassword.useMutation();
   const [isAccountEdited, setIsAccountEdited] = useState(false);
   const [isBusinessEdited, setIsBussinesEdited] = useState(false);
@@ -114,7 +115,7 @@ export const SettingModule: FC = (): ReactElement => {
 
         {menu === "account" && (
           <div className="flex flex-col gap-y-6 w-full h-full">
-            {!data?.user?.isPasswordSet && (
+            {!password && (
               <div className="flex p-2 border-yellow-500 border rounded-lg text-yellow-500 bg-yellow-50 items-center gap-x-1">
                 <IoMdAlert className="text-3xl" /> Kata sandi akun anda belum di atur
                 <Link
