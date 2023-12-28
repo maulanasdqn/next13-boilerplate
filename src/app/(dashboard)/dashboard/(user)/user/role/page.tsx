@@ -1,8 +1,8 @@
 import { DashboardUserRoleModule } from "@/modules";
 import { NextPage } from "next";
 
-const DashboardRolePage: NextPage = async () => {
+const DashboardUserRolePage: NextPage = async () => {
   return <DashboardUserRoleModule />;
 };
 
-export default DashboardRolePage;
+export default DashboardUserRolePage;

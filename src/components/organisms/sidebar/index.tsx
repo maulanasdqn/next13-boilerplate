@@ -21,8 +21,9 @@ import { TUser } from "@/entities/user";
 import { PERMISSIONS } from "@/server/database/schema";
 import { hasCommonElements } from "@/utils";
 import { SiMarketo } from "react-icons/si";
-import { FaBox } from "react-icons/fa";
+import { FaBox, FaUsersCog } from "react-icons/fa";
 import { BiSolidCategory } from "react-icons/bi";
+import { FaShield } from "react-icons/fa6";
 
 export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
   const [isSidebarOpen, setIsSidebarOpen] = useQueryState("isSidebarOpen");
@@ -108,23 +109,23 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
 
     {
       name: "Pengguna",
-      icon: <AiFillSetting className={iconClassName} />,
+      icon: <FaUsersCog className={iconClassName} />,
       path: "role",
       permissions: [PERMISSIONS.ROLE_READ, PERMISSIONS.USER_READ],
       children: [
         {
-          name: "Data Hak Akses",
-          icon: <AiFillSetting className={iconClassName} />,
+          name: "Hak Akses",
+          icon: <FaShield className={iconClassName} />,
           path: "/dashboard/user/role",
-          url: `/dashboard/user/role?title=Data Role&isSidebarOpen=${isSidebarOpen}`,
+          url: `/dashboard/user/role?title=Data Hak Akses&isSidebarOpen=${isSidebarOpen}`,
           permissions: [PERMISSIONS.ROLE_READ],
         },
 
         {
-          name: "Data Pengguna",
+          name: "Pengguna",
           icon: <PiUsersThreeFill className={iconClassName} />,
-          path: "/dashboard/user/user",
-          url: `/dashboard/user/user?title=Data Pengguna&isSidebarOpen=${isSidebarOpen}`,
+          path: "/dashboard/user",
+          url: `/dashboard/user?title=Data Pengguna&isSidebarOpen=${isSidebarOpen}`,
           permissions: [PERMISSIONS.ROLE_READ],
         },
       ],
@@ -179,7 +180,7 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
             <SiMarketo className="text-primary" size={24} />
             <span className="text-primary font-bold  w-full block text-2xl">iPOS</span>
           </div>
-          <Link href={"/dashboard/profile?title=Profile"}>
+          <Link href={"/dashboard/setting?menu=account"}>
             <div className="bg-gray-100 p-2 rounded-lg flex flex-col cursor-pointer">
               <span className="text-gray-600 text-base">{userName}</span>
 

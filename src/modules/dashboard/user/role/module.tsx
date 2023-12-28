@@ -72,7 +72,7 @@ export const DashboardUserRoleModule: FC = (): ReactElement => {
       },
       {
         header: "Tanggal Dibuat",
-        accessorKey: "created_at",
+        accessorKey: "createdAt",
         cell: ({ getValue }) => {
           const value = new Date(getValue<Date>());
           return format(value, "dd/MM/yyyy");
@@ -80,7 +80,7 @@ export const DashboardUserRoleModule: FC = (): ReactElement => {
       },
       {
         header: "Tanggal Diperbarui",
-        accessorKey: "updated_at",
+        accessorKey: "updatedAt",
         cell: ({ getValue }) => {
           const value = new Date(getValue<Date>());
           return format(value, "dd/MM/yyyy");
@@ -93,6 +93,7 @@ export const DashboardUserRoleModule: FC = (): ReactElement => {
   return (
     <section className="flex w-full h-full min-h-screen">
       <DataTable
+        createLabel="+ Buat Hak Akses"
         isLoading={isLoading}
         createLink="/dashboard/user/role/create?title=Tambah Data Role"
         columns={columns}

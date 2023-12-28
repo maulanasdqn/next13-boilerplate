@@ -19,7 +19,6 @@ export const authOptions = {
       const t = token as TUser;
 
       if (trigger === "update") {
-        console.log(t?.email);
         const roleId = await db
           .select({ id: roles.id })
           .from(roles)

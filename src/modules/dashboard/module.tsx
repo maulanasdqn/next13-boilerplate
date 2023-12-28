@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import { CardChart, LineChart, PopularProduck } from "./charts";
 import { ProductBar } from "./charts/bar-chart/product";
 import { ProductViewBar } from "./charts/bar-chart/earning";
+import { ROLES } from "@/server/database/schema";
 
 const VSBusiness = z.object({
   name: z.string().min(1, { message: "Nama bisnis Wajib diisi" }),
@@ -65,6 +66,7 @@ export const DashboardModule: FC = (): ReactElement => {
 
   return (
     <section className="flex w-full min-h-screen items-center justify-start flex-col">
+      {session?.user?.role?.name === ROLES.ADMIN && <span>You are admin</span>}
       {session?.user?.business?.name ? (
         <div className="flex flex-col items-start justify-start w-full">
           <h1 className="text-2xl font-medium">{session?.user?.business?.name}</h1>
