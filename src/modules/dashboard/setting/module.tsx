@@ -16,6 +16,9 @@ export const SettingModule: FC = (): ReactElement => {
   const { data } = clientTrpc.getProfile.useQuery();
   const { data: password, refetch } = clientTrpc.getPassword.useQuery();
   const { mutate: setPassword } = clientTrpc.updatePassword.useMutation();
+  const { mutate: updateUser } = clientTrpc.updateUser.useMutation();
+  const { data: detailUser } = clientTrpc.getDetailUser.useQuery(data?.user?.id as string);
+
   const [isAccountEdited, setIsAccountEdited] = useState(false);
   const [isBusinessEdited, setIsBusinessEdited] = useState(false);
 
@@ -24,8 +27,8 @@ export const SettingModule: FC = (): ReactElement => {
   const { control: accountControl, reset, watch } = useForm();
 
   useEffect(() => {
-    reset(data?.user);
-  }, [data?.user, reset]);
+    reset(detailUser);
+  }, [detailUser, reset]);
 
   const params = useSearchParams();
 
@@ -198,7 +201,23 @@ export const SettingModule: FC = (): ReactElement => {
                 <div>
                   <Button
                     size="sm"
-                    onClick={() => setIsAccountEdited(true)}
+                    onClick={async () => {
+                      updateUser(
+                        {
+                          fullname: watch("fullname"),
+                          email: detailUser?.email as string,
+                          password: detailUser?.password as string,
+                        },
+                        {
+                          onSuccess: () => {
+                            refetch();
+                            router.push("/dashboard/setting?title=Pengaturan&menu=account");
+                            notifyMessage({ type: "success", message: "Akun berhasil diperbarui" });
+                            setIsAccountEdited(false);
+                          },
+                        },
+                      );
+                    }}
                     variant="primary"
                     type="button"
                   >

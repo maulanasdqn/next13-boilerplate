@@ -71,6 +71,13 @@
       "when": 1703727948883,
       "tag": "0009_common_patriot",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1703741383618,
+      "tag": "0010_peaceful_proudstar",
+      "breakpoints": true
     }
   ]
 }

@@ -3,6 +3,7 @@ import { publicProcedure } from "@/libs/trpc/init";
 import { db, products } from "@/server";
 import { calculateTotalPages, metaResponsePrefix } from "@/utils";
 import { asc, eq, ilike, or, and } from "drizzle-orm";
+import { z } from "zod";
 
 export * from "./category";
 
@@ -53,3 +54,24 @@ export const getProduct = publicProcedure.input(VSMetaRequest).query(async ({ in
     throw new Error(err as string);
   }
 });
+
+export const createProduct = publicProcedure
+  .input(
+    z.object({
+      categoryId: z.string(),
+      name: z.string(),
+      price: z.number(),
+      quantity: z.number(),
+      description: z.string(),
+    }),
+  )
+  .mutation(async ({ ctx, input }) => {
+    try {
+      return await db
+        .insert(products)
+        .values({ ...input, userId: ctx?.session?.user?.id as string })
+        .returning();
+    } catch (err) {
+      throw new Error(err as string);
+    }
+  });

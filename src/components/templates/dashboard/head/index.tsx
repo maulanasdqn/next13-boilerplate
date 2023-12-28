@@ -4,7 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { FC, ReactElement } from "react";
 
 export const DashboardHeadTemplate: FC = (): ReactElement => {
-  const re = /Tambah|Perbarui|Ubah|Rubah/gi;
+  const re = /Tambah|Perbarui|Ubah|Rubah|Buat/gi;
   const searcParams = useSearchParams();
   const title = searcParams.get("title");
   return (

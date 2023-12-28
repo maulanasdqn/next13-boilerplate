@@ -1,6 +1,6 @@
 "use client";
 import { Button, ControlledFieldSelect, ControlledFieldText, FormTemplate } from "@/components";
-import { TRegister, VSRegister } from "@/entities";
+import { VSRegister } from "@/entities";
 import { clientTrpc } from "@/libs/trpc/client";
 import { notifyMessage } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -110,7 +110,7 @@ export const DashboardUserUpdateModule = () => {
             options={roleOptions}
             size="sm"
             placeholder="Hak Akses"
-            label="Kata sandi"
+            label="Hak Akses"
             control={control}
             name={"roleId"}
             status={errors.roleId ? "error" : "none"}

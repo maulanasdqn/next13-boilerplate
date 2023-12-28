@@ -6,6 +6,7 @@ export const VSRegister = z.object({
   email: z.string().email(),
   password: z.string(),
   roleId: z.string().optional(),
+  isActive: z.boolean().optional(),
 });
 
 export type TRegister = z.infer<typeof VSRegister>;

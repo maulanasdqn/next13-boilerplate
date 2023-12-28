@@ -80,10 +80,12 @@ export const authOptions = {
           .then((res) => res.at(0)?.id);
 
         const userData = await db
-          .select({ id: users.id, roleId: users.roleId })
+          .select({ id: users.id, roleId: users.roleId, isActive: users.isActive })
           .from(users)
           .where(eq(users.email, profile.email as string))
           .then((res) => res.at(0));
+
+        const isActive = userData?.isActive;
 
         if (!userData?.id) {
           await db
@@ -103,6 +105,10 @@ export const authOptions = {
             .set({ roleId })
             .where(eq(users.id, userData?.id as string))
             .returning();
+        }
+
+        if (!isActive) {
+          throw new Error("Akun ini sedang di non-aktifkan");
         }
 
         const data = await db

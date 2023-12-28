@@ -3,6 +3,7 @@ import { publicProcedure } from "@/libs/trpc/init";
 import { db, product_categories } from "@/server";
 import { calculateTotalPages, metaResponsePrefix } from "@/utils";
 import { asc, eq, ilike, or, and } from "drizzle-orm";
+import { z } from "zod";
 
 export const getProductCategory = publicProcedure
   .input(VSMetaRequest)
@@ -49,6 +50,47 @@ export const getProductCategory = publicProcedure
         },
       };
       return metaResponsePrefix(metaPrefix);
+    } catch (err) {
+      throw new Error(err as string);
+    }
+  });
+
+export const createProductCategory = publicProcedure
+  .input(
+    z.object({
+      name: z.string(),
+    }),
+  )
+  .mutation(async ({ input, ctx }) => {
+    await db.insert(product_categories).values({
+      name: input.name,
+      userId: ctx?.session?.user?.id as string,
+    });
+  });
+
+export const updateProductCategory = publicProcedure
+  .input(
+    z.object({
+      id: z.string(),
+      name: z.string(),
+    }),
+  )
+  .mutation(async ({ input, ctx }) => {
+    await db
+      .update(product_categories)
+      .set({ name: input.name })
+      .where(eq(product_categories.id, input.id as string));
+  });
+
+export const getProductCategoryById = publicProcedure
+  .input(z.object({ id: z.string() }))
+  .query(async ({ input }) => {
+    try {
+      return await db
+        .select()
+        .from(product_categories)
+        .where(eq(product_categories.id, input.id as string))
+        .then((res) => res.at(0));
     } catch (err) {
       throw new Error(err as string);
     }

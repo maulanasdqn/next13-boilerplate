@@ -81,6 +81,15 @@ export const DashboardUserModule: FC = (): ReactElement => {
       },
 
       {
+        header: "Status",
+        accessorKey: "isActive",
+        cell: ({ getValue }) => {
+          const value = getValue<boolean>();
+          return value ? "Aktif" : "Tidak Aktif";
+        },
+      },
+
+      {
         header: "Tanggal Dibuat",
         accessorKey: "createdAt",
         cell: ({ getValue }) => {

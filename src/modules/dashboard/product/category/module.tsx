@@ -5,7 +5,6 @@ import { ColumnDef } from "@tanstack/react-table";
 import { FC, ReactElement, useMemo, useState } from "react";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import { format } from "date-fns";
-import { formatCurrency } from "@/utils";
 import { parseAsInteger, parseAsString, useQueryState } from "next-usequerystate";
 
 export const DashboardProductCategoryModule: FC = (): ReactElement => {
@@ -49,7 +48,7 @@ export const DashboardProductCategoryModule: FC = (): ReactElement => {
           return (
             <div className="flex gap-x-2">
               <Button
-                href={`/dashboard/report/transaction/update/${row.original?.id}?title=${
+                href={`/dashboard/product/category/update/${row.original?.id}?title=${
                   "Perbarui Data " + row.original?.name
                 }`}
                 size="sm"

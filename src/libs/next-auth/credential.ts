@@ -26,6 +26,8 @@ export const credentialProvider = CredentialsProvider({
 
     const isHaveAPassword = user?.user?.password;
 
+    const isActive = user?.user?.isActive;
+
     const isPasswordCorrect = await bs.compare(
       credentials.password as string,
       user?.user?.password as string,
@@ -33,6 +35,10 @@ export const credentialProvider = CredentialsProvider({
 
     if (!user || !isPasswordCorrect) {
       throw new Error("Email atau Password salah");
+    }
+
+    if (!isActive) {
+      throw new Error("Akun ini sedang di non-aktifkan");
     }
 
     return {

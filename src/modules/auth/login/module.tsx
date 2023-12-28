@@ -129,7 +129,6 @@ export const AuthLoginModule: FC = (): ReactElement => {
             Daftar
           </Link>
         </p>
-        <p>Lupa kata sandi?</p>
       </div>
     </form>
   );
