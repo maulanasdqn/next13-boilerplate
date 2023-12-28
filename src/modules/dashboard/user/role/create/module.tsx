@@ -1,6 +1,7 @@
 "use client";
 import { Button, ControlledFieldText, FormTemplate } from "@/components";
 import { clientTrpc } from "@/libs/trpc/client";
+import { notifyMessage } from "@/utils";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 
@@ -26,6 +27,7 @@ export const DashboardUserRoleCreateModule = () => {
     mutate(data, {
       onSuccess: () => {
         router.push("/dashboard/user/role?title=Data Role");
+        notifyMessage({ type: "success", message: "Hak akses Berhasil Dibuat" });
       },
     });
   });
@@ -35,8 +37,8 @@ export const DashboardUserRoleCreateModule = () => {
       <div className="flex gap-x-3 w-full">
         <ControlledFieldText
           size="sm"
-          placeholder="Masukkan nama transaksi"
-          label="Nama Transaksi"
+          placeholder="Masukkan nama hak akses"
+          label="Nama Hak Akses"
           control={control}
           name={"name"}
           status={errors.name ? "error" : "none"}

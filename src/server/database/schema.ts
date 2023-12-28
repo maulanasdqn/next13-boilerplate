@@ -6,6 +6,7 @@ import {
   text,
   uuid,
   bigint,
+  boolean,
   timestamp,
   primaryKey,
 } from "drizzle-orm/pg-core";
@@ -79,6 +80,7 @@ export const users = pgTable("user", {
   id: uuid("id").notNull().primaryKey().defaultRandom(),
   roleId: uuid("role_id").references(() => roles.id, { onDelete: "cascade" }),
   fullname: text("name"),
+  isActive: boolean("is_active").notNull().default(true),
   image: text("image"),
   email: text("email").notNull().unique(),
   emailVerifiedAt: timestamp("emailVerified", { mode: "date" }),

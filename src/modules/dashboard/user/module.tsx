@@ -6,6 +6,7 @@ import { FC, ReactElement, useMemo, useState } from "react";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import { format } from "date-fns";
 import { parseAsInteger, parseAsString, useQueryState } from "next-usequerystate";
+import { notifyMessage } from "@/utils";
 
 export const DashboardUserModule: FC = (): ReactElement => {
   const [search, setSearch] = useQueryState("search", parseAsString.withDefault(""));
@@ -48,7 +49,7 @@ export const DashboardUserModule: FC = (): ReactElement => {
           return (
             <div className="flex gap-x-2">
               <Button
-                href={`/dashboard/user/role/update/${row.original?.id}`}
+                href={`/dashboard/user/update/${row.original?.id}?title=Perbarui data pengguna`}
                 size="sm"
                 variant="success"
               >
@@ -127,6 +128,11 @@ export const DashboardUserModule: FC = (): ReactElement => {
                     refetch();
                     setDeleteModal(false);
                     setId("");
+                    notifyMessage({ type: "success", message: "Pengguna Berhasil Dihapus" });
+                  },
+
+                  onError: (err) => {
+                    notifyMessage({ type: "error", message: err?.message });
                   },
                 },
               )

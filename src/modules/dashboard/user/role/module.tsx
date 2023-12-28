@@ -6,6 +6,7 @@ import { FC, ReactElement, useMemo, useState } from "react";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import { format } from "date-fns";
 import { parseAsInteger, parseAsString, useQueryState } from "next-usequerystate";
+import { ROLES } from "@/server/database/schema";
 
 export const DashboardUserRoleModule: FC = (): ReactElement => {
   const [search, setSearch] = useQueryState("search", parseAsString.withDefault(""));
@@ -54,7 +55,12 @@ export const DashboardUserRoleModule: FC = (): ReactElement => {
               >
                 <AiFillEdit />
               </Button>
-              <Button onClick={() => handleModalDelete(row.original?.id)} size="sm" variant="error">
+              <Button
+                disabled={row.original?.name === ROLES.ADMIN || row.original?.name === ROLES.OWNER}
+                onClick={() => handleModalDelete(row.original?.id)}
+                size="sm"
+                variant="error"
+              >
                 <AiFillDelete />
               </Button>
             </div>
