@@ -13,8 +13,8 @@ import { Line } from "react-chartjs-2";
 import { FC, ReactElement, useEffect, useRef, useState } from "react";
 import { MdShowChart } from "react-icons/md";
 import { Select } from "@/components";
-import { optionsList } from "../store";
-export const LineChart: FC = (): ReactElement => {
+import { optionsList } from "../../store";
+export const LineChartAdmin: FC = (): ReactElement => {
   const chartRef = useRef();
   ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
   const [chartType, setChartType] = useState<string>("bulanan");
@@ -95,9 +95,9 @@ export const LineChart: FC = (): ReactElement => {
       <div className="w-full rounded-lg bg-white p-4 my-2 shadow-sm">
         <div className="flex items-center justify-between">
           <div className="flex gap-x-2 items-center">
-            <h1 className="text-xl font-semibold ">Data Transaksi</h1>
+            <h1 className="text-xl font-semibold ">Data User Mendaftar</h1>
             <span>
-              <MdShowChart size={30} className="text-[#296253]" />
+              <MdShowChart size={30} className="text-green-500" />
             </span>
           </div>
           <div>

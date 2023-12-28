@@ -8,7 +8,7 @@ export const PopularProduck: FC = (): ReactElement => {
         <div className="flex gap-x-2 items-center">
           <h1 className="text-xl font-semibold ">Produk Popular</h1>
           <span>
-            <GrLineChart size={30} className="text-green-500" />
+            <GrLineChart size={30} className="text-[#296253]" />
           </span>
         </div>
       </div>

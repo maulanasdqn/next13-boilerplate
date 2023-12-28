@@ -8,6 +8,11 @@ export const dataProduct = [
 
 export const optionsList = [
   { label: "Harian", value: "harian" },
-  { label: "Mingguan", value: "7 hari terakhir" },
+  { label: "Mingguan", value: "mingguan" },
   { label: "Bulanan", value: "bulanan" },
+];
+
+export const userData = [
+  { name: "Jumlah User", total: 50 },
+  { name: "Total Role", total: 2 },
 ];
