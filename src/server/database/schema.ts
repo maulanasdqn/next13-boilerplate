@@ -89,6 +89,7 @@ export const users = pgTable("user", {
 
 export const customers = pgTable("app_customers", {
   id: uuid("id").notNull().primaryKey().defaultRandom(),
+  userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
   phoneNumber: text("phone_number").unique(),
   createdAt: date("created_at", { mode: "date" }).notNull().defaultNow(),
@@ -173,6 +174,7 @@ export const report_transactions = pgTable("app_report_transactions", {
 
 export const payment_methods = pgTable("app_payment_methods", {
   id: uuid("id").notNull().primaryKey().defaultRandom(),
+  userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }),
   providerName: text("provider_name").notNull(),
   accountName: text("name").notNull(),
   accountNumber: text("account_number").notNull(),
@@ -198,6 +200,7 @@ export const report_payments = pgTable("app_report_payments", {
 
 export const report_financials = pgTable("app_report_financials", {
   id: uuid("id").notNull().primaryKey().defaultRandom(),
+  userId: uuid("user_id"),
   grossIncome: bigint("gross_income", { mode: "number" }).notNull(),
   netIncome: bigint("net_income", { mode: "number" }).notNull(),
   operationalCost: bigint("operational_cost", { mode: "number" }).notNull(),
@@ -208,6 +211,7 @@ export const report_financials = pgTable("app_report_financials", {
 
 export const customer_debts = pgTable("app_customer_debts", {
   id: uuid("id").notNull().primaryKey().defaultRandom(),
+  userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }),
   customerId: uuid("customer_id")
     .notNull()
     .references(() => customers.id, { onDelete: "cascade" }),
@@ -221,7 +225,8 @@ export const customer_debts = pgTable("app_customer_debts", {
 
 export const products = pgTable("app_products", {
   id: uuid("id").notNull().primaryKey().defaultRandom(),
-  categoryId: uuid("category_id"),
+  userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }),
+  categoryId: uuid("category_id").references(() => product_categories.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
   price: bigint("price", { mode: "number" }).notNull(),
   quantity: integer("quantity").notNull(),
@@ -232,6 +237,7 @@ export const products = pgTable("app_products", {
 
 export const product_categories = pgTable("app_product_categories", {
   id: uuid("id").notNull().primaryKey().defaultRandom(),
+  userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
   createdAt: date("created_date", { mode: "date" }).notNull().defaultNow(),
   updatedAt: date("updated_date", { mode: "date" }).notNull().defaultNow(),
@@ -239,7 +245,9 @@ export const product_categories = pgTable("app_product_categories", {
 
 export const orders = pgTable("app_orders", {
   id: uuid("id").notNull().primaryKey().defaultRandom(),
-  userId: uuid("user_id").notNull(),
+  userId: uuid("user_id")
+    .references(() => users.id, { onDelete: "cascade" })
+    .notNull(),
   productId: uuid("product_id").notNull(),
   customerId: uuid("customer_id").notNull(),
   paymentId: uuid("payment_id").notNull(),

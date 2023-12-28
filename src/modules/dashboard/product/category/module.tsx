@@ -7,19 +7,17 @@ import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import { format } from "date-fns";
 import { formatCurrency } from "@/utils";
 import { parseAsInteger, parseAsString, useQueryState } from "next-usequerystate";
-import { IoPrint } from "react-icons/io5";
-import { FaFileExport } from "react-icons/fa6";
 
-export const DashboardProductModule: FC = (): ReactElement => {
+export const DashboardProductCategoryModule: FC = (): ReactElement => {
   const [search, setSearch] = useQueryState("search", parseAsString.withDefault(""));
   const [page] = useQueryState("page", parseAsInteger.withDefault(1));
   const [perPage] = useQueryState("perPage", parseAsInteger.withDefault(10));
 
   const {
-    data: products,
+    data: productCategories,
     isLoading,
     refetch,
-  } = clientTrpc.getProduct.useQuery({
+  } = clientTrpc.getProductCategory.useQuery({
     search,
     page,
     perPage,
@@ -29,7 +27,7 @@ export const DashboardProductModule: FC = (): ReactElement => {
   const [deleteModal, setDeleteModal] = useState<boolean>(false);
   const [id, setId] = useState<string>("");
 
-  const data = products?.data;
+  const data = productCategories?.data;
 
   type Unpacked<T> = T extends (infer U)[] ? U : T;
   type TData = NonNullable<typeof data>;
@@ -72,20 +70,8 @@ export const DashboardProductModule: FC = (): ReactElement => {
         cell: ({ row }) => row.index + 1,
       },
       {
-        header: "Nama Produk",
+        header: "Nama Kategori",
         accessorKey: "name",
-      },
-      {
-        header: "Harga Satuan",
-        accessorKey: "price",
-        cell: ({ getValue }) => {
-          const value = getValue<number>();
-          return formatCurrency(value);
-        },
-      },
-      {
-        header: "Stok",
-        accessorKey: "quantity",
       },
       {
         header: "Tanggal Produk Dibuat",
@@ -104,13 +90,13 @@ export const DashboardProductModule: FC = (): ReactElement => {
   return (
     <>
       <DataTable
-        createLink="/dashboard/product/create?title=Buat Produk"
-        createLabel="+ Buat Produk"
+        createLink="/dashboard/product/category/create?title=Buat Kategori Produk"
+        createLabel="+ Buat Kategori Produk"
         isLoading={isLoading}
         columns={columns}
         handleSearch={handleSearch}
         data={data || []}
-        meta={products?.meta}
+        meta={productCategories?.meta}
       />
       <Modal
         width="200"

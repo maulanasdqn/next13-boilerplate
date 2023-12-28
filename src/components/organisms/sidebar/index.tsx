@@ -9,15 +9,16 @@ import {
   AiFillBoxPlot,
   AiFillCaretDown,
   AiFillMoneyCollect,
+  AiFillRead,
   AiFillSetting,
   AiFillTag,
 } from "react-icons/ai";
-import { FaShoppingCart } from "react-icons/fa";
+import { FaShoppingCart, FaUsers } from "react-icons/fa";
 import { PiUsersThreeFill } from "react-icons/pi";
 import Link from "next/link";
 import { useQueryState } from "next-usequerystate";
 import { TUser } from "@/entities/user";
-import { PERMISSIONS, ROLES } from "@/server/database/schema";
+import { PERMISSIONS } from "@/server/database/schema";
 import { hasCommonElements } from "@/utils";
 import { SiMarketo } from "react-icons/si";
 import { FaBox } from "react-icons/fa";
@@ -149,6 +150,22 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
           path: "/dashboard/product/category",
           url: `/dashboard/product/category?title=Data Kategori Produk&isSidebarOpen=${isSidebarOpen}`,
           permissions: [PERMISSIONS.PRODUCT_CATEGORY_READ],
+        },
+      ],
+    },
+
+    {
+      name: "Pelanggan",
+      icon: <AiFillRead className={iconClassName} />,
+      path: "pelanggan",
+      permissions: [PERMISSIONS.CUSTOMER_READ],
+      children: [
+        {
+          name: "Pelanggan",
+          icon: <FaUsers className={iconClassName} />,
+          path: "/dashboard/customer",
+          url: `/dashboard/customer?title=Riwayat Pelanggan&isSidebarOpen=${isSidebarOpen}`,
+          permissions: [PERMISSIONS.CUSTOMER_READ],
         },
       ],
     },

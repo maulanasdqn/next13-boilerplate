@@ -57,6 +57,20 @@
       "when": 1703708146769,
       "tag": "0007_opposite_nico_minoru",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1703726162335,
+      "tag": "0008_yellow_warbound",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "5",
+      "when": 1703727948883,
+      "tag": "0009_common_patriot",
+      "breakpoints": true
     }
   ]
 }
