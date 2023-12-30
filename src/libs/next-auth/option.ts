@@ -14,11 +14,11 @@ export const authOptions = {
   adapter: DrizzleAdapter(db),
   session: { strategy: "jwt" },
   callbacks: {
-    async jwt({ user: us, token, account, profile, trigger }) {
+    async jwt({ user: us, token, account, profile, trigger, session }) {
       const newToken = token;
       const t = token as TUser;
 
-      if (trigger === "update") {
+      if (trigger === "update" && session.info === "create-business") {
         const roleId = await db
           .select({ id: roles.id })
           .from(roles)
@@ -26,7 +26,7 @@ export const authOptions = {
           .then((res) => res.at(0)?.id);
 
         const userData = await db
-          .select({ id: users.id, roleId: users.roleId })
+          .select({ id: users.id, roleId: users.roleId, email: users.email })
           .from(users)
           .where(eq(users.email, t?.email as string))
           .then((res) => res.at(0));
@@ -47,7 +47,7 @@ export const authOptions = {
           .from(users)
           .leftJoin(roles, eq(users.roleId, roles.id))
           .leftJoin(business, eq(users.id, business.ownerId))
-          .where(eq(users.email, t.email as string))
+          .where(eq(users.email, userData?.email as string))
           .then((res) => res.at(0));
 
         const newData = {

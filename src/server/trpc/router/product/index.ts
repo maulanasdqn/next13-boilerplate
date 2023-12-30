@@ -75,3 +75,52 @@ export const createProduct = publicProcedure
       throw new Error(err as string);
     }
   });
+
+export const updateProduct = publicProcedure
+  .input(
+    z.object({
+      id: z.string(),
+      categoryId: z.string(),
+      name: z.string(),
+      price: z.number(),
+      quantity: z.number(),
+      description: z.string(),
+    }),
+  )
+  .mutation(async ({ input }) => {
+    try {
+      return await db
+        .update(products)
+        .set({ ...input })
+        .where(eq(products.id, input.id))
+        .returning();
+    } catch (err) {
+      throw new Error(err as string);
+    }
+  });
+
+export const getDetailProduct = publicProcedure
+  .input(
+    z.object({
+      id: z.string(),
+    }),
+  )
+  .query(async ({ input }) => {
+    try {
+      return await db
+        .select()
+        .from(products)
+        .where(eq(products.id, input?.id))
+        .then((res) => res.at(0));
+    } catch (err) {
+      throw new Error(err as string);
+    }
+  });
+
+export const deleteProduct = publicProcedure.input(z.string()).mutation(async ({ input }) => {
+  try {
+    return await db.delete(products).where(eq(products.id, input)).returning();
+  } catch (err) {
+    throw new Error(err as string);
+  }
+});

@@ -75,10 +75,10 @@ export const updateProductCategory = publicProcedure
       name: z.string(),
     }),
   )
-  .mutation(async ({ input, ctx }) => {
+  .mutation(async ({ input }) => {
     await db
       .update(product_categories)
-      .set({ name: input.name })
+      .set({ name: input.name, updatedAt: new Date() })
       .where(eq(product_categories.id, input.id as string));
   });
 

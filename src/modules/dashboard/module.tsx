@@ -54,7 +54,7 @@ export const DashboardModule: FC = (): ReactElement => {
         onSuccess: async () => {
           setIsOpen(false);
           await update({
-            info: "update",
+            info: "create-business",
           });
           notifyMessage({ type: "success", message: "Bisnis berhasil dibuat" });
           refetch();

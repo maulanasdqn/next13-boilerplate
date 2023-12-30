@@ -7,8 +7,6 @@ import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import { format } from "date-fns";
 import { formatCurrency } from "@/utils";
 import { parseAsInteger, parseAsString, useQueryState } from "next-usequerystate";
-import { IoPrint } from "react-icons/io5";
-import { FaFileExport } from "react-icons/fa6";
 
 export const DashboardProductModule: FC = (): ReactElement => {
   const [search, setSearch] = useQueryState("search", parseAsString.withDefault(""));
@@ -25,7 +23,7 @@ export const DashboardProductModule: FC = (): ReactElement => {
     perPage,
   });
 
-  const { mutate } = clientTrpc.deleteReportTransaction.useMutation();
+  const { mutate } = clientTrpc.deleteProduct.useMutation();
   const [deleteModal, setDeleteModal] = useState<boolean>(false);
   const [id, setId] = useState<string>("");
 
@@ -51,7 +49,7 @@ export const DashboardProductModule: FC = (): ReactElement => {
           return (
             <div className="flex gap-x-2">
               <Button
-                href={`/dashboard/report/transaction/update/${row.original?.id}?title=${
+                href={`/dashboard/product/update/${row.original?.id}?title=${
                   "Perbarui Data " + row.original?.name
                 }`}
                 size="sm"
@@ -99,8 +97,6 @@ export const DashboardProductModule: FC = (): ReactElement => {
     [],
   );
 
-  console.log(data);
-
   return (
     <>
       <DataTable
@@ -121,16 +117,13 @@ export const DashboardProductModule: FC = (): ReactElement => {
         <div className="flex justify-start gap-x-4 w-full">
           <Button
             onClick={() =>
-              mutate(
-                { id },
-                {
-                  onSuccess: () => {
-                    refetch();
-                    setDeleteModal(false);
-                    setId("");
-                  },
+              mutate(id, {
+                onSuccess: () => {
+                  refetch();
+                  setDeleteModal(false);
+                  setId("");
                 },
-              )
+              })
             }
             variant="error"
           >

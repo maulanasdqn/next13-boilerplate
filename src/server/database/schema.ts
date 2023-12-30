@@ -22,6 +22,7 @@ export enum PERMISSIONS {
   DASHBOARD = "Dashboard",
   ORDER_READ = "Read Order",
   HAS_BUSINESS = "Has Business",
+  IS_ADMIN = "Is Admin",
   REPORT_TRANSACTION_CREATE = "Create Report Transaction",
   REPORT_TRANSACTION_READ = "Read Report Transaction",
   REPORT_TRANSACTION_UPDATE = "Update Report Transaction",
