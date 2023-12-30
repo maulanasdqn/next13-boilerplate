@@ -6,7 +6,7 @@ import {
   ControlledFieldTextArea,
   FormTemplate,
 } from "@/components";
-import { VSOrder, VSRegister } from "@/entities";
+import { VSOrder } from "@/entities";
 import { clientTrpc } from "@/libs/trpc/client";
 import { notifyMessage } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,7 +15,7 @@ import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-export const DashboardOrderCreateModule = () => {
+export const DashboardOrderDetailModule = () => {
   const { mutate } = clientTrpc.createOrder.useMutation();
   const { mutate: transaction } = clientTrpc.createReportTransaction.useMutation();
   const { data: paymentMethods } = clientTrpc.getPaymentMethods.useQuery();

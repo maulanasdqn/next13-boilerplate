@@ -84,8 +84,6 @@ export const DashboardProductCategoryModule: FC = (): ReactElement => {
     [],
   );
 
-  console.log(data);
-
   return (
     <>
       <DataTable

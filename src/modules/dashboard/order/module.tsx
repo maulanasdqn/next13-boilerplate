@@ -25,7 +25,7 @@ export const DashboardOrderModule: FC = (): ReactElement => {
     perPage,
   });
 
-  const { mutate } = clientTrpc.deleteReportTransaction.useMutation();
+  const { mutate } = clientTrpc.deleteOrder.useMutation();
   const [deleteModal, setDeleteModal] = useState<boolean>(false);
   const [id, setId] = useState<string>("");
 
@@ -50,15 +50,6 @@ export const DashboardOrderModule: FC = (): ReactElement => {
         cell: ({ row }) => {
           return (
             <div className="flex gap-x-2">
-              <Button
-                href={`/dashboard/report/transaction/update/${row.original?.id}?title=${
-                  "Perbarui Data " + row.original?.name
-                }`}
-                size="sm"
-                variant="success"
-              >
-                <AiFillEdit />
-              </Button>
               <Button onClick={() => handleModalDelete(row.original?.id)} size="sm" variant="error">
                 <AiFillDelete />
               </Button>

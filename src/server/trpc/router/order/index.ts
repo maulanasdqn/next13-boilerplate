@@ -76,7 +76,7 @@ export const deleteOrder = publicProcedure
     try {
       await db.delete(orders).where(eq(orders.id, input.id as string));
       return {
-        message: "Berhasil menghapus Transaksi!",
+        message: "Berhasil menghapus Pesanan!",
       };
     } catch (err) {
       return err;
