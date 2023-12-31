@@ -18,6 +18,41 @@ export const authOptions = {
       const newToken = token;
       const t = token as TUser;
 
+      if (trigger === "update" && session.info === "change-user") {
+        const userData = await db
+          .select({ id: users.id, roleId: users.roleId, email: users.email })
+          .from(users)
+          .where(eq(users.email, t?.email as string))
+          .then((res) => res.at(0));
+
+        const data = await db
+          .select()
+          .from(users)
+          .leftJoin(roles, eq(users.roleId, roles.id))
+          .leftJoin(business, eq(users.id, business.ownerId))
+          .where(eq(users.email, userData?.email as string))
+          .then((res) => res.at(0));
+
+        const newData = {
+          ...data?.user,
+          isPasswordSet: !!data?.user?.password,
+          role: {
+            id: data?.app_roles?.id,
+            name: data?.app_roles?.name,
+            permissions: data?.app_roles?.permissions,
+          },
+          business: {
+            id: data?.app_business?.id,
+            name: data?.app_business?.name,
+            ownerId: data?.app_business?.ownerId,
+            phoneNumber: data?.app_business?.phoneNumber,
+            address: data?.app_business?.address,
+          },
+        };
+        newToken.user = newData;
+        return newData;
+      }
+
       if (trigger === "update" && session.info === "create-business") {
         const roleId = await db
           .select({ id: roles.id })
@@ -34,12 +69,12 @@ export const authOptions = {
         await db
           .update(users)
           .set({ roleId })
-          .where(eq(users.id, userData?.id as string))
+          .where(eq(users.id, t?.id as string))
           .returning();
 
         await db
           .update(business)
-          .set({ ownerId: userData?.id })
+          .set({ ownerId: t?.id })
           .where(eq(business.ownerId, userData?.id as string));
 
         const data = await db

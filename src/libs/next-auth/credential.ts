@@ -53,6 +53,7 @@ export const credentialProvider = CredentialsProvider({
         ownerId: user?.app_business?.ownerId,
         image: user?.app_business?.image,
         address: user?.app_business?.address,
+        phoneNumber: user?.app_business?.phoneNumber,
       },
       role: {
         id: user?.app_roles?.id,

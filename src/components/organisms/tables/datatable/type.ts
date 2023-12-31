@@ -9,5 +9,5 @@ export type TDataTable<T extends Record<string, unknown>> = {
   createLink?: string;
   createLabel?: string;
   isLoading?: boolean;
-  handleSearch: ChangeEventHandler<HTMLInputElement>;
+  handleSearch?: ChangeEventHandler<HTMLInputElement>;
 };

@@ -18,7 +18,7 @@ import { z } from "zod";
 export const DashboardOrderDetailModule = () => {
   const { mutate } = clientTrpc.createOrder.useMutation();
   const { mutate: transaction } = clientTrpc.createReportTransaction.useMutation();
-  const { data: paymentMethods } = clientTrpc.getPaymentMethods.useQuery();
+  const { data: paymentMethods } = clientTrpc.getPaymentMethod.useQuery();
   const { data: products } = clientTrpc.getProduct.useQuery();
 
   const {
@@ -65,7 +65,7 @@ export const DashboardOrderDetailModule = () => {
   });
 
   const paymentMethodOptions = useMemo(() => {
-    return paymentMethods?.map((paymentMethod) => ({
+    return paymentMethods?.data?.map((paymentMethod) => ({
       label: paymentMethod.providerName,
       value: paymentMethod.id,
     }));

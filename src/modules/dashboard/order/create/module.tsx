@@ -4,27 +4,30 @@ import {
   ControlledFieldSelect,
   ControlledFieldText,
   ControlledFieldTextArea,
+  FieldText,
   FormTemplate,
 } from "@/components";
-import { VSOrder, VSRegister } from "@/entities";
+import { VSOrder } from "@/entities";
 import { clientTrpc } from "@/libs/trpc/client";
-import { notifyMessage } from "@/utils";
+import { formatCurrency, notifyMessage } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 export const DashboardOrderCreateModule = () => {
   const { mutate } = clientTrpc.createOrder.useMutation();
   const { mutate: transaction } = clientTrpc.createReportTransaction.useMutation();
-  const { data: paymentMethods } = clientTrpc.getPaymentMethods.useQuery();
+  const { data: paymentMethods } = clientTrpc.getPaymentMethod.useQuery();
   const { data: products } = clientTrpc.getProduct.useQuery();
 
   const {
     reset,
     control,
     handleSubmit,
+    setValue,
+    watch,
     formState: { isValid, errors },
   } = useForm<z.infer<typeof VSOrder>>({
     resolver: zodResolver(VSOrder),
@@ -32,6 +35,15 @@ export const DashboardOrderCreateModule = () => {
   });
 
   const router = useRouter();
+  const productId = watch("productId");
+  const fixedPrice =
+    products?.data?.filter?.((product) => product?.id === productId).at?.(0)?.price || 0;
+
+  console.log(watch("price"));
+
+  useEffect(() => {
+    setValue("price", String(fixedPrice));
+  }, [setValue, products, productId, fixedPrice]);
 
   const onSubmit = handleSubmit(async (data) => {
     mutate(data, {
@@ -65,7 +77,7 @@ export const DashboardOrderCreateModule = () => {
   });
 
   const paymentMethodOptions = useMemo(() => {
-    return paymentMethods?.map((paymentMethod) => ({
+    return paymentMethods?.data?.map((paymentMethod) => ({
       label: paymentMethod.providerName,
       value: paymentMethod.id,
     }));
@@ -91,26 +103,25 @@ export const DashboardOrderCreateModule = () => {
             status={errors.name ? "error" : "none"}
             message={errors.name?.message}
           />
-          <ControlledFieldTextArea
+          <ControlledFieldSelect
             size="sm"
-            placeholder="Masukkan deskripsi"
-            label="Deskripsi Pesanan"
+            options={productOptions}
+            placeholder="Pilih Produk"
+            label="Produk"
             control={control}
-            name={"description"}
-            status={errors.description ? "error" : "none"}
-            message={errors.description?.message}
+            name={"productId"}
+            status={errors.productId ? "error" : "none"}
+            message={errors.productId?.message}
           />
         </div>
         <div className="flex gap-x-3 w-full">
-          <ControlledFieldText
+          <FieldText
             size="sm"
             placeholder="Masukan Harga"
             label="Harga"
-            control={control}
             name={"price"}
-            type="number"
-            status={errors.price ? "error" : "none"}
-            message={errors.price?.message}
+            value={formatCurrency(fixedPrice)}
+            readOnly
           />
           <ControlledFieldText
             size="sm"
@@ -134,17 +145,23 @@ export const DashboardOrderCreateModule = () => {
             status={errors.paymentId ? "error" : "none"}
             message={errors.paymentId?.message}
           />
-          <ControlledFieldSelect
+          <FieldText
             size="sm"
-            options={productOptions}
-            placeholder="Pilih Produk"
-            label="Produk"
-            control={control}
-            name={"productId"}
-            status={errors.productId ? "error" : "none"}
-            message={errors.productId?.message}
+            placeholder="Total Harga"
+            label="Total Harga"
+            value={formatCurrency(fixedPrice * Number(watch("quantity") || 0))}
+            readOnly
           />
         </div>
+        <ControlledFieldTextArea
+          size="sm"
+          placeholder="Masukkan deskripsi"
+          label="Deskripsi Pesanan"
+          control={control}
+          name={"description"}
+          status={errors.description ? "error" : "none"}
+          message={errors.description?.message}
+        />
       </div>
       <div className="flex gap-x-4">
         <Button type="submit" size="sm" disabled={!isValid}>
