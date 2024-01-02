@@ -3,7 +3,7 @@ import { Button, DataTable, Modal } from "@/components";
 import { clientTrpc } from "@/libs/trpc/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { FC, ReactElement, useMemo, useState } from "react";
-import { AiFillDelete, AiFillEdit } from "react-icons/ai";
+import { AiFillDelete } from "react-icons/ai";
 import { format } from "date-fns";
 import { formatCurrency } from "@/utils";
 import { parseAsInteger, parseAsString, useQueryState } from "next-usequerystate";

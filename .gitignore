@@ -40,3 +40,14 @@ next-env.d.ts
 
 # Sentry Config File
 .sentryclirc
+
+# Devenv
+.devenv*
+devenv.local.nix
+
+# direnv
+.direnv
+
+# pre-commit
+.pre-commit-config.yaml
+
