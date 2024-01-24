@@ -16,13 +16,20 @@ export enum ROLES {
   ADMIN = "Admin",
   MEMBER = "Member",
   OWNER = "Owner",
+  GUEST = "Guest",
 }
 
 export enum PERMISSIONS {
   DASHBOARD = "Dashboard",
   ORDER_READ = "Read Order",
+  ORDER_CREATE = "Create Order",
+  ORDER_UPDATE = "Update Order",
+  ORDER_DELETE = "Delete Order",
   HAS_BUSINESS = "Has Business",
   IS_ADMIN = "Is Admin",
+  IS_MEMBER = "Is Member",
+  IS_OWNER = "Is Owner",
+  SETTING = "Read Setting",
   REPORT_TRANSACTION_CREATE = "Create Report Transaction",
   REPORT_TRANSACTION_READ = "Read Report Transaction",
   REPORT_TRANSACTION_UPDATE = "Update Report Transaction",
@@ -72,6 +79,7 @@ export enum PERMISSIONS {
 export const roles = pgTable("app_roles", {
   id: uuid("id").notNull().primaryKey().defaultRandom(),
   name: text("name").notNull().unique(),
+  businessId: uuid("business_id").references(() => business.id, { onDelete: "cascade" }),
   permissions: text("permissions").notNull().array(),
   createdAt: date("created_at", { mode: "date" }).notNull().defaultNow(),
   updatedAt: date("updated_at", { mode: "date" }).notNull().defaultNow(),
@@ -79,6 +87,7 @@ export const roles = pgTable("app_roles", {
 
 export const users = pgTable("user", {
   id: uuid("id").notNull().primaryKey().defaultRandom(),
+  businessId: uuid("business_id").references(() => business.id, { onDelete: "cascade" }),
   roleId: uuid("role_id").references(() => roles.id, { onDelete: "cascade" }),
   fullname: text("name"),
   isActive: boolean("is_active").notNull().default(true),

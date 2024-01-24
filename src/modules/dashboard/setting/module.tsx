@@ -1,34 +1,42 @@
 "use client";
 import {
   Button,
+  ControlledFieldSelect,
   ControlledFieldText,
   ControlledFieldTextArea,
   DataTable,
   FormTemplate,
+  Modal,
 } from "@/components";
 import { clientTrpc } from "@/libs/trpc/client";
-import Link from "next/link";
 import { FC, ReactElement, useEffect, useState } from "react";
+import Link from "next/link";
 import Image from "next/image";
+import Avatar from "react-avatar";
 import { useRouter, useSearchParams } from "next/navigation";
 import clsx from "clsx";
-import Avatar from "react-avatar";
 import { PERMISSIONS } from "@/server/database/schema";
 import { IoMdAlert } from "react-icons/io";
 import { useForm } from "react-hook-form";
 import { hasCommonElements, notifyMessage } from "@/utils";
 import { TUser } from "@/entities";
 import { useSession } from "next-auth/react";
+import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 
 export const SettingModule: FC<{ session: TUser }> = ({ session }): ReactElement => {
+  const { data: detailUser } = clientTrpc.getDetailUser.useQuery(session?.id as string);
   const { data: password, refetch } = clientTrpc.getPassword.useQuery();
   const { mutate: setPassword } = clientTrpc.updatePassword.useMutation();
   const { mutate: updateUser } = clientTrpc.updateUser.useMutation();
-  const { data: detailUser } = clientTrpc.getDetailUser.useQuery(session?.id as string);
   const { update } = useSession();
+  const { data: roles } = clientTrpc.getRoleByBusinessId.useQuery();
+  const { data: users } = clientTrpc.getUserByBusinessId.useQuery();
+  const { data: paymentMethods } = clientTrpc.getPaymentMethod.useQuery();
 
   const [isAccountEdited, setIsAccountEdited] = useState(false);
   const [isBusinessEdited, setIsBusinessEdited] = useState(false);
+  const [isModalPaymentOpen, setIsModalPaymentOpen] = useState(false);
+  const [isModalRoleOpen, setIsModalRoleOpen] = useState(false);
 
   const router = useRouter();
 
@@ -76,7 +84,24 @@ export const SettingModule: FC<{ session: TUser }> = ({ session }): ReactElement
               >
                 Pembayaran
               </Link>
+              <Link
+                className={className("members")}
+                href="/dashboard/setting?menu=members&title=Pengaturan"
+              >
+                Anggota
+              </Link>
             </>
+          )}
+          {hasCommonElements(session?.role?.permissions || [], [
+            PERMISSIONS.ROLE_READ,
+            PERMISSIONS.IS_OWNER,
+          ]) && (
+            <Link
+              className={className("roles")}
+              href="/dashboard/setting?menu=roles&title=Pengaturan"
+            >
+              Hak Akses
+            </Link>
           )}
         </div>
 
@@ -279,6 +304,11 @@ export const SettingModule: FC<{ session: TUser }> = ({ session }): ReactElement
                     onClick={() => setIsBusinessEdited(true)}
                     variant="primary"
                     type="button"
+                    disabled={
+                      !hasCommonElements(session?.role.permissions as Array<string>, [
+                        PERMISSIONS.IS_OWNER,
+                      ])
+                    }
                   >
                     Perbarui Bisnis
                   </Button>
@@ -326,35 +356,243 @@ export const SettingModule: FC<{ session: TUser }> = ({ session }): ReactElement
                 <p>Disini kamu bisa atur metode pembayaran</p>
               </div>
               <div>
-                <Button size="sm" type="button" variant="cancel">
+                <Button
+                  onClick={() => setIsModalPaymentOpen(true)}
+                  size="sm"
+                  type="button"
+                  variant="cancel"
+                >
                   + Tambah Metode Pembayaran
                 </Button>
               </div>
             </div>
             <DataTable
-              data={[]}
+              data={paymentMethods?.data || []}
               columns={[
                 {
                   header: "Aksi",
                 },
                 {
-                  header: "No",
-                },
-
-                {
                   header: "Nama Penyedia",
+                  accessorKey: "providerName",
                 },
                 {
                   header: "Nama Pengguna",
+                  accessorKey: "accountName",
                 },
                 {
                   header: "Nomor Akun",
+                  accessorKey: "accountNumber",
+                },
+              ]}
+            />
+          </div>
+        )}
+
+        {menu === "members" && (
+          <div className="flex flex-col gap-y-6 w-full h-full">
+            <div className="flex justify-between">
+              <div className="flex flex-col">
+                <h1 className="text-3xl font-semibold">Pengaturan Anggota</h1>
+                <p>Disini kamu bisa atur anggota dari bisnis kamu</p>
+              </div>
+              <div>
+                <Button size="sm" type="button" variant="cancel">
+                  + Tambah Anggota
+                </Button>
+              </div>
+            </div>
+            <DataTable
+              data={users?.data || []}
+              meta={users?.meta}
+              columns={[
+                {
+                  header: "Nama",
+                  accessorKey: "fullname",
+                },
+                {
+                  header: "Email",
+                  accessorKey: "email",
+                },
+                {
+                  header: "Hak Akses",
+                  accessorKey: "role.name",
+                },
+                {
+                  header: "Aksi",
+                  cell: ({ row }) => {
+                    const value = row.original;
+                    return (
+                      <div className="flex gap-x-2">
+                        <Button size="sm" type="button" variant="cancel">
+                          <AiFillEdit />
+                        </Button>
+                        <Button size="sm" variant="error">
+                          <AiFillDelete />
+                        </Button>
+                      </div>
+                    );
+                  },
+                },
+              ]}
+            />
+          </div>
+        )}
+
+        {menu === "roles" && (
+          <div className="flex flex-col gap-y-6 w-full h-full">
+            <div className="flex justify-between">
+              <div className="flex flex-col">
+                <h1 className="text-3xl font-semibold">Pengaturan Hak Akses</h1>
+                <p>Disini kamu bisa atur metode hak akses member bisnis kamu</p>
+              </div>
+              <div>
+                <Button
+                  onClick={() => setIsModalRoleOpen(true)}
+                  size="sm"
+                  type="button"
+                  variant="cancel"
+                >
+                  + Tambah Hak Akses
+                </Button>
+              </div>
+            </div>
+            <DataTable
+              data={roles?.data || []}
+              meta={roles?.meta}
+              columns={[
+                {
+                  header: "Nama Hak Akses",
+                  accessorKey: "name",
+                },
+                {
+                  header: "Permission",
+                  accessorKey: "permissions",
+                  accessorFn: ({ permissions }) => {
+                    return permissions?.map((item) => item).join(", ");
+                  },
+                },
+                {
+                  header: "Aksi",
+                  cell: ({ row }) => {
+                    const value = row.original;
+                    return (
+                      <div className="flex gap-x-2">
+                        <Button size="sm" type="button" variant="cancel">
+                          <AiFillEdit />
+                        </Button>
+                        <Button size="sm" variant="error">
+                          <AiFillDelete />
+                        </Button>
+                      </div>
+                    );
+                  },
                 },
               ]}
             />
           </div>
         )}
       </div>
+
+      <Modal
+        title="Tambah Metode Pembayaran"
+        isOpen={isModalPaymentOpen}
+        width="440"
+        height="320"
+        onClose={() => setIsModalPaymentOpen(false)}
+      >
+        <form className="flex flex-col h-full gap-y-4 mt-4 p-3">
+          <ControlledFieldText
+            size="sm"
+            placeholder="Masukkan Nama Penyedia"
+            control={control}
+            name="providerName"
+            label="Nama Penyedia"
+          />
+          <ControlledFieldText
+            size="sm"
+            type="text"
+            placeholder="Masukkan Nama Akun"
+            control={control}
+            name="accountName"
+            label="Nama Akun"
+          />
+          <ControlledFieldText
+            size="sm"
+            type="number"
+            placeholder="Masukkan Nomor Akun"
+            control={control}
+            name="accountNumber"
+            label="Nomor Akun"
+          />
+          <div className="flex gap-x-4">
+            <Button size="sm" variant="primary">
+              Simpan
+            </Button>
+            <Button onClick={() => setIsModalPaymentOpen(false)} size="sm" variant={"cancel"}>
+              Batal
+            </Button>
+          </div>
+        </form>
+      </Modal>
+
+      <Modal
+        title="Tambah Hak Akses"
+        isOpen={isModalRoleOpen}
+        width="440"
+        height="220"
+        onClose={() => setIsModalRoleOpen(false)}
+      >
+        <form className="flex flex-col h-full gap-y-4 mt-4 p-3">
+          <ControlledFieldText
+            size="sm"
+            placeholder="Masukkan Nama Hak Akses"
+            control={control}
+            name="name"
+            label="Nama Hak Akses"
+          />
+          <ControlledFieldSelect
+            options={Object.values(PERMISSIONS)
+              .filter(
+                (x) =>
+                  ![
+                    "Is Admin",
+                    "Is Owner",
+                    "Is Member",
+                    "Has Business",
+                    "Read Role",
+                    "Create Role",
+                    "Update Role",
+                    "Delete Role",
+                    "Detail Role",
+                    "Read User",
+                    "Create User",
+                    "Update User",
+                    "Delete User",
+                    "Detail User",
+                  ].includes(x),
+              )
+              .map((x) => ({
+                label: x,
+                value: x,
+              }))}
+            size="sm"
+            isMulti
+            placeholder="Pilih Permission"
+            control={control}
+            name="permissions"
+            label="Permission"
+          />
+          <div className="flex gap-x-4">
+            <Button size="sm" variant="primary">
+              Simpan
+            </Button>
+            <Button onClick={() => setIsModalRoleOpen(false)} size="sm" variant={"cancel"}>
+              Batal
+            </Button>
+          </div>
+        </form>
+      </Modal>
     </FormTemplate>
   );
 };

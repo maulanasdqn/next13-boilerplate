@@ -56,7 +56,11 @@ export const DashboardUserRoleModule: FC = (): ReactElement => {
                 <AiFillEdit />
               </Button>
               <Button
-                disabled={row.original?.name === ROLES.ADMIN || row.original?.name === ROLES.OWNER}
+                disabled={
+                  row.original?.name === ROLES.ADMIN ||
+                  row.original?.name === ROLES.OWNER ||
+                  row.original?.name === ROLES.GUEST
+                }
                 onClick={() => handleModalDelete(row.original?.id)}
                 size="sm"
                 variant="error"

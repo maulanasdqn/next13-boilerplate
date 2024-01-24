@@ -17,6 +17,7 @@ export const VSMetaRequest = z
     search: z.string(),
     page: z.number(),
     perPage: z.number(),
+    businessId: z.string().optional(),
   })
   .optional();
 

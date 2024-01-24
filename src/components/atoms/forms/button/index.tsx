@@ -8,7 +8,8 @@ export const Button: FC<TButton> = (props): ReactElement => {
 
   const className = clsx(
     "rounded-lg border hover:opacity-80",
-    "disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400 disabled:text-white",
+    "disabled:opacity-50 disabled:cursor-not-allowed",
+    "disabled:bg-gray-400 disabled:text-white",
     {
       "bg-primary text-white": variant === "primary",
       "bg-white text-blue-500 border-blue-500": variant === "secondary",

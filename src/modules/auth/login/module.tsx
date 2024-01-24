@@ -99,8 +99,6 @@ export const AuthLoginModule: FC = (): ReactElement => {
         name="password"
         label="Kata sandi"
         placeholder="Masukkan Kata sandi"
-        status={errors.password ? "error" : "none"}
-        message={errors.password?.message}
       />
       <ControlledFieldCheckbox size="sm" control={control} name="remember" text="Ingat Saya" />
       <Button isloading={+isLoading} disabled={!isValid} size="md" type="submit">

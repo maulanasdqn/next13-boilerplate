@@ -11,7 +11,7 @@ import { notifyMessage } from "@/utils";
 export const DashboardUserModule: FC = (): ReactElement => {
   const [search, setSearch] = useQueryState("search", parseAsString.withDefault(""));
   const [page] = useQueryState("page", parseAsInteger.withDefault(1));
-  const [perPage] = useQueryState("perPage", parseAsInteger.withDefault(10));
+  const [perPage] = useQueryState("perPage", parseAsInteger.withDefault(5));
 
   const {
     data: users,
@@ -78,6 +78,7 @@ export const DashboardUserModule: FC = (): ReactElement => {
       {
         header: "Hak Akses",
         accessorKey: "role.name",
+        accessorFn: (row) => row?.role?.name || "-",
       },
 
       {
@@ -110,7 +111,7 @@ export const DashboardUserModule: FC = (): ReactElement => {
   );
 
   return (
-    <section className="flex w-full h-full min-h-screen">
+    <section className="flex w-full h-full">
       <DataTable
         createLabel="+ Buat Pengguna"
         isLoading={isLoading}

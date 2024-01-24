@@ -32,6 +32,7 @@ export async function middleware(req: NextRequest, _event: NextFetchEvent) {
         return NextResponse.redirect(deniedUrl);
       }
     }
+    return null;
   }
   return NextResponse.next();
 }

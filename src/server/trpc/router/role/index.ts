@@ -2,8 +2,53 @@ import { VSMetaRequest } from "@/entities";
 import { publicProcedure } from "@/libs/trpc/init";
 import { db, roles, ROLES as ROLES_DATA } from "@/server";
 import { calculateTotalPages, metaResponsePrefix } from "@/utils";
-import { asc, eq, ilike, or } from "drizzle-orm";
+import { asc, eq, ilike, or, and } from "drizzle-orm";
 import { z } from "zod";
+
+export const getRoleByBusinessId = publicProcedure
+  .input(VSMetaRequest)
+  .query(async ({ input, ctx }) => {
+    try {
+      const page = input?.page || 1;
+      const perPage = input?.perPage || 10;
+      const offset = (page - 1) * perPage;
+
+      const data = await db
+        .select()
+        .from(roles)
+        .where(and(eq(roles.businessId, ctx?.session?.user?.business?.id!)))
+        .limit(perPage)
+        .offset(input?.search ? 0 : offset)
+        .orderBy(roles.createdAt, asc(roles.createdAt));
+
+      const count = await db
+        .select({ id: roles.id })
+        .from(roles)
+        .where(and(eq(roles.businessId, ctx?.session?.user?.business?.id!)))
+        .then((res) => res.length);
+
+      const totalPage = calculateTotalPages(count, perPage);
+      const nextPage = page < totalPage ? page + 1 : null;
+      const prevPage = page > 1 ? page - 1 : null;
+
+      const metaPrefix = {
+        data,
+        meta: {
+          code: 200,
+          status: "success",
+          message: "Berhasil menampilkan reservasi",
+          page,
+          perPage,
+          totalPage,
+          nextPage,
+          prevPage,
+        },
+      };
+      return metaResponsePrefix(metaPrefix);
+    } catch (err) {
+      throw new Error(err as string);
+    }
+  });
 
 export const getRole = publicProcedure.input(VSMetaRequest).query(async ({ input }) => {
   try {

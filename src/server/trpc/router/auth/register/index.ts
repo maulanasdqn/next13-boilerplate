@@ -11,7 +11,7 @@ export const createUser = publicProcedure.input(VSRegister).mutation(async ({ in
     const roleId = await db
       .select({ id: roles.id })
       .from(roles)
-      .where(eq(roles.name, ROLES.MEMBER))
+      .where(eq(roles.name, ROLES.GUEST))
       .limit(1)
       .then((res) => res.at(0)?.id);
 

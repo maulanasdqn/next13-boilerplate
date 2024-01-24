@@ -67,29 +67,20 @@ export const SeedTransaction = async () => {
 export const SeedRole = async () => {
   let dataToInsert = [];
   const roles = [ROLES_DATA.MEMBER, ROLES_DATA.ADMIN, ROLES_DATA.OWNER];
-
-  const roleIsExist = await db.select({ id: roles_db.id }).from(roles_db);
-
-  if (roleIsExist.length > 0) {
-    return;
+  for (let i = 0; i < roles.length; i++) {
+    let newData = {
+      name: roles[i],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      permissions: [PERMISSIONS.DASHBOARD],
+    };
+    dataToInsert.push(newData);
   }
-
-  if (!roleIsExist) {
-    for (let i = 0; i < roles.length; i++) {
-      let newData = {
-        name: roles[i],
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        permissions: [PERMISSIONS.DASHBOARD],
-      };
-      dataToInsert.push(newData);
-    }
-    console.log("Seeding roles... 🚀");
-    dataToInsert.forEach(async (data) => {
-      await db.insert(roles_db).values(data).returning();
-    });
-    console.log("Seeding roles done! 🎊");
-  }
+  console.log("Seeding roles... 🚀");
+  dataToInsert.forEach(async (data) => {
+    await db.insert(roles_db).values(data).returning();
+  });
+  console.log("Seeding roles done! 🎊");
 };
 
 export const SeedUser = async () => {
@@ -222,11 +213,14 @@ export const SeedBussines = async () => {
 
 async function processAsyncOperations() {
   try {
-    await SeedUser();
-    await SeedBussines();
-    await SeedCustomer();
-    await SeedPaymentMethod();
-    await SeedProduct();
+    await Promise.all([
+      SeedRole(),
+      SeedUser(),
+      SeedBussines(),
+      SeedCustomer(),
+      SeedPaymentMethod(),
+      SeedProduct(),
+    ]);
   } catch (error) {
     console.error(error);
   }

@@ -11,10 +11,13 @@ export const inputClassName = ({
 }: Pick<TCommonForms, "size" | "status" | "append" | "preppend">): string =>
   clsx(
     "rounded-lg border border-1 outline-none w-full",
-    "disabled:bg-gray-100 disabled:placeholder:text-gray-500 disabled:border-gray-200",
-    "disable:cursor-not-allowed disable:opacity-50 disable:select-none disabled:text-gray-400",
+    "disabled:bg-gray-100 disabled:placeholder:text-gray-500",
+    "disabled:border-gray-200",
+    "disable:cursor-not-allowed disable:opacity-50",
+    "disable:select-none disabled:text-gray-400",
     {
-      "text-sm placeholder:text-xs pl-2 pr-3 py-2": size === "sm" && !preppend && !append,
+      "text-sm placeholder:text-xs pl-2 pr-3 py-2":
+        size === "sm" || (size === undefined && !preppend && !append),
       "text-sm placeholder:text-xs pl-7 pr-3 py-2": size === "sm" && preppend && !append,
       "text-sm placeholder:text-xs pl-2 pr-7 py-2": size === "sm" && !preppend && append,
       "text-sm placeholder:text-xs pl-7 pr-7 py-2": size === "sm" && preppend && append,
@@ -47,15 +50,23 @@ export const formatCurrency = (value: number | unknown): string =>
   }).format(Number(value));
 
 export function hasCommonElements<T>(arr1: T[], arr2: T[]): boolean {
-  const [shorter, longer] = arr1.length < arr2.length ? [arr1, arr2] : [arr2, arr1];
+  const [shorter, longer] = arr1?.length < arr2?.length ? [arr1, arr2] : [arr2, arr1];
   const set = new Set<T>(shorter);
-  return longer.some((element) => set.has(element));
+  return longer?.some((element) => set.has(element));
 }
 
 export const permissionMapper = [
   {
     url: "/dashboard",
     permissions: [PERMISSIONS.DASHBOARD],
+  },
+  {
+    url: "/dashboard/order/create",
+    permissions: [PERMISSIONS.ORDER_CREATE],
+  },
+  {
+    url: "/dashboard/settings",
+    permissions: [PERMISSIONS.SETTING],
   },
   {
     url: "/dashboard/product",

@@ -10,7 +10,6 @@ import {
   AiFillCaretDown,
   AiFillMoneyCollect,
   AiFillRead,
-  AiFillSetting,
   AiFillTag,
 } from "react-icons/ai";
 import { FaShoppingCart, FaUsers } from "react-icons/fa";
@@ -59,13 +58,13 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
   const sidebarData = [
     {
       name: "Pesanan",
-      icon: <AiFillAccountBook className={iconClassName} />,
+      icon: <AiFillAccountBook className={iconClassName("")} />,
       path: "order",
       permissions: [PERMISSIONS.ORDER_READ],
       children: [
         {
           name: "Data Pesanan",
-          icon: <FaShoppingCart className={iconClassName} />,
+          icon: <FaShoppingCart className={iconClassName("/dashboard/order")} />,
           path: "/dashboard/order",
           url: `/dashboard/order?title=Manajamen Pesanan&isSidebarOpen=${isSidebarOpen}`,
           permissions: [PERMISSIONS.ORDER_READ],
@@ -74,7 +73,7 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
     },
     {
       name: "Laporan",
-      icon: <AiFillBook className={iconClassName} />,
+      icon: <AiFillBook className={iconClassName("")} />,
       path: "report",
       permissions: [
         PERMISSIONS.REPORT_TRANSACTION_READ,
@@ -85,21 +84,21 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
       children: [
         {
           name: "Transaksi",
-          icon: <AiFillBoxPlot className={iconClassName} />,
+          icon: <AiFillBoxPlot className={iconClassName("/dashboard/report/transaction")} />,
           path: "/dashboard/report/transaction",
           url: `/dashboard/report/transaction?title=Riwayat Data Transaksi&isSidebarOpen=${isSidebarOpen}`,
           permissions: [PERMISSIONS.REPORT_TRANSACTION_READ],
         },
         {
           name: "Keuangan",
-          icon: <AiFillMoneyCollect className={iconClassName} />,
+          icon: <AiFillMoneyCollect className={iconClassName("/dashboard/report/financial")} />,
           path: "/dashboard/report/financial",
           url: `/dashboard/report/financial?title=Riwayat Data Keuangan&isSidebarOpen=${isSidebarOpen}`,
           permissions: [PERMISSIONS.REPORT_FINANCIAL_READ],
         },
         {
           name: "Pembayaran",
-          icon: <AiFillBook className={iconClassName} />,
+          icon: <AiFillBook className={iconClassName("/dashboard/report/payment")} />,
           path: "/dashboard/report/payment",
           url: `/dashboard/report/payment?title=Riwayat Data Pembayaran&isSidebarOpen=${isSidebarOpen}`,
           permissions: [PERMISSIONS.REPORT_PAYMENT_READ],
@@ -109,23 +108,22 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
 
     {
       name: "Pengguna",
-      icon: <FaUsersCog className={iconClassName} />,
+      icon: <FaUsersCog className={iconClassName("")} />,
       path: "role",
-      permissions: [PERMISSIONS.ROLE_READ, PERMISSIONS.USER_READ],
+      permissions: [PERMISSIONS.USER_READ],
       children: [
         {
-          name: "Hak Akses",
-          icon: <FaShield className={iconClassName} />,
-          path: "/dashboard/user/role",
-          url: `/dashboard/user/role?title=Data Hak Akses&isSidebarOpen=${isSidebarOpen}`,
-          permissions: [PERMISSIONS.ROLE_READ],
-        },
-
-        {
           name: "Pengguna",
-          icon: <PiUsersThreeFill className={iconClassName} />,
+          icon: <PiUsersThreeFill className={iconClassName("/dashboard/user")} />,
           path: "/dashboard/user",
           url: `/dashboard/user?title=Data Pengguna&isSidebarOpen=${isSidebarOpen}`,
+          permissions: [PERMISSIONS.USER_READ],
+        },
+        {
+          name: "Hak Akses",
+          icon: <FaShield className={iconClassName("/dashboard/user/role")} />,
+          path: "/dashboard/user/role",
+          url: `/dashboard/user/role?title=Data Hak Akses&isSidebarOpen=${isSidebarOpen}`,
           permissions: [PERMISSIONS.ROLE_READ],
         },
       ],
@@ -133,13 +131,13 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
 
     {
       name: "Produk",
-      icon: <AiFillTag className={iconClassName} />,
+      icon: <AiFillTag className={iconClassName("")} />,
       path: "product",
       permissions: [PERMISSIONS.PRODUCT_READ, PERMISSIONS.PRODUCT_CATEGORY_READ],
       children: [
         {
           name: "Produk",
-          icon: <FaBox className={iconClassName} />,
+          icon: <FaBox className={iconClassName("/dashboard/product")} />,
           path: "/dashboard/product",
           url: `/dashboard/product?title=Data Produk&isSidebarOpen=${isSidebarOpen}`,
           permissions: [PERMISSIONS.PRODUCT_READ],
@@ -147,7 +145,7 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
 
         {
           name: "Kategori Produk",
-          icon: <BiSolidCategory className={iconClassName} />,
+          icon: <BiSolidCategory className={iconClassName("/dashboard/product/category")} />,
           path: "/dashboard/product/category",
           url: `/dashboard/product/category?title=Data Kategori Produk&isSidebarOpen=${isSidebarOpen}`,
           permissions: [PERMISSIONS.PRODUCT_CATEGORY_READ],
@@ -157,13 +155,13 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
 
     {
       name: "Pelanggan",
-      icon: <AiFillRead className={iconClassName} />,
+      icon: <AiFillRead className={iconClassName("")} />,
       path: "pelanggan",
       permissions: [PERMISSIONS.CUSTOMER_READ],
       children: [
         {
           name: "Pelanggan",
-          icon: <FaUsers className={iconClassName} />,
+          icon: <FaUsers className={iconClassName("/dashboard/customer")} />,
           path: "/dashboard/customer",
           url: `/dashboard/customer?title=Riwayat Pelanggan&isSidebarOpen=${isSidebarOpen}`,
           permissions: [PERMISSIONS.CUSTOMER_READ],
@@ -198,7 +196,7 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
               href={`/dashboard?title=Dashboard&isSidebarOpen=${isSidebarOpen}`}
               className={selectedMenu("/dashboard")}
             >
-              <IoMdDesktop className={iconClassName} />
+              <IoMdDesktop className={iconClassName("/dashboard")} />
               <span className="ms-3">Dashboard</span>
             </Link>
           </li>
@@ -218,7 +216,7 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
                     </div>
                     <AiFillCaretDown
                       className={clsx(
-                        "flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-white",
+                        "flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75  group-hover:text-gray-700",
                         {
                           "rotate-180": open === item.path,
                         },
@@ -249,13 +247,13 @@ export const Sidebar: FC<{ user: TUser }> = ({ user }): ReactElement => {
               href={`/dashboard/setting?title=Pengaturan&isSidebarOpen=${isSidebarOpen}&menu=account`}
               className={selectedMenu("/dashboard/setting")}
             >
-              <IoMdSettings className={iconClassName} />
+              <IoMdSettings className={iconClassName("/dashboard/setting")} />
               <span className="ms-3">Pengaturan</span>
             </Link>
           </li>
           <li className="block md:hidden">
             <span onClick={() => setIsSidebarOpen("close")} className={selectedMenu("")}>
-              <IoMdLogOut className={iconClassName} />
+              <IoMdLogOut className={iconClassName("")} />
               <span className="ms-3">Tutup Sidebar</span>
             </span>
           </li>

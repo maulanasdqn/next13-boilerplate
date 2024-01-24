@@ -69,12 +69,12 @@ export const authOptions = {
         await db
           .update(users)
           .set({ roleId })
-          .where(eq(users.id, t?.id as string))
+          .where(eq(users.email, userData?.email as string))
           .returning();
 
         await db
           .update(business)
-          .set({ ownerId: t?.id })
+          .set({ ownerId: userData?.id })
           .where(eq(business.ownerId, userData?.id as string));
 
         const data = await db
