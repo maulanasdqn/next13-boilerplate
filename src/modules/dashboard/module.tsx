@@ -89,7 +89,7 @@ export const DashboardModule: FC = (): ReactElement => {
 
       {hasCommonElements(session?.user?.role.permissions as Array<string>, [
         PERMISSIONS.HAS_BUSINESS,
-      ]) ? (
+      ]) && (
         <div className="flex flex-col items-start justify-start w-full">
           <h1 className="text-2xl font-medium">{session?.user?.business?.name}</h1>
           <div className="w-full">
@@ -112,56 +112,54 @@ export const DashboardModule: FC = (): ReactElement => {
             </div>
           </div>
         </div>
-      ) : (
+      )}
+      {hasCommonElements(session?.user?.role.permissions as Array<string>, [
+        PERMISSIONS.IS_GUEST,
+      ]) && (
         <>
-          {session?.user?.role?.name !== ROLES.ADMIN && (
-            <>
-              <Image src="/dashboard.png" alt="Dashboard" width={600} height={600} />
-              <div className="flex flex-col gap-y-4 items-center">
-                <h1 className="sm:text-2xl md:text-3xl text-1xl font-bold text-gray-700">
-                  Nampaknya Anda belum mempunyai bisnis
-                </h1>
-                <p>
-                  Anda perlu membuat bisnis terlebih dahulu untuk bisa menggunakan fitur aplikasi
-                  ini
-                </p>
-                <div>
-                  <Button onClick={() => setIsOpen(true)}>Buat Bisnis Sekarang</Button>
-                </div>
+          <Image src="/dashboard.png" alt="Dashboard" width={600} height={600} />
+          <div className="flex flex-col gap-y-4 items-center">
+            <h1 className="sm:text-2xl md:text-3xl text-1xl font-bold text-gray-700">
+              Nampaknya Anda belum mempunyai bisnis
+            </h1>
+            <p>
+              Anda perlu membuat bisnis terlebih dahulu untuk bisa menggunakan fitur aplikasi ini
+            </p>
+            <div>
+              <Button onClick={() => setIsOpen(true)}>Buat Bisnis Sekarang</Button>
+            </div>
+          </div>
+          <Modal width="400" isOpen={isOpen} onClose={() => setIsOpen(false)}>
+            <form onSubmit={onSubmit} className="flex flex-col gap-y-4 items-start">
+              <h1 className="sm:text-2xl md:text-3xl text-1xl font-bold text-gray-700">
+                Buat Bisnis Baru
+              </h1>
+              <ControlledFieldText
+                control={control}
+                message={errors?.name?.message}
+                status={errors?.name?.message ? "error" : "none"}
+                name="name"
+                placeholder="Masukkan Nama Bisnis"
+                label="Nama Bisnis"
+              />
+              <ControlledFieldText
+                control={control}
+                name="phoneNumber"
+                placeholder="Masukkan Nomor Telepon"
+                label="Nomor Telepon"
+                message={errors?.phoneNumber?.message}
+                status={errors?.phoneNumber?.message ? "error" : "none"}
+              />
+              <div className="flex gap-x-2">
+                <Button disabled={!isValid} type="submit">
+                  Buat Bisnis
+                </Button>
+                <Button variant="cancel" onClick={() => setIsOpen(false)}>
+                  Batal
+                </Button>
               </div>
-              <Modal width="400" isOpen={isOpen} onClose={() => setIsOpen(false)}>
-                <form onSubmit={onSubmit} className="flex flex-col gap-y-4 items-start">
-                  <h1 className="sm:text-2xl md:text-3xl text-1xl font-bold text-gray-700">
-                    Buat Bisnis Baru
-                  </h1>
-                  <ControlledFieldText
-                    control={control}
-                    message={errors?.name?.message}
-                    status={errors?.name?.message ? "error" : "none"}
-                    name="name"
-                    placeholder="Masukkan Nama Bisnis"
-                    label="Nama Bisnis"
-                  />
-                  <ControlledFieldText
-                    control={control}
-                    name="phoneNumber"
-                    placeholder="Masukkan Nomor Telepon"
-                    label="Nomor Telepon"
-                    message={errors?.phoneNumber?.message}
-                    status={errors?.phoneNumber?.message ? "error" : "none"}
-                  />
-                  <div className="flex gap-x-2">
-                    <Button disabled={!isValid} type="submit">
-                      Buat Bisnis
-                    </Button>
-                    <Button variant="cancel" onClick={() => setIsOpen(false)}>
-                      Batal
-                    </Button>
-                  </div>
-                </form>
-              </Modal>
-            </>
-          )}
+            </form>
+          </Modal>
         </>
       )}
     </section>

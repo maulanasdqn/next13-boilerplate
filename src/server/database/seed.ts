@@ -58,7 +58,6 @@ export const SeedTransaction = async () => {
   }
   console.log("Seeding transactions... 🚀");
   dataToInsert.forEach(async (data) => {
-    console.log("Inserting transaction", data.name);
     await db.insert(report_transactions).values(data).returning();
   });
   console.log("Seeding transactions! 🎊");
@@ -128,7 +127,6 @@ export const SeedProduct = async () => {
   }
   console.log("Seeding products... 🚀");
   dataToInsert.forEach(async (data) => {
-    console.log("Inserting product", data.name);
     await db.insert(products).values(data).returning();
   });
   console.log("Seeding products done! 🎊");
@@ -151,7 +149,6 @@ export const SeedPaymentMethod = async () => {
   console.log("Seeding payment method... 🚀");
   dataToInsert.forEach(async (data) => {
     setTimeout(async () => {
-      console.log("Inserting payment method...", data.name);
       await db.insert(payment_methods).values(data).returning();
     }, 1000);
   });
@@ -172,7 +169,6 @@ export const SeedCustomer = async () => {
   console.log("Seeding customer... 🚀");
   dataToInsert.forEach(async (data) => {
     try {
-      console.log("Inserting customer", data.name);
       await db.insert(customers).values(data).returning();
     } catch (error) {
       console.error(error);
@@ -202,7 +198,6 @@ export const SeedBussines = async () => {
   console.log("Seeding customer... 🚀");
   dataToInsert.forEach(async (data) => {
     try {
-      console.log("Inserting customer", data.name);
       await db.insert(business).values(data).returning();
     } catch (error) {
       console.error(error);

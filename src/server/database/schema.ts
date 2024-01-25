@@ -27,7 +27,7 @@ export enum PERMISSIONS {
   ORDER_DELETE = "Delete Order",
   HAS_BUSINESS = "Has Business",
   IS_ADMIN = "Is Admin",
-  IS_MEMBER = "Is Member",
+  IS_GUEST = "Is Guest",
   IS_OWNER = "Is Owner",
   SETTING = "Read Setting",
   REPORT_TRANSACTION_CREATE = "Create Report Transaction",
